@@ -1,4 +1,4 @@
-# Lineage Ruling Narratives — through G198 (history; not required reading)
+# Lineage Ruling Narratives — through G199 (history; not required reading)
 
 The narratives of rulings G1 to G175 were the body of `LINEAGE_OPERATING_DISCIPLINE_v138_0_0.md` until release 1.454.0, which moved them here unchanged. The operating discipline is now `LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md`.
 
@@ -4481,3 +4481,14 @@ Related: G186, G187, G188, G158.
 
 **What is not claimed.** That the discussion really took place: the record says it did, as every record does. That an old forecast is repaired: none is. That dates now enforce anything: G197 still holds.
 Related: G186, G197.
+
+## G199 — A finding has a kind, a kind has ways that fit, and an obstacle names its box
+
+**Q1 — the finding.** Of the 105 findings recorded before Lineage 29 closed, 76 named no kind of obstacle and at least three sat in the wrong one; no way supplied missing evidence; a failed outside service had a retry and nothing beyond it; the ways for work in the wrong order disagreed about editing recorded files; and the one real obstacle record named a story, not the box it stopped.
+
+**Q2 — what was ruled and built.** Each earlier finding was read and given a kind (a second reader, who did not see the first reading, read them too: the two agreed on 77 of 105 at first, and the review lists the 28 differences; 15 of the builder's kinds were changed after it and the two now agree on 95, and one proposed re-reading was dropped). Three wrong kinds were not edited, because a committed record is appended to: a new link, "read as kind" (vocabulary 1.168.0), carries the kind they are read as. A way that measures and records missing evidence was added, the retry is followed by a route that is allowed, and the way that redoes steps now says it applies only to work not yet released. `backlog_impediment` 2.0.0 (a major step: `--box` is now required) asks for the box, which must be a box of the lineage that had begun when the obstacle was raised; `ImpedimentNamesBoxShape` (shapes 1.210.0) refuses an obstacle of an adopting lineage that names none, and a negative case proves it fires.
+
+**Q3 — what the record shows.** The kinds of findings are readings, not measurements: where a finding names no obstacle (a note of what went well: three, listed in the review), the nearest kind was taken. The findings of Lineage 29 and of the later lineages carry no kind yet and no shape requires one. Nothing before this box is changed.
+
+**What is not claimed.** That every reading is the only right one. That the earlier obstacle record was edited: a link to its box was added beside it.
+Related: G189, G190, G191.

@@ -4462,3 +4462,7 @@ vsn:Urg_Early a backlog:UrgentInterruption ; backlog:urgencyDeclaredAt "2026-11-
 vsn:Item_UrgEarly a backlog:Story ; backlog:startedAt "2026-11-03T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 vsn:Urg_Ok a backlog:UrgentInterruption ; backlog:urgencyDeclaredAt "2026-11-03T12:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:urgentItem vsn:Item_UrgOk .
 vsn:Item_UrgOk a backlog:Story ; backlog:startedAt "2026-11-03T12:30:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
+# IK_NOBOX  an impediment of a lineage that names its obstacles, blocking a story and no box (ImpedimentNamesBoxShape).
+vsn:StNoBox a backlog:Story .
+vsn:ImpNoBox a backlog:Impediment ; backlog:belongsToLineage vsn:LKinds ; backlog:impedes vsn:StNoBox ; backlog:hasImpedimentStatement "Blocked." ; backlog:raisedAt "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasImpedimentOwner backlog:Builder ; backlog:hasImpedimentKind backlog:Imp_ToolFault .

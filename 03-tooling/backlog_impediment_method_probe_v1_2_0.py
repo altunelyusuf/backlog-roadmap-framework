@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Probe of the ways to clear an obstacle (G190): the real validator on a scratch register in which each impediment or kind lacks or breaks exactly one thing,
+"""Probe v1.2.0 of the ways to clear an obstacle (G190, G199): the real validator on a scratch register in which each impediment or kind lacks or breaks exactly one thing,
 and the real register read: every kind lists at least one way, every way is labelled, defined and used by a kind, and none is worded as a way round a rule."""
 import glob, re, subprocess, sys, tempfile, os
 PKG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,11 +42,17 @@ B = Namespace("http://example.org/backlog#"); RDFS = Namespace("http://www.w3.or
 g = Graph(); g.parse(REGF, format="turtle"); g.parse(TBOX, format="turtle")
 kinds = list(g.subjects(RDF.type, B.ImpedimentKind)); methods = list(g.subjects(RDF.type, B.ClearingMethod))
 expect("each of the %d kinds lists at least one way" % len(kinds), len(kinds) == 7 and all(list(g.objects(k, B.clearableBy)) for k in kinds))
-expect("each of the %d ways is labelled, defined, marked framework-original and listed by at least one kind" % len(methods), len(methods) == 14 and all(g.value(m, RDFS.label) and g.value(m, SKOS.definition) and g.value(m, B.isFrameworkOriginal) is not None and (None, B.clearableBy, m) in g for m in methods))
+expect("each of the %d ways is labelled, defined, marked framework-original and listed by at least one kind" % len(methods), len(methods) == 15 and all(g.value(m, RDFS.label) and g.value(m, SKOS.definition) and g.value(m, B.isFrameworkOriginal) is not None and (None, B.clearableBy, m) in g for m in methods))
 bad = [str(m).split("#")[-1] for m in methods if re.search(r"\b(skip|waive|bypass|defer|ignore|override)\w*", str(g.value(m, SKOS.definition)), re.I) and not re.search(r"\b(never|not|no)\b", str(g.value(m, SKOS.definition)), re.I)]
 expect("no way is worded as a way round a rule (a definition that names skipping, waiving, bypassing or deferring also says never or not)" + (": " + ",".join(bad) if bad else ""), not bad)
 expect("no way describes itself as not clearing the obstacle", not any(re.search(r"does not clear|not clear the", str(g.value(m, SKOS.definition))) for m in methods))
 expect("every definition says when the obstacle is gone ('Gone when')", all("Gone when" in str(g.value(m, SKOS.definition)) for m in methods))
+ways_of = lambda k: {str(m).split("#")[-1] for m in g.objects(B[k], B.clearableBy)}
+expect("an evidence gap has a way that produces the missing evidence, not only ways that keep or state it", "Mth_MeasureAndRecord" in ways_of("Imp_EvidenceGap") and "Measure" in str(g.value(B.Mth_MeasureAndRecord, RDFS.label)) and re.search(r"produce.*(figure|measurement|test drive)", str(g.value(B.Mth_MeasureAndRecord, SKOS.definition)), re.S) is not None)
+expect("a failed outside service has a way beyond the bounded retry", len(ways_of("Imp_ServiceFailure") - {"Mth_BoundedRetry"}) >= 1)
+wo = [m for m in ways_of("Imp_WrongOrder") | ways_of("Imp_RuleRefusal") if re.search(r"files already changed|undo or redo", str(g.value(B[m], SKOS.definition)))]
+expect("every way that undoes or redoes steps in changed files says it applies only to work not yet released, so the ways for wrong order agree about recorded files", wo and all(re.search(r"not yet released.*never edited", str(g.value(B[m], SKOS.scopeNote)), re.S) for m in wo))
+expect("the way that restarts the chain still says a bypassed stage is never backfilled", "never backfill" in str(g.value(B.Mth_RestartTheChain, SKOS.definition)).lower())
 r190 = [s for s in g.subjects(B.hasRulingIdentifier, None) if str(g.value(s, B.hasRulingIdentifier)) == "G190"]
 expect("the ruling names both shapes", len(r190) == 1 and {str(o).split("#")[-1] for o in g.objects(r190[0], B.enforcedByShape)} == {"ClearedImpedimentNamesMethodShape", "KindHasMethodShape"})
 print("VERDICT   :", "PASS" if not fails else "FAIL"); sys.exit(1 if fails else 0)

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""backlog_impediment v1.0.0 -- raise, advise on and clear an obstacle (Lineage 29, G191).
+"""backlog_impediment v2.0.0 (--box is required: a break of the raise command) -- raise, advise on and clear an obstacle (Lineage 29, G191; G199).
 
-  backlog_impediment.py REGISTER.ttl raise  --lineage L --prefix P --blocks ITEM --kind KIND --statement TEXT --owner ROLE [--now ISO]
+  backlog_impediment.py REGISTER.ttl raise  --lineage L --prefix P --box BOX [--blocks ITEM] --kind KIND --statement TEXT --owner ROLE [--now ISO]
   backlog_impediment.py REGISTER.ttl advise (--kind KIND | --impediment ID)
   backlog_impediment.py REGISTER.ttl clear  ID --method METHOD [--now ISO]
   backlog_impediment.py REGISTER.ttl list
 
-raise  appends an Impediment (what it blocks, its kind, its statement, its owner, the time it was raised) and prints the ways known to clear its kind.
+raise  appends an Impediment (the box whose work it blocks, which must be a box of the lineage that had begun when it was raised (the release of a closed box can still be blocked), and optionally the item in it; its kind, its statement, its owner, the time it was raised) and prints the ways known to clear its kind.
 advise prints the ways that clear a kind, with the steps and what shows the obstacle gone; they are advice, never an order, and none waives, skips or defers a rule.
 clear  appends the time it was resolved and the way used; it refuses an unknown or already cleared impediment, a way the kind does not list, and a time before it was raised.
 list   prints every impediment with its state and its age in hours.
@@ -35,7 +35,7 @@ def find(g, cls, name, what):
 def ways(g, kind):
     out = []
     for m in sorted(g.objects(kind, U("clearableBy")), key=str):
-        out.append((local(m), str(g.value(m, RDFS.label)), str(g.value(m, SKOS.definition))))
+        out.append((local(m), str(g.value(m, RDFS.label)), str(g.value(m, SKOS.definition)) + ((" Limit: " + str(g.value(m, SKOS.scopeNote))) if g.value(m, SKOS.scopeNote) is not None else "")))
     return out
 def show(g, kind):
     print("  kind: %s" % g.value(kind, RDFS.label))
@@ -99,22 +99,34 @@ def main(a):
         else: die("advise needs --kind or --impediment")
         show(g, k); return 0
     if cmd == "raise":
-        o = parse_args(a[2:], ("--lineage", "--prefix", "--blocks", "--kind", "--statement", "--owner", "--now"))
-        for r in ("--lineage", "--prefix", "--blocks", "--kind", "--statement", "--owner"):
+        o = parse_args(a[2:], ("--lineage", "--prefix", "--box", "--blocks", "--kind", "--statement", "--owner", "--now"))
+        for r in ("--lineage", "--prefix", "--box", "--kind", "--statement", "--owner"):
             if r not in o: die("raise needs %s" % r)
         if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", o["--prefix"]): die("the prefix is letters and digits (IK), got %r" % o["--prefix"])
         if not o["--statement"].strip(): die("the statement says what is blocked, by what, and what would clear it; it is empty")
         lin = [s for s in g.subjects(RDF.type, U("Lineage")) if local(s) == o["--lineage"]]
         if len(lin) != 1: die("no lineage %r" % o["--lineage"])
         NOT_WORK = {"Role", "ImpedimentKind", "ClearingMethod", "Impediment", "Lineage", "RuleSet", "GovernanceRuling"}
-        item = [s for s in set(g.subjects(None, None)) if local(s) == o["--blocks"] and isinstance(s, URIRef) and (s, RDF.type, None) in g and not any(local(t) in NOT_WORK for t in g.objects(s, RDF.type))]
-        if len(item) < 1: die("nothing named %r in the register for the impediment to block (not a role, kind, way, impediment, lineage, rule set or ruling)" % o["--blocks"])
+        box = [s for s in g.subjects(RDF.type, U("Iteration")) if local(s) in (o["--box"], "It_%s_%s" % (o["--prefix"], o["--box"]))]
+        if len(box) != 1: die("%r is not a box (iteration) of the register: name the box whose work the obstacle blocks, for example %s" % (o["--box"], ", ".join(sorted(local(s) for s in g.subjects(RDF.type, U("Iteration")) if (s, U("belongsToLineage"), lin[0]) in g)[-2:]) or "a box of the lineage"))
+        box = box[0]
+        if (box, U("belongsToLineage"), lin[0]) not in g: die("%s is not a box of lineage %s: an obstacle blocks the work of a box of its own lineage" % (local(box), o["--lineage"]))
+        item = [] if "--blocks" not in o else [s for s in set(g.subjects(None, None)) if local(s) == o["--blocks"] and isinstance(s, URIRef) and (s, RDF.type, None) in g and not any(local(t) in NOT_WORK for t in g.objects(s, RDF.type))]
+        if "--blocks" in o and len(item) < 1: die("nothing named %r in the register for the impediment to block (not a role, kind, way, impediment, lineage, rule set or ruling)" % o["--blocks"])
         if len(item) > 1: die("%r names more than one thing in the register: %s" % (o["--blocks"], ", ".join(str(x) for x in item)))
         kind = find(g, "ImpedimentKind", o["--kind"], "kind")
         own = [s for s in set(g.subjects(None, None)) if local(s) == o["--owner"] and isinstance(s, URIRef) and any(local(t) in ("Role",) or (t, RDFS.subClassOf, U("Role")) in g for t in g.objects(s, RDF.type))]
         if not own: die("%r is not a role in the register: an impediment is owned by a role" % o["--owner"])
-        t = when(o.get("--now")); iid = next_id(g, o["--prefix"]); st = o["--statement"].replace("\\", "\\\\").replace('"', '\\"').replace("\r", "\\r").replace("\n", "\\n").replace("\t", "\\t")
-        item = item[0]; itemq = ("<%s>" % item)
+        t = when(o.get("--now"))
+        starts = list(g.objects(box, U("iterationStart")))
+        if len(starts) != 1 or not isinstance(starts[0], Literal) or str(starts[0].datatype) != "http://www.w3.org/2001/XMLSchema#dateTime":
+            die("%s must have exactly one start recorded as a date-time with a zone, so it can be said to have begun when the obstacle was met" % local(box))
+        try: b0 = starts[0].toPython().astimezone(datetime.timezone.utc) if starts[0].toPython().tzinfo else None
+        except Exception: b0 = None
+        if b0 is None: die("the start of %s has no time zone or is not a time; it needs one such as 2026-11-02T09:00:00Z" % local(box))
+        if t < b0: die("%s was raised (%s) before the box began (%s): an obstacle is met in a box that has begun" % (o["--prefix"], iso(t), starts[0]))
+        iid = next_id(g, o["--prefix"]); st = o["--statement"].replace("\\", "\\\\").replace('"', '\\"').replace("\r", "\\r").replace("\n", "\\n").replace("\t", "\\t")
+        itemq = "<%s>, <%s>" % (box, item[0]) if item else "<%s>" % box; item = item[0] if item else box
         txt = '\n# Impediment raised %s\n<%s%s> a <%sImpediment> ; <%sbelongsToLineage> <%s> ;\n    <%simpedes> %s ; <%shasImpedimentKind> <%s> ;\n    <%shasImpedimentOwner> <%s> ;\n    <%shasImpedimentStatement> "%s" ;\n    <%sraisedAt> "%s"^^<http://www.w3.org/2001/XMLSchema#dateTime> .\n' % (iso(t), FW, iid, B, B, lin[0], B, itemq, B, kind, B, own[0], B, st, B, iso(t))
         write(reg, txt, "<%s%s>" % (FW, iid))
         print("raised %s at %s: blocks %s, %s, owner %s" % (iid, iso(t), local(item), local(kind), local(own[0]))); show(g, kind); return 0

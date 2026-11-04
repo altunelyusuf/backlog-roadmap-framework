@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.167.0> ;
-    owl:versionInfo "1.167.0" ;
-    owl:priorVersion <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.168.0> ;
+    owl:versionInfo "1.168.0" ;
+    owl:priorVersion <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -8880,6 +8880,19 @@ backlog:hasImpedimentKind a owl:ObjectProperty , owl:FunctionalProperty ;
 backlog:ImpedimentKind kb:hasClassKind kb:ClassKind_ValueDomain .
 backlog:hasImpedimentKind kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
 
+#################################################################
+# Lineage 29, box 6 (G199): a finding read again, never edited
+#################################################################
+
+backlog:readAsKind a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range backlog:ImpedimentKind ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "read as kind"@en ;
+    skos:definition "The kind of obstacle a later reading gives a finding whose recorded kind was wrong. The recorded kind stays, because a committed record is appended to and never edited; the kind that counts is this one where it is present, and otherwise the recorded kind."@en .
+
+backlog:readAsKind kb:hasRelationshipCategory kb:RelationshipCategory_Provenance .
+
 
 #################################################################
 # Lineage 29, box 2 (G190): the ways to clear an obstacle
@@ -8887,7 +8900,7 @@ backlog:hasImpedimentKind kb:hasRelationshipCategory kb:RelationshipCategory_Cha
 
 backlog:ClearingMethod a owl:Class ;
     rdfs:subClassOf backlog:BacklogConcept ;
-    owl:oneOf ( backlog:Mth_SatisfyInStep backlog:Mth_RedoInOrder backlog:Mth_ChangeThroughManagement backlog:Mth_FreshAgentReview backlog:Mth_KeepRecordInPackage backlog:Mth_StateTheLimit backlog:Mth_ReproduceAndRepairTool backlog:Mth_AskOwnerOneQuestion backlog:Mth_DecideByRule backlog:Mth_AskForTheFile backlog:Mth_UseAllowedRoute backlog:Mth_BoundedRetry backlog:Mth_RestartTheChain backlog:Mth_ReorderTheBox ) ;
+    owl:oneOf ( backlog:Mth_SatisfyInStep backlog:Mth_RedoInOrder backlog:Mth_ChangeThroughManagement backlog:Mth_FreshAgentReview backlog:Mth_KeepRecordInPackage backlog:Mth_StateTheLimit backlog:Mth_ReproduceAndRepairTool backlog:Mth_AskOwnerOneQuestion backlog:Mth_DecideByRule backlog:Mth_AskForTheFile backlog:Mth_UseAllowedRoute backlog:Mth_BoundedRetry backlog:Mth_RestartTheChain backlog:Mth_ReorderTheBox backlog:Mth_MeasureAndRecord ) ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     backlog:isFrameworkOriginal true ;
     rdfs:label "Clearing Method"@en ;
@@ -8911,4 +8924,4 @@ backlog:ClearingMethod kb:hasClassKind kb:ClassKind_Method .
 backlog:clearableBy kb:hasRelationshipCategory kb:RelationshipCategory_Association .
 backlog:clearedBy kb:hasRelationshipCategory kb:RelationshipCategory_Provenance .
 
-[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Mth_SatisfyInStep backlog:Mth_RedoInOrder backlog:Mth_ChangeThroughManagement backlog:Mth_FreshAgentReview backlog:Mth_KeepRecordInPackage backlog:Mth_StateTheLimit backlog:Mth_ReproduceAndRepairTool backlog:Mth_AskOwnerOneQuestion backlog:Mth_DecideByRule backlog:Mth_AskForTheFile backlog:Mth_UseAllowedRoute backlog:Mth_BoundedRetry backlog:Mth_RestartTheChain backlog:Mth_ReorderTheBox ) .
+[] a owl:AllDifferent ; owl:distinctMembers ( backlog:Mth_SatisfyInStep backlog:Mth_RedoInOrder backlog:Mth_ChangeThroughManagement backlog:Mth_FreshAgentReview backlog:Mth_KeepRecordInPackage backlog:Mth_StateTheLimit backlog:Mth_ReproduceAndRepairTool backlog:Mth_AskOwnerOneQuestion backlog:Mth_DecideByRule backlog:Mth_AskForTheFile backlog:Mth_UseAllowedRoute backlog:Mth_BoundedRetry backlog:Mth_RestartTheChain backlog:Mth_ReorderTheBox backlog:Mth_MeasureAndRecord ) .

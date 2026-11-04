@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""backlog_impediment_probe v1.0.0 -- proof of backlog_impediment (G191): the tool run on a scratch register that holds the real kinds and ways, then the real validator on what it wrote."""
+"""backlog_impediment_probe v1.2.0 -- proof of backlog_impediment (G191, G199): the tool run on a scratch register that holds the real kinds and ways, then the real validator on what it wrote."""
 import glob, os, re, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", p)[0]]
 if sys.argv[1:] == ["--deps"]:
-    print(os.path.join(HERE, "backlog_impediment_v1_0_0.py")); print(os.path.abspath(__file__)); sys.exit(0)
-TOOL = os.path.join(HERE, "backlog_impediment_v1_0_0.py")
+    print(os.path.join(HERE, "backlog_impediment_v2_0_0.py")); print(os.path.abspath(__file__)); sys.exit(0)
+TOOL = os.path.join(HERE, "backlog_impediment_v2_0_0.py")
 VAL = sorted(glob.glob(HERE + "/backlog_validate_v*.py"), key=sv)[-1]
 REGF = sorted(glob.glob(PKG + "/01-ontologies/backlog_abox_v*.ttl"), key=sv)[-1]
 fails = 0
@@ -24,13 +24,20 @@ base = sub.serialize(format="turtle") + """
 @prefix ex: <http://example.org/imp-probe#> . @prefix backlog: <http://example.org/backlog#> .
 ex:Lin a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown ; backlog:humanApprovalLevel 3 .
 ex:Work a backlog:Story .
+ex:It a backlog:Iteration ; backlog:belongsToLineage ex:Lin ; backlog:iterationStart "2026-11-02T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ItOther a backlog:Iteration ; backlog:belongsToLineage ex:Other ; backlog:iterationStart "2026-11-02T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ItDone a backlog:Iteration ; backlog:belongsToLineage ex:Lin ; backlog:iterationStart "2026-11-02T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:iterationEnd "2026-11-02T09:30:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:ItNoStart a backlog:Iteration ; backlog:belongsToLineage ex:Lin .
+ex:ItStrStart a backlog:Iteration ; backlog:belongsToLineage ex:Lin ; backlog:iterationStart "2026-11-02T09:00:00" .
+ex:ItTwoStarts a backlog:Iteration ; backlog:belongsToLineage ex:Lin ; backlog:iterationStart "2026-11-02T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> , "2026-11-02T10:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+ex:Other a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown ; backlog:humanApprovalLevel 3 .
 ex:Builder a backlog:Role .
 """
 def run(reg, *a):
     r = subprocess.run([sys.executable, "-I", TOOL, reg] + list(a), capture_output=True, text=True); return r.returncode, r.stdout + r.stderr
 with tempfile.TemporaryDirectory() as d:
     reg = os.path.join(d, "r.ttl"); open(reg, "w").write(base)
-    RA = ["--lineage", "Lin", "--prefix", "T", "--blocks", "Work", "--kind", "ToolFault", "--statement", "The tool crashes on a checkpoint with no date; nothing can be dated.", "--owner", "Builder"]
+    RA = ["--lineage", "Lin", "--prefix", "T", "--box", "It", "--blocks", "Work", "--kind", "ToolFault", "--statement", "The tool crashes on a checkpoint with no date; nothing can be dated.", "--owner", "Builder"]
     c, o = run(reg, "advise", "--kind", "ToolFault")
     expect("advise prints the ways of a kind with their steps", c == 0 and "Reproduce the fault" in o and "Gone when" in o)
     c, o = run(reg, "advise", "--kind", "NoSuch"); expect("advise refuses a kind that is not one of the seven", c == 1 and "REFUSED" in o and "RuleRefusal" in o)
@@ -49,11 +56,11 @@ with tempfile.TemporaryDirectory() as d:
     c, o = run(reg, "clear", "Imp_T_1", "--method", "ReproduceAndRepairTool", "--now", "2026-11-02T11:30:00Z"); expect("clear refuses an impediment already resolved", c == 1 and "already resolved" in o)
     before = open(reg).read()
     c, o = run(reg, "clear", "Imp_Nope", "--method", "ReproduceAndRepairTool"); expect("clear refuses an impediment that does not exist and changes nothing", c == 1 and open(reg).read() == before)
-    NL = ["--lineage", "Lin", "--prefix", "T", "--blocks", "Work", "--kind", "ToolFault", "--owner", "Builder"]
+    NL = ["--lineage", "Lin", "--prefix", "T", "--box", "It", "--blocks", "Work", "--kind", "ToolFault", "--owner", "Builder"]
     c, o = run(reg, "raise", *NL, "--statement", 'line one\nline "two" \\ back\ttab; it blocks the dating.', "--now", "2026-11-02T10:10:00Z")
     expect("a statement with a newline, quotes, a backslash and a tab is written so that the register still parses", c == 0 and run(reg, "list")[0] == 0 and 'line one' in open(reg).read().replace("\\n", " "))
     snap = open(reg).read()
-    c, o = run(reg, "raise", "--lineage", "Lin", "--prefix", "I K>", "--blocks", "Work", "--kind", "ToolFault", "--owner", "Builder", "--statement", "x y z"); expect("a prefix that is not letters and digits is refused and the register is unchanged", c == 1 and "prefix" in o and open(reg).read() == snap)
+    c, o = run(reg, "raise", "--lineage", "Lin", "--prefix", "I K>", "--box", "It", "--blocks", "Work", "--kind", "ToolFault", "--owner", "Builder", "--statement", "x y z"); expect("a prefix that is not letters and digits is refused and the register is unchanged", c == 1 and "prefix" in o and open(reg).read() == snap)
     c, o = run(reg, "raise", *RA, "--now", "2999-01-01T00:00:00Z"); expect("a time in the future is refused", c == 1 and "future" in o and open(reg).read() == snap)
     c, o = run(reg, "raise", *RA, "--now", "yesterday"); expect("a time that is not a time is refused with a message, not a traceback", c == 1 and "REFUSED" in o and "Traceback" not in o)
     c, o = run(reg, "raise", *[x if x != "Work" else "Builder" for x in RA]); expect("a role cannot be the thing an impediment blocks", c == 1 and "nothing named" in o)
@@ -64,7 +71,7 @@ with tempfile.TemporaryDirectory() as d:
     c, o = run(reg, "raise", *[x if x != "Work" else "Many" for x in RA], "--now", "2026-11-02T10:20:00Z"); expect("an item with several triples can be blocked", c == 0 and "blocks Many" in o)
     snap2 = open(reg, "rb").read()
     c, o = run(reg, "raise", *RA, "--now", "0001-01-01T00:00:00Z"); expect("a time before the year 2000 is refused and the register is unchanged", c == 1 and open(reg, "rb").read() == snap2)
-    r = subprocess.run([sys.executable, "-I", TOOL, reg, "raise", "--lineage", "Lin", "--prefix", "T", "--blocks", "Work", "--kind", "ToolFault", "--owner", "Builder", "--statement", "bad \udcff byte"], capture_output=True, text=True, env={"PATH": os.environ.get("PATH", "")})
+    r = subprocess.run([sys.executable, "-I", TOOL, reg, "raise", "--lineage", "Lin", "--prefix", "T", "--box", "It", "--blocks", "Work", "--kind", "ToolFault", "--owner", "Builder", "--statement", "bad \udcff byte"], capture_output=True, text=True, env={"PATH": os.environ.get("PATH", "")})
     expect("text that is not valid UTF-8 is refused and the register keeps its size", r.returncode != 0 and open(reg, "rb").read() == snap2)
     import threading
     res = []
@@ -97,7 +104,19 @@ with tempfile.TemporaryDirectory() as d:
     expect("a statement quoting the address of a later number does not block it", c == 0 and c2 == 0 and ("raised Imp_T_%d" % (nxt + 1)) in o2)
     import shutil
     real = os.path.join(d, "real.ttl"); shutil.copy(REGF, real)
-    c, o = run(real, "raise", "--lineage", "L_ImpedimentsKnown", "--prefix", "ZZ", "--blocks", "ST_IK_RaiseAdviseClear", "--kind", "ToolFault", "--owner", "Builder", "--statement", "Probe entry on a copy of the real register.", "--now", "2026-11-02T10:00:00Z")
+    c, o = run(real, "raise", "--lineage", "L_ImpedimentsKnown", "--prefix", "ZZ", "--box", "It_IK_2", "--blocks", "ST_IK_RaiseAdviseClear", "--kind", "ToolFault", "--owner", "Builder", "--statement", "Probe entry on a copy of the real register.", "--now", "2026-11-02T16:00:00Z")
     expect("on a copy of the real register an item of the lineage can be blocked, the way a real story is", c == 0 and "raised Imp_ZZ_1" in o)
     c, o = run(reg, "list"); expect("list shows the cleared one with its way and the other still open", "cleared by Mth_ReproduceAndRepairTool" in o and "open" in o)
+    # G199: an obstacle names the box whose work it blocks
+    snapb = open(reg).read()
+    c, o = run(reg, "raise", *[x for x in RA if x not in ("--box", "It")], "--now", "2026-11-02T11:01:00Z"); expect("raise refuses an obstacle that names no box", c == 1 and "raise needs --box" in o and open(reg).read() == snapb)
+    c, o = run(reg, "raise", *[x if x != "It" else "Work" for x in RA], "--now", "2026-11-02T11:01:00Z"); expect("raise refuses a box that is not a box of the register", c == 1 and "is not a box" in o and open(reg).read() == snapb)
+    c, o = run(reg, "raise", *[x if x != "It" else "ItOther" for x in RA], "--now", "2026-11-02T11:01:00Z"); expect("raise refuses the box of another lineage", c == 1 and "not a box of lineage" in o and open(reg).read() == snapb)
+    c, o = run(reg, "raise", *RA, "--now", "2026-11-02T08:00:00Z"); expect("raise refuses a time before the box began", c == 1 and "before the box began" in o and open(reg).read() == snapb)
+    c, o = run(reg, "raise", *[x if x != "It" else "ItDone" for x in RA], "--now", "2026-11-02T11:02:00Z"); expect("the release of a closed box can still be blocked", c == 0 and "raised Imp_T_" in o)
+    c, o = run(reg, "raise", *[x for x in RA if x not in ("--blocks", "Work")], "--now", "2026-11-02T11:03:00Z"); expect("an obstacle may name only the box", c == 0 and "blocks It" in o)
+    snapc = open(reg).read()
+    for nm, why in (("ItNoStart", "no start"), ("ItStrStart", "a start that is plain text"), ("ItTwoStarts", "two starts")):
+        c, o = run(reg, "raise", *[x if x != "It" else nm for x in RA], "--now", "2026-11-02T11:05:00Z"); expect("raise refuses a box with " + why + " cleanly", c == 1 and "exactly one start" in o and "Traceback" not in o and open(reg).read() == snapc)
+    c, o = run(reg, "advise", "--kind", "RuleRefusal"); expect("advice for a kind shows the limit of a way that has one", c == 0 and "Limit: Applies to work not yet released" in o)
 print("VERDICT   :", "PASS" if not fails else "FAIL"); sys.exit(1 if fails else 0)
