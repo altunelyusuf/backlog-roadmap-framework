@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.14.0 — 2026-11-04 (The other profiles and the lineages closed earlier are shown unchanged by this lineage)
+
+Minor release; adds one probe and its baseline, nothing in the vocabulary, shapes or rule sets changes. Impact: the gate now stops if a rule set of another profile or of a lineage closed before release 4.9.0 is changed, or one of those lineages is reopened. Not covered: shapes, tools, stage outputs and findings of those lineages, and lineages that closed later.
+
+**Unplanned work:** Owner ruling to concentrate on Lineage 29; story KeptHeld closed in box 8
+
 ## v4.13.0 — 2026-11-04 (Scope items form trees and every area and exclusion of an adopting lineage is answered; an obstacle is shown raised and cleared in a box)
 
 Minor release; no earlier lineage changes. Impact: lineages opened from now with the agentic profile must answer every area and exclusion of their scope with a goal or a parent (new rule set, profile revision 15); earlier lineages and other profiles are unchanged. Items may now sit under a parent of their own kind (new link). A probe shows a real obstacle raised, cleared by a known way and the work resumed. Not refused: a cycle of parents, a second parent, deliverables under this rule.
