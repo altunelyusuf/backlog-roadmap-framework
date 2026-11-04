@@ -78,4 +78,21 @@ with tempfile.TemporaryDirectory() as d:
     open(rp, "w").write(ns)
     o3 = subprocess.run([sys.executable, "-I", TOOL, rp, "--lineage", "L", "--now", "2026-11-02T06:00:00Z"], capture_output=True, text=True).stdout.split("== Obstacles")[1]
     expect("a late box with no start is named as having none, and no impediment is placed in it", "no start" in o3 and "It1" in o3)
+    # malformed input (Lineage 29): O2 has a mover in a box that ends, so a checkpoint date that is not a date used to meet "updated > nothing" and stop with a TypeError
+    def run_bad(text, tool=TOOL, *extra):
+        open(rp, "w").write(text); return subprocess.run([sys.executable, "-I", tool, rp, "--lineage", "L", "--now", "2026-11-02T04:00:00Z", *extra], capture_output=True, text=True)
+    BAD = REG.replace("backlog:checkpointDate " + T('04'), 'backlog:checkpointDate "soon"')
+    rb = run_bad(BAD)
+    expect("a checkpoint date that is text does not stop the report: it ends, names the value under Malformed input, and still prints the other objectives", rb.returncode == 0 and "Traceback" not in rb.stderr and "not a date or number: 'soon'" in rb.stdout and any(x.strip().startswith("O1") for x in rb.stdout.splitlines()) and "== Boxes ==" in rb.stdout)
+    expect("with --strict malformed input makes the exit code 1", run_bad(BAD, TOOL, "--strict").returncode == 1)
+    rn = run_bad(BAD.replace("backlog:hasObservedValue 4", 'backlog:hasObservedValue "many"'))
+    expect("an observed value that is text is named too and does not stop the report", rn.returncode == 0 and "not a date or number: 'many'" in rn.stdout)
+    expect("a clean register names no malformed input", "  none" in subprocess.run([sys.executable, "-I", TOOL, rp.replace("r.ttl", "clean.ttl") if open(rp.replace("r.ttl", "clean.ttl"), "w").write(REG) else "", "--lineage", "L", "--now", "2026-11-02T04:00:00Z"], capture_output=True, text=True).stdout.split("== Malformed input ==")[1])
+    src = open(TOOL, encoding="utf-8").read()
+    for what, old, new in (("the guard on an unknown base is gone", "(upd and base and upd > base)", "(upd and upd > base)"), ("malformed values are not listed", "for m in MAL: print", "for m in []: print"), ("an unreadable value is not remembered", "and str(v) not in MAL:\n        MAL.append(str(v))", "and False:\n        MAL.append(str(v))")):
+        if old not in src: expect("mutant text found: " + what, False); continue
+        with tempfile.TemporaryDirectory() as md:
+            mp = md + "/" + os.path.basename(TOOL); open(mp, "w", encoding="utf-8").write(src.replace(old, new, 1))
+            m1 = run_bad(BAD, mp)
+        expect("mutant caught: " + what, not (m1.returncode == 0 and "not a date or number: 'soon'" in m1.stdout and "Traceback" not in m1.stderr))
 print("VERDICT   :", "PASS" if not fails else "FAIL"); sys.exit(1 if fails else 0)

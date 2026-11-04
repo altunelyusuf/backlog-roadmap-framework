@@ -17,6 +17,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.13.0 (Lineage 29, story Preflight): the preflight also runs the vocabulary probe (about 6 s, and the release path asks the preflight twice), so a vocabulary refusal comes before the long gate and not after it (finding of the review of Lineage 29).
 v1.12.0 (Lineage 31, story Probes): prune-cache also removes the validator's kept inputs (aux_reference, aux_shapes, aux_list files) older than N days (the review of box 2 found they would grow without bound).
 v1.11.0 (Lineage 31, story Probes): the gate-times file is a record file, so a stage release that writes it is not refused as changing more than records (the independent review of box 1 found this).
 v1.10.0 (Lineage 31, story Know): after a passing gate the seconds of every gate section and every probe are written into the package, 06-package-provenance/GATE_TIMES/gate_times_vVERSION.tsv, before the manifest is rebuilt, so where the release time goes is kept per release and not lost with the work folder.
@@ -279,6 +280,12 @@ def preflight(v):
         r = subprocess.run([sys.executable, val, "--gate-k"], capture_output=True, text=True)
         if r.returncode != 0:
             bad.append("Gate K: " + (r.stdout.strip().splitlines() or ["failed"])[-1])
+    vp = newest(os.path.join(HERE, "backlog_vocabulary_probe_v*.py"))      # v1.13.0: a vocabulary refusal used to come only after the long gate
+    if vp and os.path.isdir(os.path.join(PKG, "01-ontologies")):        # the probe reads the T-Box and the A-box: in a package without them it cannot judge
+        r = subprocess.run([sys.executable, vp], capture_output=True, text=True, cwd=PKG)
+        if r.returncode != 0:
+            tail = (r.stdout.strip().splitlines() or r.stderr.strip().splitlines() or ["no output"])[-1][:200]
+            bad.append("the vocabulary probe fails (exit %d; it takes about 6 s here and would refuse after the long gate): %s" % (r.returncode, tail))
     reg = newest(os.path.join(PKG, "01-ontologies", "backlog_abox_v*.ttl"))
     if reg:
         if val:
