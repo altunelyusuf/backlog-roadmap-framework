@@ -4466,3 +4466,12 @@ vsn:Item_UrgOk a backlog:Story ; backlog:startedAt "2026-11-03T12:30:00Z"^^<http
 # IK_NOBOX  an impediment of a lineage that names its obstacles, blocking a story and no box (ImpedimentNamesBoxShape).
 vsn:StNoBox a backlog:Story .
 vsn:ImpNoBox a backlog:Impediment ; backlog:belongsToLineage vsn:LKinds ; backlog:impedes vsn:StNoBox ; backlog:hasImpedimentStatement "Blocked." ; backlog:raisedAt "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasImpedimentOwner backlog:Builder ; backlog:hasImpedimentKind backlog:Imp_ToolFault .
+
+# SI_NOANSWER  an area of a lineage that adopts RS_ScopeItemsAnswered, with no goal that answers it (ScopeItemUnansweredShape).
+vsn:LScopeAns a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ScopeItemsAnswered ; backlog:hasLineageStatus backlog:LS_Goaled ; backlog:humanApprovalLevel 3 .
+vsn:ScAns a backlog:ScopeStatement ; backlog:belongsToLineage vsn:LScopeAns ; backlog:coversArea vsn:ArNoGoal .
+vsn:ArNoGoal a backlog:ScopeArea ; backlog:hasScopeLayer backlog:Layer_Work .
+
+# PI_BADPARENT  an area that names a deliverable as its parent (ParentItemShape).
+vsn:ArBadParent a backlog:ScopeArea ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:hasParentItem vsn:DelParent .
+vsn:DelParent a backlog:ScopeDeliverable ; backlog:hasScopeLayer backlog:Layer_Product .

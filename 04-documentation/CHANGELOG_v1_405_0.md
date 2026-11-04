@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.13.0 — 2026-11-04 (Scope items form trees and every area and exclusion of an adopting lineage is answered; an obstacle is shown raised and cleared in a box)
+
+Minor release; no earlier lineage changes. Impact: lineages opened from now with the agentic profile must answer every area and exclusion of their scope with a goal or a parent (new rule set, profile revision 15); earlier lineages and other profiles are unchanged. Items may now sit under a parent of their own kind (new link). A probe shows a real obstacle raised, cleared by a known way and the work resumed. Not refused: a cycle of parents, a second parent, deliverables under this rule.
+
+**Unplanned work:** Owner ruling to concentrate on Lineage 29; stories TaxonomyLink and LiveProof closed in box 7
+
 ## v4.12.0 — 2026-11-04 (Every earlier finding has a kind, every kind has ways that fit, and an obstacle names its box)
 
 Impact: the 105 findings recorded before Lineage 29 closed all carry a kind of obstacle (76 added, three wrong kinds read again beside the recorded ones through one new link; a second reader agreed on 95 of 105); a way that measures and records missing evidence and a route beyond the retry are added and the way that redoes steps says it applies only to unreleased work; the impediment tool is 2.0.0 because the box is now required, and a shape refuses an obstacle that names no box of its lineage. Vocabulary, shapes and fixture each grow by one small addition. Open: no shape requires a kind on later findings; a raise after a box closed has no upper limit.

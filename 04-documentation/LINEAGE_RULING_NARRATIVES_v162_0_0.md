@@ -1,4 +1,4 @@
-# Lineage Ruling Narratives — through G199 (history; not required reading)
+# Lineage Ruling Narratives — through G200 (history; not required reading)
 
 The narratives of rulings G1 to G175 were the body of `LINEAGE_OPERATING_DISCIPLINE_v138_0_0.md` until release 1.454.0, which moved them here unchanged. The operating discipline is now `LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md`.
 
@@ -4492,3 +4492,14 @@ Related: G186, G197.
 
 **What is not claimed.** That every reading is the only right one. That the earlier obstacle record was edited: a link to its box was added beside it.
 Related: G189, G190, G191.
+
+## G200 — The scope taxonomy is a tree, and every area and exclusion of an adopting lineage is answered
+
+**Q1 — the finding.** The scope taxonomy classified areas, deliverables and exclusions by layer and goals by facing, but nothing arranged them as a tree: an area could not sit under an area, nor a goal under a goal. And the only check that a scope item had a goal was an advisory, which a lineage could pass with an area nobody answered for.
+
+**Q2 — what was ruled and built.** One link, "has parent item" (vocabulary 1.169.0), puts an item under one parent of its own kind; `ParentItemShape` refuses a parent of another kind or the item itself. A rule set, adopted by lineages opened under profile revision 15, makes the advisory a refusal for areas and exclusions: `ScopeItemUnansweredShape` (shapes 1.211.0) refuses one with no goal, unless it sits under a parent. Both have a negative case in the fixture. A probe shows each on a scratch register and the rule on a copy of the real register in which Lineage 29 adopts it.
+
+**Q3 — what the record shows.** On that copy the register is clean (every area and exclusion of Lineage 29 has its goal), a planted area with no goal is refused by name, and a lineage that did not adopt is not. Lineage 29 itself does not adopt the rule set, because it was opened before it existed. A deliverable is answered by the mission-facing goal and by the stories that satisfy it, as before.
+
+**What is not claimed.** That any lineage is bound yet. That goals are checked under a parent goal: a parent link on goals is allowed and nothing more. That a cycle of parents or a second parent is refused: neither is. That a product view of an area needs its own goal: it does not. That a deliverable is checked here: it is answered as before. That a retracted scope statement is skipped: it is read like the others.
+Related: G194.
