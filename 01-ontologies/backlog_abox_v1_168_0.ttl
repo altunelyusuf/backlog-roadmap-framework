@@ -19177,7 +19177,7 @@ fw:PB_IK_5 a backlog:PlanBaseline ; rdfs:label "Base plan of box 5"@en ;
 # ---- Ruling G198, 2026-11-04: a forecast is shown and discussed before it is kept (the forecast record of Lineage 29) ----
 backlog:RS_ForecastDiscussed a owl:NamedIndividual , backlog:RuleSet ;
     rdfs:label "A forecast behind a checkpoint is recorded as discussed with the Owner"@en ;
-    skos:definition "Within an adopting lineage, the forecast behind each checkpoint date carries a record that it was discussed with the role that decides (forecastDiscussedBy) and when (forecastDiscussedAt, not before the forecast was made). A RuleSet because it binds only lineages that adopt it; a lineage opened earlier is not bound. The date stays a forecast and enforces nothing (G197)."@en .
+    skos:definition "Within an adopting lineage, the forecast behind each checkpoint date carries a record that it was discussed with the role that decides (forecastDiscussedBy) and when (forecastDiscussedAt, not before the forecast was made). A RuleSet because it binds only lineages that adopt it; a lineage opened earlier is not bound. The date stays a forecast and enforces nothing."@en .
 backlog:Pr_14 a owl:NamedIndividual , backlog:ProfileRevision ; rdfs:label "Profile revision 14"@en ; backlog:revisionNumber 14 ; skos:definition "Adds to the agentic adaptive profile (AAL) the rule set that a forecast is recorded as discussed, so that a lineage opened under it shows that its forecast was looked at before its dates were kept. The other profiles are not changed."@en .
 backlog:Profile_AgenticAdaptive backlog:profileIncludes backlog:RS_ForecastDiscussed .
 backlog:RS_ForecastDiscussed backlog:introducedInRevision backlog:Pr_14 .
