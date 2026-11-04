@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # register-use: reference-only
 # (audited: the probe reads no record of the framework register; it reads git and builds throw-away repositories)
-"""backlog_cost_kept_probe v1.0.0 -- the full gate, the release tool and the two disciplines are shown unchanged by Lineage 30 (cost-saving tools).
+"""backlog_cost_kept_probe v1.0.1 -- the full gate, the release tool and the two disciplines are shown unchanged by Lineage 30 (cost-saving tools).
 
-The baseline is the published tree at the start of the lineage (tag backlog-roadmap-framework-v4.6.0). The newest gate script may differ from the baseline's only in its
+The baseline is the published tree at the start of the lineage (tag backlog-roadmap-framework-v4.6.0) and the end is the published tree where the lineage closed (tag backlog-roadmap-framework-v4.8.0); v1.0.1 compares the two tags, not the working tree, so later work does not make a statement about this lineage false. The newest gate script may differ from the baseline's only in its
 version-note comment lines and in its PROBE_LIST, and the list may only GAIN the probes named in ALLOWED (the proof probes of this lineage); nothing may be taken out. The
 newest release tool, the files the release path calls (RELEASE_PATH), the newest lineage discipline and the newest OE discipline are byte-identical to the baseline's. The PROBE_LIST must be one plain assignment that keeps the baseline's probes first, in order and once each. A line that begins like a version note is taken to be a comment and ignored wherever it stands (the gate holds no heredoc; one added would change what the rule means). Files the release path reaches by other means (the publisher repository) are not compared. This probe is not a check of the gate: it shows only what
 this lineage did not change; the gate's own steps are held by backlog_checks_kept_probe.
@@ -15,7 +15,7 @@ import glob, os, re, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 if sys.argv[1:] == ["--deps"]:
     print(os.path.abspath(__file__)); sys.exit(0)
-TAG = "backlog-roadmap-framework-v4.6.0"
+TAG = "backlog-roadmap-framework-v4.6.0"; END = "backlog-roadmap-framework-v4.8.0"
 RELEASE_PATH = ("build_manifest", "make_public_distribution", "backlog_release_item_check", "backlog_probe_inputs", "backlog_merkle_cache", "backlog_distribution_drift_check", "backlog_archive_integrity", "backlog_pipeline_verify")
 ALLOWED = {"backlog_cost_tools_probe", "backlog_cost_kept_probe"}
 CHECK_SRC = r'''
@@ -42,18 +42,17 @@ def gate_parts(text):
     ok = len(plist) == 1 and re.fullmatch(r'PROBE_LIST="[A-Za-z0-9_ ]*"', plist[0]) is not None
     members = plist[0].split('"')[1].split() if ok else None
     return rest, members
-def check(root, pkg, tag, oe_folder):
+def check(root, pkg, tag, oe_folder, end):
     """None when the baseline tag is absent (not run); else the list of problems (empty when nothing changed)."""
-    if sh(root, "rev-parse", "--verify", "-q", tag + "^{commit}")[0] != 0:
+    if sh(root, "rev-parse", "--verify", "-q", tag + "^{commit}")[0] != 0 or sh(root, "rev-parse", "--verify", "-q", end + "^{commit}")[0] != 0:
         return None
     problems = []
-    cur_dir = os.path.join(root, pkg, "03-tooling")
     for stem, ext in (("backlog_gate", "sh"), ("backlog_release_tool", "py")):
         base_files = tree(root, tag, pkg + "/03-tooling")
-        bn = newest(base_files, stem); cn = newest(glob.glob(os.path.join(cur_dir, stem + "_v*." + ext)), stem)
+        bn = newest(base_files, stem); cn = newest(tree(root, end, pkg + "/03-tooling"), stem)
         if not bn or not cn:
             problems.append("%s: no file in the baseline or now" % stem); continue
-        bt = read_at(root, tag, bn); ct = open(cn, "rb").read()
+        bt = read_at(root, tag, bn); ct = read_at(root, end, cn)
         if stem == "backlog_release_tool":
             if bt != ct:
                 problems.append("the release tool differs from the baseline (%s now, %s then)" % (os.path.basename(cn), os.path.basename(bn)))
@@ -71,17 +70,16 @@ def check(root, pkg, tag, oe_folder):
             if extra:
                 problems.append("the gate lists probes this lineage did not name: " + ", ".join(extra))
     for stem in RELEASE_PATH:
-        bn = newest(tree(root, tag, pkg + "/03-tooling"), stem); cn = newest(glob.glob(os.path.join(cur_dir, stem + "_v*.py")), stem)
-        if bn and (not cn or read_at(root, tag, bn) != open(cn, "rb").read()):
+        bn = newest(tree(root, tag, pkg + "/03-tooling"), stem); cn = newest(tree(root, end, pkg + "/03-tooling"), stem)
+        if bn and (not cn or read_at(root, tag, bn) != read_at(root, end, cn)):
             problems.append("the release path file %s differs from the baseline" % stem)
-    for label, folder, stem, where in (("lineage discipline", pkg + "/04-documentation", "LINEAGE_OPERATING_DISCIPLINE", os.path.join(root, pkg, "04-documentation")),
-                                       ("OE discipline", oe_folder, "OE_Operating_Discipline", os.path.join(root, oe_folder))):
-        bn = newest(tree(root, tag, folder), stem); cn = newest(glob.glob(os.path.join(where, stem + "_v*.md")), stem)
+    for label, folder, stem in (("lineage discipline", pkg + "/04-documentation", "LINEAGE_OPERATING_DISCIPLINE"), ("OE discipline", oe_folder, "OE_Operating_Discipline")):
+        bn = newest(tree(root, tag, folder), stem); cn = newest(tree(root, end, folder), stem)
         if not bn and not cn:
             continue          # a clone that does not hold this folder (the public copy holds no OE method): nothing to compare
         if not bn or not cn:
             problems.append("%s: present in only one of the baseline and now" % label); continue
-        if read_at(root, tag, bn) != open(cn, "rb").read():
+        if read_at(root, tag, bn) != read_at(root, end, cn):
             problems.append("the %s differs from the baseline (%s now, %s then)" % (label, os.path.basename(cn), os.path.basename(bn)))
     return problems
 '''
@@ -107,7 +105,8 @@ def scenarios(check):
         with tempfile.TemporaryDirectory() as d:
             git, w = build(d)
             mutate(w, d)
-            r = check(d, "pkg", TAG, "oe-method/04-documentation")
+            git("add", "-A"); git("commit", "-q", "--allow-empty", "-m", "lineage"); git("tag", END)
+            r = check(d, "pkg", TAG, "oe-method/04-documentation", END)
             ok = (r == []) if expect_sub is None else (bool(r) and any(expect_sub in x for x in r))
             res.append((name, ok))
     GATE = lambda extra_step="", plist="a_probe b_probe": '# v1.83.0 (other note)\necho step one\n%sPROBE_LIST="%s"\necho step two\n' % (extra_step, plist)
@@ -129,18 +128,18 @@ def scenarios(check):
     run("nothing changed at all: passes", lambda w, d: None, None)
     with tempfile.TemporaryDirectory() as d:
         build(d, tag=False)
-        res.append(("no baseline tag: not run (None), never a pass of its own", check(d, "pkg", TAG, "oe-method/04-documentation") is None))
+        res.append(("no baseline tag: not run (None), never a pass of its own", check(d, "pkg", TAG, "oe-method/04-documentation", END) is None))
     return res
 MUTANTS = [
     ("the gate's steps are not compared", "if b_rest != c_rest:", "if False:"),
     ("a probe taken out is not seen", "if [m for m in b_members if m not in c_members]:", "if False:"),
     ("any added probe is allowed", "m not in b_members and m not in ALLOWED]", "m not in b_members and False]"),
     ("the release tool is not compared", "if bt != ct:", "if False:"),
-    ("the disciplines are not compared", "if read_at(root, tag, bn) != open(cn, \"rb\").read():", "if False:"),
-    ("the OE discipline is read from the lineage folder", "(\"OE discipline\", oe_folder, \"OE_Operating_Discipline\", os.path.join(root, oe_folder))", "(\"OE discipline\", pkg + \"/04-documentation\", \"OE_Operating_Discipline\", os.path.join(root, pkg, \"04-documentation\"))"),
+    ("the disciplines are not compared", 'if read_at(root, tag, bn) != read_at(root, end, cn):', "if False:"),
+    ("the OE discipline is read from the lineage folder", '("OE discipline", oe_folder, "OE_Operating_Discipline")', '("OE discipline", pkg + "/04-documentation", "OE_Operating_Discipline")'),
     ("a doubled or reordered probe list is accepted", 'if len(set(c_members)) != len(c_members) or c_members[:len(b_members)] != b_members:', "if False:"),
     ("a probe list with a command in it is accepted", "ok = len(plist) == 1 and re.fullmatch(r'PROBE_LIST=\"[A-Za-z0-9_ ]*\"', plist[0]) is not None", "ok = len(plist) >= 1"),
-    ("the other release path files are not compared", 'if bn and (not cn or read_at(root, tag, bn) != open(cn, "rb").read()):', "if False:"),
+    ("the other release path files are not compared", 'if bn and (not cn or read_at(root, tag, bn) != read_at(root, end, cn)):', "if False:"),
     ("a discipline present on one side only is passed over", 'if not bn or not cn:\n            problems.append("%s: present in only one', 'if False:\n            problems.append("%s: present in only one'),
     ("version notes are not ignored", 'not re.match(r"# v\\d+\\.\\d+\\.\\d+ \\(", l)', "True"),
 ]
@@ -163,12 +162,12 @@ if not root:
     print("NOT RUN  the package is not in a git work tree; nothing could be compared")
 else:
     pkg = os.path.relpath(os.path.dirname(HERE), root)
-    r = load(CHECK_SRC)(root, pkg, TAG, "oe-method/04-documentation")
+    r = load(CHECK_SRC)(root, pkg, TAG, "oe-method/04-documentation", END)
     if r is None:
-        print("NOT RUN  the baseline tag %s is not in this clone; nothing was compared (never read as a pass)" % TAG)
+        print("NOT RUN  the tags %s and %s are not both in this clone; nothing was compared (never read as a pass)" % (TAG, END))
     elif r:
         print("FAIL  the real repository differs from the baseline: " + "; ".join(r)); bad.append("real: " + "; ".join(r))
     else:
-        print("PASS  the gate (but for version notes and the two named probes), the release tool and the two disciplines are those of %s" % TAG)
+        print("PASS  the gate (but for version notes and the two named probes), the release tool and the two disciplines are those of %s as of %s" % (TAG, END))
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)

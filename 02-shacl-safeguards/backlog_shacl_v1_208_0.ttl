@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.207.0> ;
-    owl:versionInfo "1.207.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.208.0> ;
+    owl:versionInfo "1.208.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -4555,10 +4555,11 @@ backlog:CheckpointConditionAnchorShape a sh:NodeShape ;
 
 backlog:CheckpointObservedShape a sh:NodeShape ;
     sh:targetClass backlog:ObjectiveCheckpoint ;
-    sh:severity sh:Violation ;
-    rdfs:label "A passed checkpoint has a real observation dated at or after it (L1/L3)"@en ;
+    sh:severity sh:Warning ;
+    rdfs:comment "v1.208.0 (G197, Owner direction of 2026-11-04): a checkpoint date is a forecast and enforces nothing, so a passed date with no observation is an advisory about the forecast and no longer a violation."@en ;
+    rdfs:label "A passed checkpoint date with no observation is an advisory about its forecast (G197)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1/L3: this checkpoint's own date has passed and its objective carries no MetricObservation dated at or after it. A baseline and a target state an intention; only an observation settles whether it held, and a passed checkpoint with none is exactly how a register declares an objective and is never shown to have failed it -- MetricObservation's own real definition names this failure directly. Autonomous re-measurement at the checkpoint, not only at the objective's own authoring, is what this closes." ;
+        sh:message "Advisory (G197): this checkpoint's own date has passed and its objective carries no MetricObservation dated at or after it. A baseline and a target state an intention; only an observation settles whether it held, and a passed checkpoint with none is exactly how a register declares an objective and is never shown to have failed it -- MetricObservation's own real definition names this failure directly. Autonomous re-measurement at the checkpoint, not only at the objective's own authoring, is what this closes." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:checkpointDate ?cd .

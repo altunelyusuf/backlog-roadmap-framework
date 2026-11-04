@@ -1,4 +1,4 @@
-# Lineage Ruling Narratives — through G178 (history; not required reading)
+# Lineage Ruling Narratives — through G197 (history; not required reading)
 
 The narratives of rulings G1 to G175 were the body of `LINEAGE_OPERATING_DISCIPLINE_v138_0_0.md` until release 1.454.0, which moved them here unchanged. The operating discipline is now `LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md`.
 
@@ -4457,3 +4457,15 @@ Related: G194, G158, G104, G127.
 
 **What is not claimed.** That a stage output is a proof the stage was built in order: the order check and the digest still judge that. That a register-only release with a stage output cannot hide other register changes: the register rules and the order check still run on it.
 Related: G194, G195, G148.
+
+
+## G197 — A planned date is a forecast and enforces nothing
+
+**Q1 — the finding.** On 2026-11-04 the Owner pointed to a drift: the discipline spoke of dates as targets, and the shapes treated a passed checkpoint date with no observation as a violation, but the framework has no time-based scheduler, so no date can make anything wait or happen. A date can only be a forecast of when the work is expected to be done, and a rule that turns a forecast into a demand makes the register invalid because the clock moved, with no change to the register at all.
+
+**Q2 — what was ruled and built.** The discipline step 3 now says in terms that a date is a forecast, never a target, a deadline or a promise, and enforces nothing. The one shape that read a checkpoint date against the clock, `CheckpointObservedShape`, is an advisory (shapes 1.208.0) and is the shape the ruling names. The definition of the checkpoint in the vocabulary (1.166.0) says the same and no longer speaks of a deadline.
+
+**Q3 — what the record shows.** The Owner's direction was routed as a change to the discipline (route d) and recorded in the register before any file changed. The other shapes that compare a date with the clock were left as they are and are listed as a finding for the live lineage: they concern milestones, the end of an iteration and the time box of an urgent interruption, which are different dates with their own rulings.
+
+**What is not claimed.** That every use of a date in the framework is now free of enforcement: the shapes listed above still read the clock. That a forecast needs no discussion: G186 still requires it before dates are final. That the advisory will be read: it is surfaced, not blocking.
+Related: G186, G187, G188, G158.
