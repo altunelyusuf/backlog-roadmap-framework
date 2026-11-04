@@ -1,4 +1,4 @@
-# Lineage Ruling Narratives — through G197 (history; not required reading)
+# Lineage Ruling Narratives — through G198 (history; not required reading)
 
 The narratives of rulings G1 to G175 were the body of `LINEAGE_OPERATING_DISCIPLINE_v138_0_0.md` until release 1.454.0, which moved them here unchanged. The operating discipline is now `LINEAGE_OPERATING_DISCIPLINE_v139_0_0.md`.
 
@@ -4469,3 +4469,15 @@ Related: G194, G195, G148.
 
 **What is not claimed.** That every use of a date in the framework is now free of enforcement: the shapes listed above still read the clock. That a forecast needs no discussion: G186 still requires it before dates are final. That the advisory will be read: it is surfaced, not blocking.
 Related: G186, G187, G188, G158.
+
+
+## G198 — A forecast is recorded as discussed before its dates are kept
+
+**Q1 — the finding.** G186 asks that the forecast be shown for discussion before the dates are final, but nothing recorded that this happened: the forecast of Lineage 28 and every later one carried a free-text note at best.
+
+**Q2 — what was ruled and built.** The forecast now carries two links, who it was discussed with and when (vocabulary 1.167.0). A rule set, adopted by lineages opened under profile revision 14, requires both on the forecast behind each checkpoint, with the discussion not before the forecast; the shape is `ForecastDiscussedShape` (shapes 1.209.0) and a negative case in the fixture proves it fires.
+
+**Q3 — what the record shows.** The rule binds lineages that adopt it, so no lineage of the register is judged by it yet: Lineage 29 was opened before it and the forecasts of Lineage 29 carry only their notes. This is the way new rules enter (a ruling binds work not yet started).
+
+**What is not claimed.** That the discussion really took place: the record says it did, as every record does. That an old forecast is repaired: none is. That dates now enforce anything: G197 still holds.
+Related: G186, G197.

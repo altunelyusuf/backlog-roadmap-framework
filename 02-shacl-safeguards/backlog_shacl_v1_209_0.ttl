@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.208.0> ;
-    owl:versionInfo "1.208.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.209.0> ;
+    owl:versionInfo "1.209.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9655,6 +9655,22 @@ backlog:PlannedDatesShape a sh:NodeShape ;
                                 FILTER (?cd >= ?fc && ?fm <= ?fc && STRLEN(REPLACE(STR(?fa), "\\\\s", "")) > 0 && ?fv > 0) }
                 || EXISTS { ?other backlog:datePredictedBy ?f . FILTER (?other != $this) }
                 || EXISTS { $this backlog:datePredictedBy ?f2 . FILTER (?f2 != ?f) } )
+        }""" ] .
+
+backlog:ForecastDiscussedShape a sh:NodeShape ;
+    sh:targetClass backlog:ObjectiveCheckpoint ;
+    sh:severity sh:Violation ;
+    rdfs:label "A forecast behind a checkpoint of a lineage that records its forecast discussions was discussed first (G198)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "FD_UNDISCUSSED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "FD_UNDISCUSSED: the forecast behind this checkpoint of a lineage that records its forecast discussions carries no record that it was discussed (forecastDiscussedAt and forecastDiscussedBy), or the discussion is dated before the forecast was made. A forecast nobody looked at is a number and not a plan; the date is a forecast and enforces nothing (G197), but it is shown before it is kept (G186)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?obj backlog:hasCheckpoint $this ; backlog:belongsToLineage ?lin .
+            ?lin backlog:adoptsRuleSet backlog:RS_ForecastDiscussed .
+            $this backlog:datePredictedBy ?f .
+            FILTER NOT EXISTS { ?f backlog:forecastDiscussedAt ?da ; backlog:forecastDiscussedBy ?db ; backlog:forecastMadeAt ?fm . FILTER (?da >= ?fm) }
         }""" ] .
 
 backlog:BoxBasePlanShape a sh:NodeShape ;

@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.11.0 — 2026-11-04 (A forecast can record that the Owner discussed it, and the kind refusal is shown on the real register)
+
+Impact: a forecast may now carry when and by whom it was discussed, and a rule set (agentic profile revision 14) refuses a forecast of an adopting lineage without it; no lineage adopts it yet, so no existing record is judged. The refusal of an obstacle with no kind is now proven on a copy of the real register. Vocabulary, shapes and fixture each grow by one small addition; the gate lists two more probes. Open: a checkpoint with no forecast and the types of the two links are not yet checked.
+
+**Unplanned work:** Owner ruling of 2026-11-04 09:17 (planned dates are forecasts): recorded as G198; box 5 of Lineage 29 closes the stories RuleFires and ForecastRecord
+
 ## v4.10.0 — 2026-11-04 (The preflight runs the vocabulary probe and the dates report no longer stops on malformed input (Lineage 29, box 4))
 
 Two stories of Lineage 29 are done after one box and three independent reviews of the fixes. Impact of each change (OE discipline 2.38.0): release tool 1.12.0 to 1.13.0, MINOR: the preflight gains a check that refuses a vocabulary fault before the long gate (it adds about 6 s, twice per release); release preflight probe 1.0.0 to 1.1.0, MINOR: new cases and mutants; dates report 1.1.0 to 1.2.0, MINOR: malformed dates and numbers are named under a closing section and the report goes on, and --strict exits 1 on them; dates report probe 1.1.0 to 1.2.0, MINOR: new cases and mutants. No vocabulary or shape changes; the package is a MINOR bump. Found and left open: session start reads the word NOT in the ceremony's count line '0 NOT MEASURED' as a refusal; the fix for a date outside the calendar after conversion has no case of its own.

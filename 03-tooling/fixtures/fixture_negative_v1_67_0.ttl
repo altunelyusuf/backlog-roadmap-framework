@@ -4413,6 +4413,12 @@ vsn:LPlan a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_PlannedDates ; ba
 vsn:ObjPlan a backlog:Objective ; backlog:belongsToLineage vsn:LPlan ; backlog:hasCheckpoint vsn:CpPlan .
 vsn:CpPlan a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 
+# FD_UNDISCUSSED  a forecast behind a checkpoint of a lineage that records its forecast discussions, with no discussion record (ForecastDiscussedShape).
+vsn:LDisc a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ForecastDiscussed ; backlog:humanApprovalLevel 3 .
+vsn:ObjDisc a backlog:Objective ; backlog:belongsToLineage vsn:LDisc ; backlog:hasCheckpoint vsn:CpDisc .
+vsn:CpDisc a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-05T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:datePredictedBy vsn:FcDisc .
+vsn:FcDisc a backlog:Forecast ; backlog:forecastMadeAt "2026-11-04T06:40:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:forecastCompletion "2026-11-04T10:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:forecastAssumption "x" ; backlog:forecastObservedVelocity 1.5 .
+
 # BP_NOBASEPLAN  a box of a lineage that plans its dates, with no current base plan (BoxBasePlanShape).
 vsn:ItNoPlan a backlog:Iteration ; backlog:belongsToLineage vsn:LPlan ; backlog:iterationStart "2026-11-02T11:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 
