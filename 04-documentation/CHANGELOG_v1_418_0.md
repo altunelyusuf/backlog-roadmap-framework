@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.4.2 — 2026-11-06 (The Owner's wider reading of an obstacle is recorded and routed)
+
+Records only. The Owner ruled that an obstacle is any condition that makes progress impossible or puts success at risk, not only a blocker, that each is told apart as a problem (it has happened) or a risk (it is a probability), and that the lineage identifies, categorizes and mitigates them. The ruling is recorded with a change request and its impact analysis; the goals that state the benefit, their objectives and their stories are not yet defined.
+
+**Unplanned work:** Owner ruling G211 of 2026-11-05, recorded at 22:10 UTC (2026-11-06 01:10 Istanbul), which widens what an obstacle is and routes the work through a change request.
+
 ## v5.4.1 — 2026-11-06 (The request that grew the scope is recorded as accepted)
 
 Records only. The change request that grew the scope of Lineage 29 by the verified gaps was decided by the Owner on 2026-11-04 (the scope change that fulfils it says so) and stayed marked pending; it is now marked accepted. The count of items re-admitted without a naming change is recounted: eleven stories are named by that scope change, and eleven build tasks remain, which a scope change does not name and the Backlog digest does not hold. Nothing recorded earlier is edited except that one status.
