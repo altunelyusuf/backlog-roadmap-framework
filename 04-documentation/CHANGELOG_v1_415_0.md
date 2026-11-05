@@ -11285,11 +11285,13 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
-## v5.2.3 — 2026-11-05 (Owner decision: a closed stage leaves out only what a change names, and an added goal's impact on others is analysed)
+## v5.3.0 — 2026-11-05 (Owner decision: a closed stage leaves out only what a change names, and an added goal's impact on others is analysed)
 
 Owner decision of 2026-11-05, recorded at 18:05 Istanbul, on the question put correctly: when change management adds a goal and an objective to a running lineage after those stages are closed, the closed stages leave out of their check only the items the change names; and if an added goal affects other goals, an impact analysis and the additional work it calls for are done too. The story that carries this (a scope change names what it introduces, the digests follow, the impact on other goals is analysed and answered) is now planned work of this lineage; the earlier withdrawn ruling stays withdrawn.
 
-**Unplanned work:** Owner ruling G208 of 2026-11-05, recorded at 18:05 Istanbul (15:05 UTC), recorded in this release; records only.
+The release tool 1.15.0 counts the handover inbox and its log as records, so filing a handover is a records-only release (a relaxation of what the light path accepts, hence a minor version); its probe 1.4.0 expects it. One handover of the other package on the reopened stage is answered by the decision above and filed as accepted.
+
+**Unplanned work:** Owner ruling G208 of 2026-11-05, recorded at 18:05 Istanbul (15:05 UTC), recorded in this release; the tool change follows Owner ruling G205 (records-only releases take the light path).
 
 ## v5.2.2 — 2026-11-05 (Owner correction: the answer on closed lineages answered a wrong question; the ruling and notes are withdrawn)
 

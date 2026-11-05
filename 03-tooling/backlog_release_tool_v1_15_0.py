@@ -329,7 +329,8 @@ def cmd_preflight(args):
 
 
 LIGHT_LOG = os.path.join("06-package-provenance", "LIGHT_RELEASES.txt")
-RECORD_FILES = re.compile(r"(^|/)(backlog_abox_v\d+_\d+_\d+\.ttl|CHANGELOG_v\d+_\d+_\d+\.md|PROBE_INPUTS\.json|VERSION\.txt|MANIFEST_SHA256[^/]*\.txt|PROOF_STAMPS\.json|LIGHT_RELEASES\.txt|GATE_TIMES/gate_times_v\d+_\d+_\d+\.tsv)$")
+RECORD_FILES = re.compile(r"(^|/)(07-handover-inbox/.+|backlog_abox_v\d+_\d+_\d+\.ttl|CHANGELOG_v\d+_\d+_\d+\.md|PROBE_INPUTS\.json|VERSION\.txt|MANIFEST_SHA256[^/]*\.txt|PROOF_STAMPS\.json|LIGHT_RELEASES\.txt|GATE_TIMES/gate_times_v\d+_\d+_\d+\.tsv)$")
+# v1.15.0 (G205): the handover inbox and its log are records too, so filing a handover is a records-only release.
 # v1.14.0 (Owner ruling of 2026-11-05 15:28, G205): no cap on records-only releases in a row; the full gate runs when code, data or pages change (anything that is not a record file).
 
 

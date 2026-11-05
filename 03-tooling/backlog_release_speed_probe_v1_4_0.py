@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_speed_probe v1.3.0 -- the release tool 1.6.0 does what it says (Lineage 22).
+"""backlog_release_speed_probe v1.4.0 -- the release tool 1.6.0 does what it says (Lineage 22).
 
 Cases: preflight stops on a register that does not validate and on a failed archive integrity check and lets a valid one through; `roll` moves the register and the
 change-log to their next versions, inserts the entry above the newest one and makes PROBE_INPUTS.json follow, and refuses without an account of unplanned work; the gate
@@ -88,6 +88,8 @@ with tempfile.TemporaryDirectory() as t:
 spec = importlib.util.spec_from_file_location("rt2", tool); rt2 = importlib.util.module_from_spec(spec); spec.loader.exec_module(rt2)
 rec = ["01-ontologies/backlog_abox_v1_9_0.ttl", "04-documentation/CHANGELOG_v1_9_0.md", "VERSION.txt", "06-package-provenance/PROBE_INPUTS.json", "06-package-provenance/LIGHT_RELEASES.txt", "MANIFEST_SHA256.txt"]
 expect("a stage release of records alone is allowed", rt2.stage_refusal(rec, "") is None)
+expect("a stage release may file a handover and its log (the inbox holds records)", rt2.stage_refusal(rec + ["07-handover-inbox/HANDOVER_LOG.md", "07-handover-inbox/accepted/HANDOVER_x_v1_0_0.md"], "") is None)
+expect("a file outside the inbox that only looks like it is refused", rt2.stage_refusal(rec + ["04-documentation/07-handover-inbox-notes.md"], "") is not None)
 expect("a stage release that changes a tool is refused and the file is named", "backlog_gate_v1_74_0.sh" in (rt2.stage_refusal(rec + ["03-tooling/backlog_gate_v1_74_0.sh"], "") or ""))
 expect("a stage release that changes a shape is refused", rt2.stage_refusal(rec + ["02-shacl-safeguards/backlog_shacl_v1_199_0.ttl"], "") is not None)
 expect("three stage releases since the last full one still allow a fourth", rt2.stage_refusal(rec, "# h\n1.1.0 full\n1.1.1 stage\n1.1.2 stage\n1.1.3 stage\n") is None)
