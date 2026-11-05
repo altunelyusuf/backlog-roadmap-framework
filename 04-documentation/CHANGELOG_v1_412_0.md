@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.2.0 — 2026-11-05 (Records-only releases take the light path without a cap (G205))
+
+Ruling G205 (Owner, 2026-11-05 12:28 UTC, 15:28 Istanbul): a release of records alone takes the light path (manifest, gate, hygiene) however many come in a row; the full suite and measurement run only when code, data or pages change. The release tool 1.14.0 no longer limits the run of records-only releases (the cap of four is removed); its probe 1.3.0 now expects a long run to pass; the lineage discipline 163.0.3 states the rule. The record files that count as records stay as before.
+
+**Unplanned work:** Owner ruling G205 of 2026-11-05 15:28 Istanbul (12:28 UTC): the light path for records-only releases, the full suite only when code, data or pages change; recorded in this release.
+
 ## v5.1.0 — 2026-11-05 (Lineage 29 takes in the work deferred from the handovers; its fourth chain reads ordered; an item may be admitted by successive chains)
 
 The Owner's decision of 2026-11-05 10:55 UTC (13:55 Istanbul) that the work deferred from the handovers enters Lineage 29 is recorded as ruling G204, twelve change requests with their impact assessments (each states how it supports the mission, and says so where the link is indirect): ten from the handovers and the two held from earlier the same day (the outcome read by its rule, and the authorization behind a grant). A fourth stage revision rebuilds the chain from the scope: eight new areas, twelve new deliverables, eight new goals, eleven new objectives with baselines counted or read on 2026-11-05 (each says which), twelve new stories, all Proposed; the nineteen goals and objectives of the third chain are copied and derive from it, their observations marked copied, not measured again. The twelve requests are accepted, each by a scope change that admits its story. Four handovers were dispositioned (deferred with reasons, then taken in by this decision) and a fifth, on digests after a change, accepted into the request on introduced elements.

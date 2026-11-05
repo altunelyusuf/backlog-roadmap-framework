@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_speed_probe v1.2.0 -- the release tool 1.6.0 does what it says (Lineage 22).
+"""backlog_release_speed_probe v1.3.0 -- the release tool 1.6.0 does what it says (Lineage 22).
 
 Cases: preflight stops on a register that does not validate and on a failed archive integrity check and lets a valid one through; `roll` moves the register and the
 change-log to their next versions, inserts the entry above the newest one and makes PROBE_INPUTS.json follow, and refuses without an account of unplanned work; the gate
@@ -91,7 +91,7 @@ expect("a stage release of records alone is allowed", rt2.stage_refusal(rec, "")
 expect("a stage release that changes a tool is refused and the file is named", "backlog_gate_v1_74_0.sh" in (rt2.stage_refusal(rec + ["03-tooling/backlog_gate_v1_74_0.sh"], "") or ""))
 expect("a stage release that changes a shape is refused", rt2.stage_refusal(rec + ["02-shacl-safeguards/backlog_shacl_v1_199_0.ttl"], "") is not None)
 expect("three stage releases since the last full one still allow a fourth", rt2.stage_refusal(rec, "# h\n1.1.0 full\n1.1.1 stage\n1.1.2 stage\n1.1.3 stage\n") is None)
-expect("four stage releases since the last full one send the fifth to the full gate", "full gate" in (rt2.stage_refusal(rec, "1.1.0 full\n1.1.1 stage\n1.1.2 stage\n1.1.3 stage\n1.1.4 stage\n") or ""))
+expect("any number of stage releases since the last full one still allow the next (G205: no cap; code, data or pages decide)", rt2.stage_refusal(rec, "1.1.0 full\n" + "".join("1.1.%d stage\n" % n for n in range(1, 30))) is None)
 expect("a full release resets the count", rt2.stage_refusal(rec, "1.1.1 stage\n1.1.2 stage\n1.1.3 stage\n1.1.4 stage\n1.1.5 full\n1.1.6 stage\n") is None)
 gate = sorted(glob.glob(os.path.join(HERE, "backlog_gate_v*.sh")), key=sv)[-1]
 gl = open(gate, encoding="utf-8").read().split("\n")

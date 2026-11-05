@@ -330,22 +330,14 @@ def cmd_preflight(args):
 
 LIGHT_LOG = os.path.join("06-package-provenance", "LIGHT_RELEASES.txt")
 RECORD_FILES = re.compile(r"(^|/)(backlog_abox_v\d+_\d+_\d+\.ttl|CHANGELOG_v\d+_\d+_\d+\.md|PROBE_INPUTS\.json|VERSION\.txt|MANIFEST_SHA256[^/]*\.txt|PROOF_STAMPS\.json|LIGHT_RELEASES\.txt|GATE_TIMES/gate_times_v\d+_\d+_\d+\.tsv)$")
-MAX_STAGE_RUN = 4
+# v1.14.0 (Owner ruling of 2026-11-05 15:28, G205): no cap on records-only releases in a row; the full gate runs when code, data or pages change (anything that is not a record file).
 
 
 def stage_refusal(changed, log_text):
-    """None when a stage release is allowed, else the reason. CHANGED: package-relative names changed since the published tree. LOG_TEXT: the content of LIGHT_RELEASES.txt."""
+    """None when a stage release is allowed, else the reason. CHANGED: package-relative names changed since the published tree. LOG_TEXT: the content of LIGHT_RELEASES.txt (kept for the caller; it no longer limits the run)."""
     other = [c for c in changed if not RECORD_FILES.search(c)]
     if other:
         return "a stage release changes records alone, and these are not records: " + ", ".join(sorted(other)[:5])
-    kinds = [l.split()[1] for l in log_text.splitlines() if len(l.split()) >= 2 and not l.startswith("#")]
-    run = 0
-    for k in reversed(kinds):
-        if k != "stage":
-            break
-        run += 1
-    if run >= MAX_STAGE_RUN:
-        return "%d stage releases came since the last full one; this release runs the full gate" % run
     return None
 
 
