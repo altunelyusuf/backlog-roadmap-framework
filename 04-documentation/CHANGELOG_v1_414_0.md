@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.2.2 — 2026-11-05 (Owner correction: the answer on closed lineages answered a wrong question; the ruling and notes are withdrawn)
+
+Owner correction of 2026-11-05 17:03 Istanbul: the question put to him about closed stages was wrong, because it came from a handover that treated a whole lineage as closed; the profile lets a closed stage of a running lineage be reopened by change management, so his earlier answer (a closed lineage cannot be changed without a revival) does not decide the question. The ruling and notes of the previous release are withdrawn by appended notes; the reply sent to the sender is corrected.
+
+**Unplanned work:** Owner ruling G207 of 2026-11-05 17:03 Istanbul (14:03 UTC), recorded in this release; records only.
+
 ## v5.2.1 — 2026-11-05 (Owner decision: a closed lineage is changed only by a revival; the digest-follows part of the introduced-elements request is not built)
 
 Owner decision of 2026-11-05 about 16:40 Istanbul, answering how a closed stage should show what change management adds later: a closed lineage cannot be changed without a revival. The part of the request on introduced elements that asked the stage digests to follow what a change introduces is therefore not built, and the story that carried it stays proposed and is not planned; the revival of this lineage and its stage revisions are the answer. The repair already made to the order check stays. The sender was answered in its inbox.
