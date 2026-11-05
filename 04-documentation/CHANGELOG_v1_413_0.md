@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.2.1 — 2026-11-05 (Owner decision: a closed lineage is changed only by a revival; the digest-follows part of the introduced-elements request is not built)
+
+Owner decision of 2026-11-05 about 16:40 Istanbul, answering how a closed stage should show what change management adds later: a closed lineage cannot be changed without a revival. The part of the request on introduced elements that asked the stage digests to follow what a change introduces is therefore not built, and the story that carried it stays proposed and is not planned; the revival of this lineage and its stage revisions are the answer. The repair already made to the order check stays. The sender was answered in its inbox.
+
+**Unplanned work:** Owner ruling G206 of 2026-11-05 16:40 Istanbul (13:40 UTC), recorded in this release together with appended notes in the register; records only.
+
 ## v5.2.0 — 2026-11-05 (Records-only releases take the light path without a cap (G205))
 
 Ruling G205 (Owner, 2026-11-05 12:28 UTC, 15:28 Istanbul): a release of records alone takes the light path (manifest, gate, hygiene) however many come in a row; the full suite and measurement run only when code, data or pages change. The release tool 1.14.0 no longer limits the run of records-only releases (the cap of four is removed); its probe 1.3.0 now expects a long run to pass; the lineage discipline 163.0.3 states the rule. The record files that count as records stay as before.
