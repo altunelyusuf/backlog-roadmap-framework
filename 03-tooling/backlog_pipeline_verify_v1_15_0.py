@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """backlog_pipeline_verify_v1_11_0.py — the lineage order, checked by reconstruction.
 
+v1.15.0 (G208): under table v5 a goal, an objective or a scope deliverable that an accepted scope change of the same lineage names (introducesElement) is left out of the digest of every stage that holds it (the Backlog digest is cumulative and holds them too); another kind of element, or a change of another lineage, hides nothing; one no accepted change names still moves it. A change is accepted when the request it fulfils carries Disp_Accepted.
 v1.12.0 (G158): under table v5 an item an urgent interruption names (urgentItem) is left out of the Backlog digest as well: an emergency is not scope growth.
 v1.11.0 (G157): under table v5 an item that a ScopeChange admits (admitsItem) is not part of the Backlog digest, so change management after the close no longer leaves the digest failing.
 
@@ -60,6 +61,20 @@ STAGE_TYPES = None  # loaded from the ontology; see _load_stage_types
 ORDER = ["Stage_Mission", "Stage_Scope", "Stage_Goal", "Stage_Objective", "Stage_Backlog"]
 
 
+def _named_by_accepted_change(g, s, lineage=None):
+    """True when s is a goal, an objective or a scope deliverable that a ScopeChange of the same lineage names with introducesElement and the
+    change request it fulfils is accepted (G208). Any other kind of element, and a change of another lineage, hides nothing."""
+    if not any((s, RDF.type, URIRef(B + k)) in g for k in ("Goal", "Objective", "ScopeDeliverable")):
+        return False
+    for sc in g.subjects(URIRef(B + "introducesElement"), s):
+        if lineage is not None and (sc, URIRef(B + "belongsToLineage"), lineage) not in g:
+            continue
+        for cr in g.objects(sc, URIRef(B + "fulfillsRequest")):
+            if (cr, URIRef(B + "hasDisposition"), URIRef(B + "Disp_Accepted")) in g:
+                return True
+    return False
+
+
 def state_digest(g, stage, lineage=None, admitted=False, change_managed=False):
     """v1.9.0 (sen0401 handover, planning-after-the-backlog-stage-closed): under table v4 the Backlog digest
     excludes ExecutionTask (a task is produced by planning an item into an iteration and is subordinate by
@@ -91,6 +106,10 @@ def state_digest(g, stage, lineage=None, admitted=False, change_managed=False):
                 # v1.11.0 (G157, table v5): an item a ScopeChange admits was added by change management after the
                 # close; the owner-decided change record is its visibility, so the closed stage's digest does not move.
                 if change_managed and stage == "Stage_Backlog" and ((None, URIRef(B + "admitsItem"), s) in g or (None, URIRef(B + "urgentItem"), s) in g):
+                    continue
+                # v1.15.0 (G208, table v5): an element an accepted scope change names as introduced by it was added by change
+                # management; the change record is its visibility, so the closed stage's digest does not move for it.
+                if change_managed and stage in ("Stage_Scope", "Stage_Goal", "Stage_Objective", "Stage_Backlog") and _named_by_accepted_change(g, s, lineage):
                     continue
                 subs.add(str(s))
             elif admitted and stage == "Stage_Backlog":

@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.211.0> ;
-    owl:versionInfo "1.211.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.212.0> ;
+    owl:versionInfo "1.212.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9844,3 +9844,39 @@ backlog:UrgentItemStartsAfterDeclarationShape a sh:NodeShape ;
             ?i backlog:startedAt ?s .
             FILTER (?s < ?d)
         }""" ] .
+
+#################################################################
+#  v1.212.0 (G208) -- an added goal's impact on other goals is
+#  analysed and answered. Added shapes only.
+#################################################################
+
+backlog:IntroducedGoalImpactNamedShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeChange ;
+    sh:severity sh:Violation ;
+    rdfs:label "A scope change that introduces a goal has an impact analysis that names the goals affected, or says none is (G208)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "IGI_NAMED_BAD" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G208: this scope change introduces a goal, and the impact analysis of the request it fulfils neither names a goal the change affects (affectsGoal) nor says that none is affected (findsNoOtherGoalAffected). An added goal can touch the goals beside it; the analysis must say." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:introducesElement ?g . ?g a backlog:Goal . $this backlog:fulfillsRequest ?cr .
+            FILTER NOT EXISTS { ?ia backlog:analyzesRequest ?cr ; backlog:affectsGoal ?x }
+            FILTER NOT EXISTS { ?ia2 backlog:analyzesRequest ?cr ; backlog:findsNoOtherGoalAffected true }
+        }""" ] .
+
+backlog:IntroducedGoalImpactAnsweredShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeChange ;
+    sh:severity sh:Violation ;
+    rdfs:label "When an added goal affects other goals, the analysis names at least one work item that answers the impact (G208)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "IGI_ANSWER_BAD" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "G208: the impact analysis of the request this scope change fulfils names a goal affected by the added goal, but names no work item that answers that impact (callsForItem). The impact is analysed and the additional work is done in the same change. (The shape requires at least one such item; it does not tie an item to each affected goal.)" ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:introducesElement ?g . ?g a backlog:Goal . $this backlog:fulfillsRequest ?cr .
+            ?ia backlog:analyzesRequest ?cr ; backlog:affectsGoal ?x .
+            FILTER NOT EXISTS { ?ia backlog:callsForItem ?w }
+        }""" ] .
+

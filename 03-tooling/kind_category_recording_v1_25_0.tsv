@@ -716,3 +716,6 @@ property	clearedBy	http://example.org/backlog#clearedBy	RelationshipCategory_Pro
 property	forecastDiscussedBy	http://example.org/backlog#forecastDiscussedBy	RelationshipCategory_Provenance	the record of who a forecast was discussed with belongs to the forecast it describes	G198
 property	readAsKind	http://example.org/backlog#readAsKind	RelationshipCategory_Provenance	the kind a later reading gives a finding is a record of how the finding was read	G199
 property	hasParentItem	http://example.org/backlog#hasParentItem	RelationshipCategory_Compositional	an item sits under a parent of its own kind, as a part of it	G200
+property	affectsGoal	http://example.org/backlog#affectsGoal	RelationshipCategory_Association	an impact assessment names a goal it affects, a plain link between two records that neither owns nor contains the other	G208
+property	callsForItem	http://example.org/backlog#callsForItem	RelationshipCategory_Association	an impact assessment names a work item that answers it, a plain link between two records	G208
+property	introducesElement	http://example.org/backlog#introducesElement	RelationshipCategory_Association	a scope change names a goal, objective or deliverable it introduces, a plain link between two records	G208

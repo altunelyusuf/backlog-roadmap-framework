@@ -4475,3 +4475,19 @@ vsn:ArNoGoal a backlog:ScopeArea ; backlog:hasScopeLayer backlog:Layer_Work .
 # PI_BADPARENT  an area that names a deliverable as its parent (ParentItemShape).
 vsn:ArBadParent a backlog:ScopeArea ; backlog:hasScopeLayer backlog:Layer_Work ; backlog:hasParentItem vsn:DelParent .
 vsn:DelParent a backlog:ScopeDeliverable ; backlog:hasScopeLayer backlog:Layer_Product .
+
+# G208: an added goal whose impact analysis is silent (IGI_NAMED_BAD), and one that names an affected goal but no work that answers it (IGI_ANSWER_BAD).
+ex:IGI_G1 a backlog:Goal . ex:IGI_G2 a backlog:Goal . ex:IGI_G3 a backlog:Goal .
+ex:IGI_CR1 a backlog:ChangeRequest . ex:IGI_IA1 a backlog:ImpactAssessment ; backlog:analyzesRequest ex:IGI_CR1 .
+ex:IGI_NAMED_BAD a backlog:ScopeChange ; backlog:fulfillsRequest ex:IGI_CR1 ; backlog:introducesElement ex:IGI_G1 .
+ex:IGI_CR2 a backlog:ChangeRequest . ex:IGI_IA2 a backlog:ImpactAssessment ; backlog:analyzesRequest ex:IGI_CR2 ; backlog:affectsGoal ex:IGI_G3 .
+ex:IGI_ANSWER_BAD a backlog:ScopeChange ; backlog:fulfillsRequest ex:IGI_CR2 ; backlog:introducesElement ex:IGI_G2 .
+
+
+# G208: two analyses that meet the rule and must not fire it (IGI_GOOD names an affected goal and the work that answers it; IGI_NONE says no other goal is affected).
+ex:IGI_G4 a backlog:Goal . ex:IGI_W1 a backlog:Story .
+ex:IGI_CR3 a backlog:ChangeRequest . ex:IGI_IA3 a backlog:ImpactAssessment ; backlog:analyzesRequest ex:IGI_CR3 ; backlog:affectsGoal ex:IGI_G3 ; backlog:callsForItem ex:IGI_W1 .
+ex:IGI_GOOD a backlog:ScopeChange ; backlog:fulfillsRequest ex:IGI_CR3 ; backlog:introducesElement ex:IGI_G4 .
+ex:IGI_G5 a backlog:Goal .
+ex:IGI_CR4 a backlog:ChangeRequest . ex:IGI_IA4 a backlog:ImpactAssessment ; backlog:analyzesRequest ex:IGI_CR4 ; backlog:findsNoOtherGoalAffected true .
+ex:IGI_NONE a backlog:ScopeChange ; backlog:fulfillsRequest ex:IGI_CR4 ; backlog:introducesElement ex:IGI_G5 .
