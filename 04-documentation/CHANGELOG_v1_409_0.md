@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v4.17.0 — 2026-11-05 (Lineage 29 records the plan to stop an overstated closure from happening again)
+
+Minor release; the register only. Impact: a change request, its impact and the Owner's ruling are recorded for Lineage 29: build ten safeguards against closing a lineage as achieved while its gaps and repairs are unanswered, and monitor the method until they enforce. No rule, shape or tool changes; the lineage stays open.
+
+**Unplanned work:** G202 (Owner decision of 2026-11-05 09:25 Istanbul: find the root causes, add preventive mechanisms and interim monitoring, and add the enforcements to the lineage discipline, all ten at once)
+
 ## v4.16.0 — 2026-11-05 (Lineage 29 records what it still owes before it can end)
 
 Minor release; the register only. Impact: a change request and its impact are recorded for Lineage 29 (traced answers for the gaps, a second review of repairs, an outcome of partly achieved with a reason for each objective); no rule, shape or tool changes, and the lineage stays open.
