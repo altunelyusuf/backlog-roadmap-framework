@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.171.0> ;
-    owl:versionInfo "1.171.0" ;
-    owl:priorVersion <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.172.0> ;
+    owl:versionInfo "1.172.0" ;
+    owl:priorVersion <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -6021,11 +6021,11 @@ backlog:preLineageItem a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:label "pre-lineage item"@en ;
     skos:definition "True on a work item that existed before the chain that now owns it was built. Set by a restart for the items of the restarted lineage, or (v1.108.0) by a succession for an open item of the predecessor that the successor carries. Cleared by nothing: the item keeps belongsToLineage -- the lineage it was created during -- and is admitted, not re-dated or re-pointed, via admittedByOutput."@en .
 
-backlog:admittedByOutput a owl:ObjectProperty , owl:FunctionalProperty ;
+backlog:admittedByOutput a owl:ObjectProperty ;
     rdfs:domain backlog:WorkItem ; rdfs:range backlog:StageOutput ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "admitted by output"@en ;
-    skos:definition "The active (non-retracted) Stage_Backlog output that took this pre-lineage item in: the rebuilt output of a restarted lineage, the output of a divided lineage's part, or (v1.108.0) the output of the successor a LineageSuccession names for the item's own lineage. Until it is set, the item is work that chain does not yet own."@en .
+    skos:definition "A Stage_Backlog output that took this item in: the rebuilt output of a restarted lineage, the output of a divided lineage's part, or (v1.108.0) the output of the successor a LineageSuccession names for the item's own lineage. (v1.172.0) An item may carry successive admissions, one for each chain that took it in, because a record is appended to and never moved: the admission that counts is the one on an output that is not retracted, and one on a retracted output is history. Until one is set, the item is work that chain does not yet own."@en .
 
 #################################################################
 #  v1.84.0 (2026-09-07) -- LINEAGE THRASH: the stop condition for

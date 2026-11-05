@@ -6,7 +6,9 @@
 # v1.16.0 (Lineage 31, story Fixed; speed only): the adoptions of the register in a commit are kept in the memo directory under the commit's name (a commit never changes), and the diff walk of the register's history is read once per run, not once per lineage; the verdicts are the same (backlog_lineage_order_cache_probe).
 # v1.15.0 (Lineage 29, revival): a revived lineage opens again at the commit of its latest stage revision, so it can adopt the current rule sets there; one adopted later is still refused.
 # v1.14.0 (Lineage 22, box 2, D6): the register at a commit is parsed once per commit however many adoptions ask for it (v1.13.0 parsed it again for every probe of every adoption, about 200 times); the verdict is the same.
-"""backlog_lineage_order_check v1.20.0 — did the chain come before the work, or after?
+"""
+
+v1.21.0 (Lineage 29, request on the elements a change introduces; relaxation, MINOR): an item may carry more than one admission, one for each chain that took it in (the vocabulary 1.172.0 no longer declares the property functional); the admission that counts is any one on an output that is not retracted. Before, one value was read, chosen by chance, so a story re-admitted by a later revision read as work done before the chain (BYPASS) when the value read was the retracted output's. Found when the fourth revision of Lineage 29 admitted again the items its third chain had admitted.backlog_lineage_order_check v1.20.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -503,7 +505,7 @@ def classify(g, L, witness, prefix):
             # (or its absence) is the shapes' business, not a second bypass finding.
             continue
         anchor = backlog_first
-        if rev_first is not None and anchor is not None and item_first[ln][1] >= rev_first[1] and g.value(i, B.admittedByOutput) in active_backlog:
+        if rev_first is not None and anchor is not None and item_first[ln][1] >= rev_first[1] and any(o in active_backlog for o in g.objects(i, B.admittedByOutput)):
             continue
         if anchor is None:
             bypassed.append((ln, item_first[ln], "absent"))
@@ -554,7 +556,7 @@ def classify(g, L, witness, prefix):
             # bypassedOutput set) and named again: work an earlier rebuild had taken in
             pre_chain = set(g.objects(b, B.bypassedOutput))
             lost = sorted({local(i) for i in g.objects(b, B.bypassedItem)
-                           if g.value(i, B.admittedByOutput) in pre_chain})
+                           if any(o in pre_chain for o in g.objects(i, B.admittedByOutput))})
             if lost:
                 thrash.append(("Thrash_AdmissionLost", b, prior_r[-1] if prior_r else None, lost,
                                f"bypass {local(b)} names admitted items {sorted(lost)}"))
@@ -960,8 +962,7 @@ def main():
             last_r = d["restarts"][-1]
             for b in g.objects(last_r, B.answersBypass):
                 named = list(g.objects(b, B.bypassedItem))
-                adm = [i for i in named if g.value(i, B.admittedByOutput) is not None
-                       and not (g.value(g.value(i, B.admittedByOutput), B.outputRetracted) or False)]
+                adm = [i for i in named if any(not (g.value(o, B.outputRetracted) or False) for o in g.objects(i, B.admittedByOutput))]
                 if named:
                     print(f"      # reductionObserved for a next restart of {local(L)}: {len(adm)}/{len(named)} = {len(adm)/len(named):.3f}")
         if verdict == "AWAITING_BACKLOG" and "--no-empty-pass" in argv:

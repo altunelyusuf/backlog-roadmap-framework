@@ -11285,6 +11285,20 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.1.0 — 2026-11-05 (Lineage 29 takes in the work deferred from the handovers; its fourth chain reads ordered; an item may be admitted by successive chains)
+
+The Owner's decision of 2026-11-05 10:55 UTC (13:55 Istanbul) that the work deferred from the handovers enters Lineage 29 is recorded as ruling G204, twelve change requests with their impact assessments (each states how it supports the mission, and says so where the link is indirect): ten from the handovers and the two held from earlier the same day (the outcome read by its rule, and the authorization behind a grant). A fourth stage revision rebuilds the chain from the scope: eight new areas, twelve new deliverables, eight new goals, eleven new objectives with baselines counted or read on 2026-11-05 (each says which), twelve new stories, all Proposed; the nineteen goals and objectives of the third chain are copied and derive from it, their observations marked copied, not measured again. The twelve requests are accepted, each by a scope change that admits its story. Four handovers were dispositioned (deferred with reasons, then taken in by this decision) and a fifth, on digests after a change, accepted into the request on introduced elements.
+
+- Order check 1.20.0 -> 1.21.0, MINOR (a relaxation): an item may carry more than one admission, one for each chain that took it in, and the admission that counts is any one on an output that is not retracted. Before, one value was read, chosen by chance, so a story the fourth revision admitted again read as work done before the chain. Found by the fourth revision itself; it is the first part of the story on introduced elements.
+- Vocabulary 1.171.0 -> 1.172.0, MINOR (a relaxation): the admission property is no longer declared functional and its definition says why. No shape reads it as functional; the pipeline verifier and the execution-ready tool already read every value.
+- Probe order revision 1.0.0 -> 1.1.0, MINOR: three more cases (admitted again by the rebuilt output; admitted only by outputs that are retracted; admitted by the retracted output only) and two mutants of the checker, each caught.
+- Probe handover rules 1.3.2 -> 1.3.3 and the earlier items of this release batch are as recorded under 5.0.0 below.
+- Register: the four records of the third chain are retracted by the fourth revision and stay as written.
+
+**Not covered:** the twelve stories are Proposed; none is built. The forecasts of the new objectives are proposed to the Owner and not yet discussed. The remaining part of the story on introduced elements (a scope change that names the goals and objectives it introduces, and a digest that follows them) is not done.
+
+**Unplanned work:** G204 (Owner decision of 2026-11-05 10:55 UTC, which is 13:55 Istanbul: add the deferred work into the current lineage, it is very critical)
+
 ## v5.0.0 — 2026-11-05 (A lineage is witnessed on a work branch; Lineage 29's third chain, committed stage by stage, reads ordered)
 
 Major release. One batch, witnessed commit by commit on the work branch wip/brsf-l29-chain3 of the governed repository and released in one step, as the Owner decided (G203).
