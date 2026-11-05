@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # register-use: reference-only
 # (audited: the probe reads no record of the framework register; the validator keeps only the controlled individuals)
-"""backlog_handover_rules_probe v1.3.0 -- re-runnable proof of the five G148 rulings and the G150 rename case rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
+"""backlog_handover_rules_probe v1.3.0 (fixture repair 1.3.3: the G154 route fixture records a well-formed commit hash, not the letter c, because order check 1.20.0 reads a recorded value that is neither a hash nor a release tag as WITNESS_BROKEN) -- re-runnable proof of the five G148 rulings and the G150 rename case rulings (T-Box v1.146.0, shapes v1.179.0, A-Box v1.56.0).
 
   A  L4 intent chain and the empty-epic rule do not judge a Cancelled item (an adopting project: a cancelled epic is not work to measure or groom).
   B  RS_DecompositionStateAgrees: a parent whose children are all Done or Cancelled, one at least Done, is not left open.
@@ -132,7 +132,7 @@ def route_register(upto, ruling, admit):
     t += "x:L a backlog:Lineage ; backlog:lineageOrdinal 1 ; backlog:lineageArchived false" + (" ; backlog:lineageFrozen true ; backlog:frozenBy x:BP" if upto > 5 else "") + (" ; backlog:frozenRuling \"No need to restart, you should use change management.\"" if ruling else "") + " .\n"
     for n in range(upto if upto <= 5 else 5):
         st = STAGES[n]; prev = f" ; backlog:consumesOutput x:O_{STAGES[n-1]}" if n else ""
-        t += f"x:O_{st} a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_{st} ; backlog:belongsToLineage x:L{prev} ; backlog:closedAtCommit \"c\" ; backlog:hasStateDigest \"d{st}\" .\n"
+        t += f"x:O_{st} a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_{st} ; backlog:belongsToLineage x:L{prev} ; backlog:closedAtCommit \"abcdef0\" ; backlog:hasStateDigest \"d{st}\" .\n"
     return t
 with tempfile.TemporaryDirectory() as e:
     git(e, "init", "-q"); os.makedirs(os.path.join(e, "reg")); rf = os.path.join(e, "reg", "register.ttl")

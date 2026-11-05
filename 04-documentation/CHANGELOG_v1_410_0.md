@@ -11285,6 +11285,24 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.0.0 — 2026-11-05 (A lineage is witnessed on a work branch; Lineage 29's third chain, committed stage by stage, reads ordered)
+
+Major release. One batch, witnessed commit by commit on the work branch wip/brsf-l29-chain3 of the governed repository and released in one step, as the Owner decided (G203).
+
+Impact of each change (BP-D62):
+- Order check 1.16.0 -> 1.20.0, MAJOR (a check tightened): a lineage may name a work branch and is then read on that branch as origin holds it; for every lineage, a commit or release that an active stage output records must hold that output, and the recorded value must be a commit hash or a well-formed release tag. A register valid before may now be refused; on this register only the four outputs of Lineage 29's second chain broke the new rule, and they are retracted by its third stage revision.
+- Vocabulary 1.169.0 -> 1.171.0, MINOR: the property witnessed on branch (backlog:witnessedOnBranch), with the names the check reads.
+- Probe handover rules 1.3.2 -> 1.3.3, PATCH: the gate of the first attempt at 5.0.0 refused on this probe. Cause: its G154 route fixture recorded the letter c as the commit of each stage output, and order check 1.20.0 reads any recorded value that is neither a commit hash nor a release tag as WITNESS_BROKEN, so two cases read the wrong verdict. The fixture now records a well-formed hash; the check was right and is unchanged. The first attempt published nothing.
+- Probe witness branch 1.4.0, new, and gate 1.89.0 -> 1.93.0, MINOR: the probe is in the probe list (fifteen cases, four mutants of the checker; the last review of the batch found the refusal of a malformed release tag had no case, so two were added).
+- Lineage discipline 162.0.0 -> 163.0.2 and its narratives 162.0.0 -> 163.2.0 (MAJOR by the package's convention for the discipline): a lineage with a work branch commits each increment there and releases the batch; a lineage without one publishes each increment, as before. Four passages left the discipline for its size ceiling and no obligation went with them (named in the narratives, G203). The discipline now stands at its ceiling of 8000 bytes.
+- Register 1.173.0 -> 1.175.0, MINOR (records added; three status pointers moved): Owner ruling G203; the change request for the digest of the work that moves an objective (from a handover of the Agentic Systems package, item 2; item 1 deferred); a finding that the four outputs of Lineage 29's second chain name release 4.8.0, which holds none of them, with a correction note on each; the third stage revision of Lineage 29 and its Scope, Goal, Objective and Backlog stages, each in its own commit; fifteen stories admitted by three scope changes; the three change requests accepted; six handovers received during the batch dispositioned (two into Lineage 29 by two change requests, pending, for the next batch: the observation an objective's outcome reads, and an authorization behind each grant of access given by an agent; four deferred to queued work after Lineage 29).
+
+Not covered: no safeguard is built yet (the fifteen stories are Proposed); the forecasts behind the third chain's checkpoints are not yet discussed with the Owner; the time at which each commit was pushed is not read; the fetch writes the branch's remote-tracking ref into the clone that is checked; a throwaway branch of the push test stays on origin until it is deleted on the repository's page.
+
+Reviewed: the mechanism by three independent reviews (each accepted it with defects, all repaired; the reviews are in 06-package-provenance/reviews/review_IK_witness*.txt), and the whole batch by a fourth.
+
+**Unplanned work:** G203 (Owner decision of 2026-11-05 10:45 Istanbul: test the push of a work branch, then build it, on his proposal of 10:42 to keep the progress locally until ready and release the batch)
+
 ## v4.17.0 — 2026-11-05 (Lineage 29 records the plan to stop an overstated closure from happening again)
 
 Minor release; the register only. Impact: a change request, its impact and the Owner's ruling are recorded for Lineage 29: build ten safeguards against closing a lineage as achieved while its gaps and repairs are unanswered, and monitor the method until they enforce. No rule, shape or tool changes; the lineage stays open.

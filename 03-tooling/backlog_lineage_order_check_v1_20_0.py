@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
+# v1.20.0 (Lineage 29, repair after the third independent review): the whole recorded value is read: a commit hash alone, or a release tag (backlog-roadmap-framework-vMAJOR.MINOR.PATCH) alone or followed by the package's note "(tag; witnessed by git, not asserted)"; a blank value, extra text and a malformed tag read WITNESS_BROKEN when the witness is git.
+# v1.19.0 (Lineage 29, repair after the second independent review): origin's answer is read for the branch's exact ref (ls-remote matches name endings, so a branch named a/refs/heads/<name> blocked the real one); an active stage output whose recorded commit is neither a commit hash nor a release tag reads WITNESS_BROKEN ("release 4.8.0", "HEAD" and free text passed unchecked).
+# v1.18.0 (Lineage 29, repair after the independent review of 1.17.0): origin is asked which commit it holds for a witness branch and the fetched ref must be that commit, so a ref kept from earlier, a branch deleted on origin, an unreachable origin and a fetch that fails or hangs read WITNESS_BROKEN instead of passing or crashing; the witness note is on the lineage's own line; a recorded commit must hold its output (also for lineages that name no branch).
+# v1.17.0 (Lineage 29, ruling G203): a lineage that names a work branch (witnessedOnBranch) is read on that branch as it stands on origin: the first appearance of its stages and items, and the ancestry of the commits its stage outputs record, are taken from origin/<branch>, not from the tip of the branch this clone is on. A named branch that origin does not hold is WITNESS_BROKEN. Every other lineage is read as before. For every lineage, a commit or release an active stage output records must hold that output (its first appearance is that commit or an ancestor).
 # v1.16.0 (Lineage 31, story Fixed; speed only): the adoptions of the register in a commit are kept in the memo directory under the commit's name (a commit never changes), and the diff walk of the register's history is read once per run, not once per lineage; the verdicts are the same (backlog_lineage_order_cache_probe).
 # v1.15.0 (Lineage 29, revival): a revived lineage opens again at the commit of its latest stage revision, so it can adopt the current rule sets there; one adopted later is still refused.
 # v1.14.0 (Lineage 22, box 2, D6): the register at a commit is parsed once per commit however many adoptions ask for it (v1.13.0 parsed it again for every probe of every adoption, about 200 times); the verdict is the same.
-"""backlog_lineage_order_check v1.16.0 — did the chain come before the work, or after?
+"""backlog_lineage_order_check v1.20.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
 one commit per stage, and only then work items (LINEAGE_OPERATING_DISCIPLINE, ceremony
@@ -146,6 +150,38 @@ def _aux_dir():
     return d
 
 
+def branch_ref(root, branch):
+    """v1.17.0 (G203): the remote-tracking ref of a lineage's witness branch and None, or None and the reason it cannot witness.
+    Origin is asked which commit it holds for the branch (ls-remote), the branch is fetched, and the fetched ref must be that
+    commit: a ref the clone kept from earlier, a branch origin no longer holds, an origin that cannot be reached and a fetch
+    that fails or does not finish are all a broken witness, never a pass. Only what origin holds now witnesses. The fetch
+    writes the branch's remote-tracking ref into the clone that is checked."""
+    if not re.fullmatch(r"[A-Za-z0-9._/-]+", branch) or ".." in branch or branch.startswith(("-", "/")) or branch.endswith(("/", ".lock")):
+        return None, "is not a branch name this check reads"
+    try:
+        ls = subprocess.run(["git", "ls-remote", "--heads", "origin", f"refs/heads/{branch}"], cwd=root, capture_output=True, text=True, timeout=60)
+    except subprocess.TimeoutExpired:
+        return None, "cannot be read: origin did not answer within 60 s"
+    if ls.returncode != 0:
+        return None, "cannot be read: origin cannot be reached (%s)" % (ls.stderr.strip().splitlines() or ["no message"])[-1][:120]
+    want = f"refs/heads/{branch}"
+    line = next((l for l in ls.stdout.splitlines() if len(l.split()) == 2 and l.split()[1] == want), "")
+    if not line:
+        return None, "is not held by origin (never pushed, or deleted there)"
+    remote_hash = line.split()[0]
+    ref = f"refs/remotes/origin/{branch}"
+    try:
+        fe = subprocess.run(["git", "fetch", "-q", "origin", f"+refs/heads/{branch}:{ref}"], cwd=root, capture_output=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired:
+        return None, "cannot be read: the fetch did not finish within 120 s"
+    if fe.returncode != 0:
+        return None, "cannot be read: the fetch failed (%s)" % (fe.stderr.strip().splitlines() or ["no message"])[-1][:120]
+    v = subprocess.run(["git", "rev-parse", "--verify", "--quiet", ref + "^{commit}"], cwd=root, capture_output=True, text=True)
+    if v.returncode != 0 or v.stdout.strip() != remote_hash:
+        return None, "cannot be read: the fetched ref is not the commit origin holds"
+    return ref, None
+
+
 def local(x):
     return str(x).split("#")[-1]
 
@@ -168,8 +204,9 @@ class GitWitness:
     history (git log -p), read once, checked against every pending key per line, instead
     of one separate full-history -S search per key. O(history) instead of O(N x history).
     """
-    def __init__(self, repo_root, rel_path):
+    def __init__(self, repo_root, rel_path, ref="HEAD"):
         self.root, self.rel = repo_root, rel_path
+        self.ref = ref   # v1.17.0 (G203): the commit history is read from this ref (a lineage's witness branch), HEAD by default
         self.cache = {}
         self._ordinal = None   # hash -> 1-based ancestry count, built once, lazily
 
@@ -180,7 +217,7 @@ class GitWitness:
 
     def _ordinal_index(self):
         if self._ordinal is None:
-            r = subprocess.run(["git", "log", "--reverse", "--format=%h"],
+            r = subprocess.run(["git", "log", "--reverse", "--format=%h", self.ref],
                                cwd=self.root, capture_output=True, text=True)
             self._ordinal = {h: i + 1 for i, h in enumerate(r.stdout.split())}
         return self._ordinal
@@ -195,7 +232,7 @@ class GitWitness:
         return int(c.stdout.strip() or 0)
 
     def _first_uncached(self, key):
-        r = subprocess.run(["git", "log", "--reverse", "--format=%h", "-S", key + " ", "--", self.rel],
+        r = subprocess.run(["git", "log", "--reverse", "--format=%h", "-S", key + " ", self.ref, "--", self.rel],
                            cwd=self.root, capture_output=True, text=True)
         line = r.stdout.strip().split("\n")[0] if r.stdout.strip() else ""
         if not line:
@@ -220,7 +257,7 @@ class GitWitness:
         if key in self.cache:
             return self.cache[key]
         files = getattr(self, "reg_files", None) or []
-        hs = subprocess.run(["git", "log", "--reverse", "--format=%h", "--", self.rel], cwd=self.root, capture_output=True, text=True).stdout.split()
+        hs = subprocess.run(["git", "log", "--reverse", "--format=%h", self.ref, "--", self.rel], cwd=self.root, capture_output=True, text=True).stdout.split()
         memo = self.__dict__.setdefault("_present_memo", {})   # v1.14.0: shared by every call, the commits probed are the same ones
         gcache = self.__dict__.setdefault("_graphs_at", {})
 
@@ -306,7 +343,7 @@ class GitWitness:
         stdout = self.__dict__.get("_diff_walk")
         if stdout is None:       # v1.16.0: the diff walk of the register's history is the same for every lineage, so it is read once per run, not once per lineage (16 walks of 4 seconds)
             r = subprocess.run(
-                ["git", "log", "--reverse", "-U0", "--format=COMMIT %h", "--", self.rel],
+                ["git", "log", "--reverse", "-U0", "--format=COMMIT %h", self.ref, "--", self.rel],
                 cwd=self.root, capture_output=True, text=True,
             )
             stdout = self.__dict__["_diff_walk"] = r.stdout
@@ -336,7 +373,7 @@ class GitWitness:
         v = subprocess.run(["git", "rev-parse", "--verify", "--quiet", commit + "^{commit}"], cwd=self.root, capture_output=True, text=True)
         if v.returncode != 0:
             return None
-        r = subprocess.run(["git", "merge-base", "--is-ancestor", commit, "HEAD"], cwd=self.root, capture_output=True, text=True)
+        r = subprocess.run(["git", "merge-base", "--is-ancestor", commit, self.ref], cwd=self.root, capture_output=True, text=True)
         return r.returncode == 0
 
 
@@ -624,14 +661,30 @@ def classify(g, L, witness, prefix):
     broken = []; unverifiable = []
     for st, olist in outs.items():
         for o in olist:
-            c = str(g.value(o, B.closedAtCommit) or "").strip()
+            raw = g.value(o, B.closedAtCommit)
+            c = str(raw or "").strip()
             token = c.split()[0] if c else ""
-            if re.fullmatch(r"[0-9a-f]{7,40}", token) or token.startswith("backlog-roadmap-framework-v"):
+            well_formed = bool(re.fullmatch(r"[0-9a-f]{7,40}", c) or re.fullmatch(r"backlog-roadmap-framework-v\d+\.\d+\.\d+( \(tag; witnessed by git, not asserted\))?", c))
+            if raw is not None and isinstance(witness, GitWitness) and not well_formed:
+                # v1.19.0: a value this check cannot read as a commit or a release witnesses nothing
+                broken.append(f"{local(o)} records closedAtCommit {c!r}, which is not a commit hash or a release tag this check reads")
+            elif re.fullmatch(r"[0-9a-f]{7,40}", token) or token.startswith("backlog-roadmap-framework-v"):
                 anc = witness.is_ancestor(token)
-                if anc is None:
+                if anc is None and getattr(witness, "ref", "HEAD") != "HEAD":
+                    # v1.17.0 (G203): the witness branch was fetched from origin; a commit it does not hold was never pushed there
+                    broken.append(f"{local(o)} records closedAtCommit {token}, which the witness branch {witness.ref} does not hold")
+                elif anc is None:
                     unverifiable.append(f"{local(o)} records closedAtCommit {token}, a ref this clone does not have (fetch tags to verify)")
                 elif not anc:
                     broken.append(f"{local(o)} records closedAtCommit {token}, which is not an ancestor of the branch tip (rewritten or never pushed)")
+                else:
+                    # v1.17.0 (G203): the recorded commit must hold the output: its first appearance is that commit or one of its ancestors.
+                    # A release named before the output existed passed as an ancestor of the tip (found 2026-11-05: four outputs of Lineage 29 name a release that holds none of them).
+                    fa = witness.first(local(o), prefix)
+                    if fa is not None and isinstance(witness, GitWitness):
+                        r_ = subprocess.run(["git", "merge-base", "--is-ancestor", fa[0], token], cwd=witness.root, capture_output=True, text=True)
+                        if r_.returncode == 1:
+                            broken.append(f"{local(o)} records closedAtCommit {token}, which does not hold it (it first appears at {fa[0]})")
     # 4. single-commit case -- hash equality, never epoch equality (v1.4.0)
     commits = {f[0] for f in out_first.values()} | {f[0] for f in item_first.values()}
     stage_hashes = [f[0] for f in out_first.values()]
@@ -839,6 +892,8 @@ def main():
     if touched is not None:
         print(f"scope       : baseline-scoped -- blocking limited to {len(touched)} lineage(s) this run's own data actually changed")
     worst = 0; n = 0; unwitnessed_total = 0; verdicts = {}
+    branch_witnesses = {}
+    witnessed_on = {}
     emitted = []
     advisory_only = []
     for L in sorted(g.subjects(RDF.type, B.Lineage), key=local):
@@ -847,7 +902,26 @@ def main():
             continue
         in_scope = touched is None or L in touched
         prefix = prefix_for(g, L)
-        verdict, d = classify(g, L, witness, prefix)
+        lw = witness
+        wb = g.value(L, B.witnessedOnBranch)
+        if wb is not None and isinstance(witness, GitWitness):
+            # v1.17.0 (G203): the lineage is witnessed on its work branch, as origin holds it
+            ref, why = branch_ref(witness.root, str(wb))
+            if ref is None:
+                print(f"      - WITNESS_BROKEN {local(L)} names the witness branch {wb}, which {why}")
+                print(f"  {local(L):24} WITNESS_BROKEN  (witness branch {wb})")
+                n += 1; verdicts[local(L)] = "WITNESS_BROKEN"
+                if in_scope:
+                    worst = 2
+                else:
+                    advisory_only.append(local(L))
+                continue
+            lw = branch_witnesses.get(ref)
+            if lw is None:
+                lw = branch_witnesses[ref] = GitWitness(witness.root, witness.rel, ref)
+                lw.reg_files = witness.reg_files
+            witnessed_on[local(L)] = ref
+        verdict, d = classify(g, L, lw, prefix)
         if verdict == "NO_OUTPUTS":
             if d["unwitnessed_outputs"]:
                 unwitnessed_total += d["unwitnessed_outputs"]
@@ -868,6 +942,7 @@ def main():
         bl = d["outputs"].get("Stage_Backlog")
         print(f"  {local(L):24} {verdict:12} outputs={len(d['outputs'])} items={len(d['items'])} backlog_output={bl[0] if bl else 'absent'}"
               + ("  (chain retracted; rebuild from Mission pending)" if verdict == "RESTARTED" else "")
+              + (f"  (witnessed on {witnessed_on[local(L)]}, G203)" if local(L) in witnessed_on else "")
               + ("  (nothing examined: no Backlog stage and no work item; work may not start)" if verdict == "AWAITING_BACKLOG" else "")
               + (f" restart={d['restart'][0]}" if d['restart'] else ""))
         for p in d["problems"]:

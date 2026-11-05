@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.169.0> ;
-    owl:versionInfo "1.169.0" ;
-    owl:priorVersion <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.171.0> ;
+    owl:versionInfo "1.171.0" ;
+    owl:priorVersion <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -147,7 +147,7 @@
                 <http://example.org/oepack-release-history> ;
     dcterms:identifier "backlog" ;
     dcterms:created "2026-07-27T00:00:00"^^xsd:dateTime ;
-    dcterms:modified "2026-09-02T12:00:00"^^xsd:dateTime ;
+    dcterms:modified "2026-11-05T00:00:00"^^xsd:dateTime ;
     dcterms:creator "Yusuf Altunel" ;
     dcterms:publisher "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
     dcterms:rightsHolder "İstanbul Kültür Üniversitesi, Department of Computer Engineering" ;
@@ -4119,6 +4119,12 @@ backlog:closedAtCommit a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "closed at commit"@en ;
     skos:definition "The governed-repository commit at which this stage closed. THE ONLY EXTERNALLY WITNESSED ANCHOR available: a commit is append-only and held by a remote the author does not control, so a stage claiming to have closed at a commit can be checked against a history nobody can rewrite. Established by experiment — a digest over the register alone is computable from the final state and therefore proves nothing about order, while a commit is not. Its limit is equally real: git witnesses order BETWEEN commits and says nothing about order WITHIN one, so a lineage authored in a single commit is unordered evidence however it was actually built."@en .
+
+backlog:witnessedOnBranch a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "witnessed on branch"@en ;
+    skos:definition "The work branch of the governed repository on which this lineage's stages and boxes are witnessed, one commit each, before the main line receives them in one release (G203). The order of the lineage is read from the first appearance of its records on this branch, and a commit its stage outputs record must be an ancestor of the branch. The branch is never rewritten. The order check reads a name of letters, digits, dot, underscore, hyphen and slash, with no two dots in a row, that does not start with a hyphen or slash and does not end with a slash or with .lock; any other name is refused as a witness."@en .
 
 backlog:closureCommittedAt a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ClosureReport ; rdfs:range xsd:string ;
