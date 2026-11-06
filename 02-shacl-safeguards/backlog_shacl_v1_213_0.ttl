@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.212.0> ;
-    owl:versionInfo "1.212.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.213.0> ;
+    owl:versionInfo "1.213.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9880,3 +9880,24 @@ backlog:IntroducedGoalImpactAnsweredShape a sh:NodeShape ;
             FILTER NOT EXISTS { ?ia backlog:callsForItem ?w }
         }""" ] .
 
+#################################################################
+#  v1.213.0 (G215, Owner ruling of 2026-11-06) -- a finished lineage that is not concluded is named.
+#  Advisory only: a stipulation proposed to the Owner (L-116). Added shapes only.
+#################################################################
+
+backlog:FinishedLineageNotConcludedAdvisoryShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Warning ;
+    rdfs:label "Advisory: a lineage whose items are all Done or Cancelled is concluded (G215)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "FIN_NOT_CONCLUDED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "Advisory (G215): every item of this lineage is Done or Cancelled and its status is below Achieved. A finished lineage is concluded: closure report, guards read again, Owner confirmation, mission outcome, then set down with backlog_lineage_archive in the next release." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageStatus ?ls .
+            FILTER (?ls NOT IN (backlog:LS_Achieved, backlog:LS_Abandoned, backlog:LS_Archived))
+            FILTER NOT EXISTS { $this backlog:lineageArchived true }
+            FILTER EXISTS { ?i backlog:belongsToLineage $this ; backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) }
+            FILTER NOT EXISTS { ?j backlog:belongsToLineage $this ; backlog:hasState ?s2 . FILTER (?s2 NOT IN (backlog:Done, backlog:Cancelled)) }
+        }""" ] .

@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.4.8 — 2026-11-06 (The discipline names the step that concludes a finished lineage)
+
+The lineage discipline has a sixth step: a finished lineage is concluded with a closure report, guards read again, the Owner's confirmation and the mission outcome, and is then set down; checks of live records must read the archive too. A new advisory check, proposed to the Owner, names a finished lineage not yet concluded. It refuses nothing. To stay under the size limit of the discipline, a few lines were shortened.
+
+**Unplanned work:** Moving story GvRule6 (IK-S57) into work and adding the discipline step and the advisory check, on the Owner ruling G215 given at 11:01 and 11:24 Istanbul on 2026-11-06 and his instruction of 17:49 the same day to run the remaining tasks to completion.
+
 ## v5.4.7 — 2026-11-06 (Cost saving and gate speed are concluded and the finished lineages are set down)
 
 Lineages 30 and 31 are concluded with closure reports and fresh readings of what had to stay unchanged. The first adaptive lineage's nine open stories are cancelled with a reason, and the finished lineages are set down in the archive with the fixed archive tool.

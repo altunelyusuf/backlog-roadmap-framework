@@ -4491,3 +4491,12 @@ ex:IGI_GOOD a backlog:ScopeChange ; backlog:fulfillsRequest ex:IGI_CR3 ; backlog
 ex:IGI_G5 a backlog:Goal .
 ex:IGI_CR4 a backlog:ChangeRequest . ex:IGI_IA4 a backlog:ImpactAssessment ; backlog:analyzesRequest ex:IGI_CR4 ; backlog:findsNoOtherGoalAffected true .
 ex:IGI_NONE a backlog:ScopeChange ; backlog:fulfillsRequest ex:IGI_CR4 ; backlog:introducesElement ex:IGI_G5 .
+
+# G215 (the older case L_Understated of the G97 fixtures also fires, for it is finished by the same definition): a lineage whose every item is Done or Cancelled and whose status is below Achieved (FIN_NOT_CONCLUDED fires); one with an item still open does not (FIN_OPEN).
+ex:FIN_M a backlog:Mission .
+ex:FIN_NOT_CONCLUDED a backlog:Lineage ; backlog:lineageOrdinal 91 ; backlog:lineageArchived false ; backlog:lineageForMission ex:FIN_M ; backlog:hasLineageStatus backlog:LS_InProgress .
+ex:FIN_S1 a backlog:Story ; backlog:belongsToLineage ex:FIN_NOT_CONCLUDED ; backlog:hasState backlog:Done .
+ex:FIN_S2 a backlog:Story ; backlog:belongsToLineage ex:FIN_NOT_CONCLUDED ; backlog:hasState backlog:Cancelled .
+ex:FIN_OPEN a backlog:Lineage ; backlog:lineageOrdinal 92 ; backlog:lineageArchived false ; backlog:lineageForMission ex:FIN_M ; backlog:hasLineageStatus backlog:LS_InProgress .
+ex:FIN_S3 a backlog:Story ; backlog:belongsToLineage ex:FIN_OPEN ; backlog:hasState backlog:Done .
+ex:FIN_S4 a backlog:Story ; backlog:belongsToLineage ex:FIN_OPEN ; backlog:hasState backlog:Proposed .
