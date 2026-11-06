@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.4.3 — 2026-11-06 (The methods that deal with problems and risks are routed: goals, objectives, benefits and stories)
+
+Records only. The Owner decided on 2026-11-06 that a goal must be satisfiable before the lineage closes, that benefits which appear later are tracked and never held as goals, and that each method is shown to work by a test drive on a toy example and, for the treatments of a risk, by a check against the field standard (ISO 31000). The change request of 5.4.2 is fulfilled by a scope change that introduces three goals, three objectives and three deliverables and admits three stories; three benefits are recorded as expected and not realised. The test drive of 2026-11-05 on a copy of the register is the baseline: a toy problem was raised, advised on and cleared, a way that does not fit its kind was refused, and a toy risk was refused because no kind exists for it.
+
+**Unplanned work:** Owner ruling G212 of 2026-11-05, recorded at 23:51 UTC (2026-11-06 02:51 Istanbul), which decides the form of the goals and the proof of the methods and routes the work through the open change request.
+
 ## v5.4.2 — 2026-11-06 (The Owner's wider reading of an obstacle is recorded and routed)
 
 Records only. The Owner ruled that an obstacle is any condition that makes progress impossible or puts success at risk, not only a blocker, that each is told apart as a problem (it has happened) or a risk (it is a probability), and that the lineage identifies, categorizes and mitigates them. The ruling is recorded with a change request and its impact analysis; the goals that state the benefit, their objectives and their stories are not yet defined.
