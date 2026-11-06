@@ -3,7 +3,7 @@
 the three whose recorded kind was wrong are read again through readAsKind (the recorded kind stays: a committed record is never edited), and the count that is
 left is shown to move when a kind or a reading is taken away (mutants). It reads the newest register; nothing is written to it.
 
-  python3 -I backlog_finding_kind_probe_v1_0_0.py          exit 0 when every case holds"""
+  python3 -I backlog_finding_kind_probe_v1_0_1.py          exit 0 when every case holds"""
 import glob, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", p)[0]]
@@ -14,7 +14,7 @@ from rdflib import Graph, RDF, URIRef
 B = "http://example.org/backlog#"; FW = "http://example.org/backlog-framework-register#"
 U = lambda n: URIRef(B + n); local = lambda x: str(x).rsplit("#", 1)[-1]
 KINDS = {"Imp_RuleRefusal", "Imp_EvidenceGap", "Imp_ToolFault", "Imp_WrongOrder", "Imp_AccessLimit", "Imp_DecisionWaiting", "Imp_ServiceFailure"}
-AFTER = ("Find_IK_", "Find_CS_", "Find_GS_")                      # findings of Lineage 29 itself and of the two lineages after its closure
+AFTER = ("Find_IK_", "Find_CS_", "Find_GS_", "Find_AC_", "Find_SDLC_", "Find_Gov_", "Find_G", "Find_AutoGap", "Find_EPRulingsIneffective")   # findings of Lineage 29 itself and of the lineages after its closure, and the findings of lineages concluded before obstacle kinds existed (read from the archive, not part of this set)
 READ = {"Find_AA_StageScriptKeptOldStatus": ("Imp_RuleRefusal", "Imp_ToolFault"), "Find_AP2_UndeclaredPredicate": ("Imp_RuleRefusal", "Imp_ToolFault"),
         "Find_AA_EntityStagesAgain": ("Imp_RuleRefusal", "Imp_ToolFault")}   # recorded, read as
 fails = 0
@@ -33,7 +33,8 @@ def counted(g):
         f = URIRef(FW + k)
         if not (g.value(f, U("hasImpedimentKind")) is not None and local(g.value(f, U("hasImpedimentKind"))) == was and g.value(f, U("readAsKind")) is not None and local(g.value(f, U("readAsKind"))) == now): wrong.append(k)
     return fs, none, odd, wrong
-g = Graph(); g.parse(REGF, format="turtle")
+ARCH = sorted(glob.glob(PKG + "/01-ontologies/archive/backlog_framework_archive_abox_v*.ttl"), key=sv)[-1]
+g = Graph(); g.parse(REGF, format="turtle"); g.parse(ARCH, format="turtle")
 fs, none, odd, wrong = counted(g)
 expect("%d earlier findings are read" % len(fs), len(fs) == 105)
 expect("every earlier finding carries a kind, recorded or read (%d without)" % len(none), not none)

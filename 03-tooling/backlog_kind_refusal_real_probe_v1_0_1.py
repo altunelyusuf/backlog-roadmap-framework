@@ -35,16 +35,7 @@ expect("1 the real register raises no kind refusal", judge("") == [])
 r2 = judge(IMP("PlantedNoKind", "L_ImpedimentsKnown", None))
 expect("2 an obstacle of Lineage 29 with no kind is refused by name", len(r2) == 1 and "PlantedNoKind" in r2[0])
 expect("3 the same obstacle with a kind is not refused", judge(IMP("PlantedKind", "L_ImpedimentsKnown", "Imp_ToolFault")) == [])
-# a lineage of the register that did not adopt the rule set: the first lineage whose statement lacks RS_ImpedimentsKnown
-lins = re.findall(r"^fw:(L_\w+) a backlog:Lineage", text, re.M)
-non = []
-for l in lins:
-    m = re.search(r"^fw:%s a backlog:Lineage.*?(?=^fw:L_\w+ a backlog:Lineage|\Z)" % l, text, re.M | re.S)
-    blk = m.group(0)[:6000] if m else ""
-    if "RS_ImpedimentsKnown" not in blk and l != "L_ImpedimentsKnown": non.append(l)
-    if non: break
-if non:
-    expect("4 an obstacle with no kind in a lineage that did not adopt the rule set (%s) is not refused" % non[0], judge(IMP("PlantedOutside", non[0], None)) == [])
-else:
-    expect("4 a lineage that did not adopt exists in the register", False)
+# the register now holds one live lineage and it adopted the rule set, so a lineage that did not adopt is planted
+PL = "fw:L_PlantedOther a backlog:Lineage .\n"
+expect("4 an obstacle with no kind in a planted lineage that did not adopt the rule set is not refused", judge(PL + IMP("PlantedOutside", "L_PlantedOther", None)) == [])
 print("register:", os.path.basename(REG)); print("VERDICT   :", "PASS" if not bad else "FAIL"); sys.exit(1 if bad else 0)

@@ -10,10 +10,11 @@ HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
 REG = sorted(glob.glob(os.path.join(PKG, "01-ontologies/backlog_abox_v*.ttl")), key=sv)[-1]
 if sys.argv[1:] == ["--deps"]:
-    print(REG); print(os.path.abspath(__file__)); sys.exit(0)
+    print(REG); print(sorted(glob.glob(os.path.join(PKG, "01-ontologies/archive/backlog_framework_archive_abox_v*.ttl")), key=sv)[-1]); print(os.path.abspath(__file__)); sys.exit(0)
 from rdflib import Graph, URIRef, RDF
 B = "http://example.org/backlog#"; AG = "http://example.org/agentic-systems#"; PV = "http://www.w3.org/ns/prov#"; FW = "http://example.org/backlog-framework-register#"
-g = Graph(); g.parse(REG, format="turtle")
+ARCH = sorted(glob.glob(os.path.join(PKG, "01-ontologies/archive/backlog_framework_archive_abox_v*.ttl")), key=sv)[-1]
+g = Graph(); g.parse(REG, format="turtle"); g.parse(ARCH, format="turtle")
 GRANT, BY, ACTS = URIRef(AG + "AccessGrant"), URIRef(AG + "grantedBy"), URIRef(PV + "actedOnBehalfOf")
 RUN, HUMAN = URIRef(B + "ExecutorInstance"), URIRef(B + "Executor_IndividualHuman")
 bad = []

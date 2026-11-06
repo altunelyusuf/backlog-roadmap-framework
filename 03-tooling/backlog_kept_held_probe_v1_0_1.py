@@ -12,12 +12,12 @@ sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
 latest = lambda pat: sorted(glob.glob(os.path.join(PKG, pat)), key=sv)[-1]
 REG = latest("01-ontologies/backlog_abox_v*.ttl"); BASE = latest("03-tooling/kept_held_baseline_v*.nt")
 if sys.argv[1:] == ["--deps"]:
-    print(REG); print(BASE); print(os.path.abspath(__file__)); sys.exit(0)
+    print(REG); print(latest("01-ontologies/archive/backlog_framework_archive_abox_v*.ttl")); print(BASE); print(os.path.abspath(__file__)); sys.exit(0)
 from rdflib import Graph, URIRef, Literal
 from rdflib.namespace import OWL
 B = "http://example.org/backlog#"; U = lambda n: URIRef(B + n)
-EX = {U("hasState"), U("hasLineageStatus"), U("lineageArchived"), U("archivedAt"), OWL.versionInfo, OWL.versionIRI, OWL.priorVersion}
-base = Graph(); base.parse(BASE, format="nt"); cur = Graph(); cur.parse(REG, format="turtle")
+EX = {U("hasState"), U("hasLineageStatus"), U("lineageArchived"), U("archivedAt"), U("archiveFile"), U("archivalTrigger"), U("hasArchivalConfirmationStatus"), OWL.versionInfo, OWL.versionIRI, OWL.priorVersion}
+base = Graph(); base.parse(BASE, format="nt"); cur = Graph(); cur.parse(REG, format="turtle"); cur.parse(latest("01-ontologies/archive/backlog_framework_archive_abox_v*.ttl"), format="turtle")
 subs = set(base.subjects())
 CLOSED = [x for x in subs if (x, U("adoptsRuleSet"), None) in base]
 def reopened(g): return [x for x in CLOSED if g.value(x, U("hasLineageStatus")) not in (U("LS_Achieved"), U("LS_Abandoned"), U("LS_Archived"))]

@@ -63,14 +63,8 @@ PLANT = lambda g: "fw:Scope2_ImpedimentsKnown backlog:coversArea fw:Area_Planted
 r = judge(text + ADOPT + PLANT(False), os.path.basename(REG))
 expect("B an area planted in the scope of Lineage 29 with no goal is refused by name", r == [("SI_NOANSWER", "Area_Planted")])
 expect("B the same area with a goal is not refused", judge(text + ADOPT + PLANT(True), os.path.basename(REG)) == [])
-from rdflib import Graph, RDF, URIRef
-g = Graph(); g.parse(REG, format="turtle")
-B = "http://example.org/backlog#"
-non = sorted(l for l in g.subjects(RDF.type, URIRef(B + "Lineage")) if (l, URIRef(B + "adoptsRuleSet"), URIRef(B + "RS_ScopeItemsAnswered")) not in g and (l, URIRef(B + "hasLineageStatus"), None) in g and any(True for _ in g.subjects(URIRef(B + "belongsToLineage"), l)))
-sc = [s for l in non for s in g.subjects(URIRef(B + "belongsToLineage"), l) if (s, RDF.type, URIRef(B + "ScopeStatement")) in g]
-if sc:
-    other = "<%s> backlog:coversArea fw:Area_PlantedOut .\nfw:Area_PlantedOut a backlog:ScopeArea ; backlog:hasScopeLayer backlog:Layer_Work .\n" % sc[0]
-    expect("B the same area in the scope of a lineage that did not adopt (%s) is not refused" % str(sc[0]).split("#")[-1], judge(text + ADOPT + other, os.path.basename(REG)) == [])
-else:
-    expect("B a lineage that did not adopt, with a scope statement, exists in the register", False)
+# the register now holds one live lineage and it adopted the rule set, so a lineage that did not adopt is planted
+PLO = "fw:L_PlantedOther a backlog:Lineage .\nfw:Scope_PlantedOther a backlog:ScopeStatement ; backlog:belongsToLineage fw:L_PlantedOther .\n"
+other = PLO + "fw:Scope_PlantedOther backlog:coversArea fw:Area_PlantedOut .\nfw:Area_PlantedOut a backlog:ScopeArea ; backlog:hasScopeLayer backlog:Layer_Work .\n"
+expect("B the same area in the scope of a planted lineage that did not adopt is not refused", judge(text + ADOPT + other, os.path.basename(REG)) == [])
 print("register:", os.path.basename(REG)); print("VERDICT   :", "PASS" if not bad else "FAIL"); sys.exit(1 if bad else 0)

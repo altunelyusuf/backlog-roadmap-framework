@@ -12,7 +12,7 @@ sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
 latest = lambda pat: sorted(glob.glob(os.path.join(PKG, pat)), key=sv)[-1]
 AB, VAL = latest("01-ontologies/backlog_abox_v*.ttl"), latest("03-tooling/backlog_validate_v*.py")
 if sys.argv[1:] == ["--deps"]:
-    print("\n".join([AB, VAL, latest("02-shacl-safeguards/backlog_shacl_v*.ttl"), latest("01-ontologies/backlog_tbox_v*.ttl"), os.path.abspath(__file__)])); sys.exit(0)
+    print("\n".join([AB, latest("01-ontologies/archive/backlog_framework_archive_abox_v*.ttl"), VAL, latest("02-shacl-safeguards/backlog_shacl_v*.ttl"), latest("01-ontologies/backlog_tbox_v*.ttl"), os.path.abspath(__file__)])); sys.exit(0)
 from rdflib import Graph, Namespace, URIRef, RDF
 B = Namespace("http://example.org/backlog#"); FW = Namespace(re.search(r"@prefix fw: <([^>]+)>", open(AB, encoding="utf-8").read()).group(1))
 bad = []
@@ -63,7 +63,7 @@ def judge(g, n, P="AP2"):
     rel = FW["Rel_%s_%d" % (P, n)]
     if (rel, RDF.type, B.DeploymentUnit) not in g or g.value(rel, B.hasState) != B.Done: out.append("no deployment unit is Done for the box")
     return out
-g = Graph(); g.parse(AB, format="turtle")
+g = Graph(); g.parse(AB, format="turtle"); g.parse(latest("01-ontologies/archive/backlog_framework_archive_abox_v*.ttl"), format="turtle")
 closed = [n for n in range(1, 20) if (FW["It_AP2_%d" % n], RDF.type, B.Iteration) in g and g.value(FW["It_AP2_%d" % n], B.hasState) == B.Done]
 expect("the lineage has closed boxes and they are numbered one to n", bool(closed) and closed == list(range(1, len(closed) + 1)), "boxes %s" % closed)
 for n in closed:

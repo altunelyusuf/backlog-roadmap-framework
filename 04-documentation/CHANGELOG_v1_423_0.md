@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.4.7 — 2026-11-06 (Cost saving and gate speed are concluded and the finished lineages are set down)
+
+Lineages 30 and 31 are concluded with closure reports and fresh readings of what had to stay unchanged. The first adaptive lineage's nine open stories are cancelled with a reason, and the finished lineages are set down in the archive with the fixed archive tool.
+
+**Unplanned work:** Moving story GvClose6 (IK-S56) into work and setting the finished lineages down, on the Owner ruling G215 (11:01 and 11:24 Istanbul, 2026-11-06: build the closure reports and close the finished lineages) and his instruction of 17:49 the same day to run the remaining tasks to completion.
+
 ## v5.4.6 — 2026-11-06 (Setting down a lineage leaves live what a live lineage uses)
 
 The archive tool no longer sets down what a live lineage uses: it drops first every candidate that touches anything outside the archived lineages. A probe on a small register catches seven mutants; the gate is 1.95.0.
