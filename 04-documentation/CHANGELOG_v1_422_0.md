@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.4.6 — 2026-11-06 (Setting down a lineage leaves live what a live lineage uses)
+
+The archive tool no longer sets down what a live lineage uses: it drops first every candidate that touches anything outside the archived lineages. A probe on a small register catches seven mutants; the gate is 1.95.0.
+
+**Unplanned work:** Moving story GvKeep6 (IK-S55) into work and releasing the archive tool fix, on the Owner ruling G215 given at 11:01 and 11:24 Istanbul on 2026-11-06.
+
 ## v5.4.5 — 2026-11-06 (Finishing a lineage is governed: the concluding and setting down of a lineage is routed, with a category for governance work)
 
 Records only. The Owner decided on 2026-11-06 that a finished lineage is concluded and set down, that the gap which left ten finished lineages open is closed by a step in the discipline and a check, and that the work which governs lineages is kept in this lineage as its own category until the Delivery lineage and its governing lineage are designed. Measured on a copy of the register: setting down the seven archivable lineages breaks 63 checks of live lineages, because the shared agent roles are carried into the archive. A new change request is fulfilled by a scope change that introduces three goals, three objectives and three deliverables and admits three stories.

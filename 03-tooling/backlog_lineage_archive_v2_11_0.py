@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v2.11.0 (Lineage 29, governance story: setting down a lineage leaves live what a live lineage uses): the cluster closure counted a subject that no lineage owns, such as the run of a live lineage, as a candidate for the archive, so a shared definition (the builder, verifier, overseer and approver roles) whose every user was an archived run or a candidate was set down with them, and the live runs lost their definition: 63 violations of live lineages on a copy of the register after the seven archivable lineages were set down (64 on the register of 5.4.5, which holds one more run). A candidate that touches anything outside the partition and the candidates is now dropped first, until none is left to drop.
 # v2.10.0 (Lineage 22, D2): a statement whose subject is written as a full IRI moves with its lineage like one written as a prefixed name (split_statements); 59 statements of Lineage 20 stayed in the live register because only the second form was read
 # v2.9.0 (G134): an entry names its lineage, mission and outcome by LINKS (never text); a mission or outcome that is not recorded is left out, not written as a blank or as the word unrecorded
 # v2.8.0 (G121): the earlier statements of an archived lineage's mission (supersedesMission, however long the chain) are its mission history and move with it, up to a statement another lineage pursues; before, they stayed live ownerless and pointed into the archive.
@@ -6,7 +7,7 @@
 # v2.6.0 (G99 release B): the version a new live or archive file supersedes joins the header's owl:priorVersion chain (it was added by hand each time; move_header does it, and refuses a header that has no chain to extend).
 # v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.10.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.11.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -37,6 +38,8 @@ WHAT IT DOES.  backlog_lineage_archive.py <register.ttl> <LineageLocalName>... [
      iterated to a fixed point -- every subject that belongs to no live lineage and references a
      subject already in the partition (closure reports, change requests, events about the
      lineage's items). Measured on lineages 7+8: 411 direct members, 493 after closure.
+     (v2.11.0) A subject that no lineage owns and that touches anything outside the partition and its own candidates, such as the run of a LIVE lineage or an agent
+     role that a live run uses, is never swept: those candidates are dropped first, and so are the subjects that depend on them.
   3. Reports what stays live and still points into the partition (a pointer into a named archive
      is a reference, not a dangling edge -- the archive ABox says so itself).
   4. With --apply: writes the partition's triples into a NEW archive ABox version, removes them
@@ -213,6 +216,16 @@ def partition(g, lineages):
     # nothing live (an entity and the gaps that name it, both referenced only by archived items)
     cand = {s for s in set(g.subjects()) if isinstance(s, URIRef) and s not in part and s not in live_subj and s not in keep_live
             and (s, RDF.type, B.Lineage) not in g and (s, RDF.type, B.Mission) not in g}
+    # v2.11.0: drop first every candidate that touches something outside the partition and the candidates (a run of a live lineage touches its live
+    # story), and so, in turn, whatever those candidates share (the definition of an agent role); only a closed cluster can then go with the partition.
+    changed = True
+    while changed:
+        changed = False
+        for s in list(cand):
+            inc = [x for x in g.subjects(None, s) if isinstance(x, URIRef) and x != s]
+            out = [o for o in g.objects(s, None) if isinstance(o, URIRef) and o != s and not str(o).startswith("http://example.org/backlog#")]
+            if not (all(x in part or x in cand for x in inc) and all(o in part or o in cand for o in out)):
+                cand.discard(s); changed = True
     changed = True
     while changed:
         changed = False
