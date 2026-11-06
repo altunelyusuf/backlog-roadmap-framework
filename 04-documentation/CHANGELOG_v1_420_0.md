@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.4.4 — 2026-11-06 (A goal is a requirement met within the development; an obstacle survey and taxonomy are routed)
+
+Records only. The Owner decided on 2026-11-06 that a goal belongs to the development and is proven satisfied within it, that a level reached in an operating or business environment is a benefit that is tracked and never a goal (the requirements set to reach that level can be met and shown, the level itself cannot), that the survey of obstacles is done with another registrant, and that an obstacle taxonomy built from it becomes part of the framework from now on. A new change request is fulfilled by a scope change that introduces three goals, three objectives and three deliverables and admits three stories.
+
+**Unplanned work:** Owner rulings G213 and G214 of 2026-11-06, given at 09:30 Istanbul, which decide the form of a goal and route the survey and the taxonomy through change management.
+
 ## v5.4.3 — 2026-11-06 (The methods that deal with problems and risks are routed: goals, objectives, benefits and stories)
 
 Records only. The Owner decided on 2026-11-06 that a goal must be satisfiable before the lineage closes, that benefits which appear later are tracked and never held as goals, and that each method is shown to work by a test drive on a toy example and, for the treatments of a risk, by a check against the field standard (ISO 31000). The change request of 5.4.2 is fulfilled by a scope change that introduces three goals, three objectives and three deliverables and admits three stories; three benefits are recorded as expected and not realised. The test drive of 2026-11-05 on a copy of the register is the baseline: a toy problem was raised, advised on and cleared, a way that does not fit its kind was refused, and a toy risk was refused because no kind exists for it.
