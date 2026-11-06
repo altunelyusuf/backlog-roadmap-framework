@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.4.5 — 2026-11-06 (Finishing a lineage is governed: the concluding and setting down of a lineage is routed, with a category for governance work)
+
+Records only. The Owner decided on 2026-11-06 that a finished lineage is concluded and set down, that the gap which left ten finished lineages open is closed by a step in the discipline and a check, and that the work which governs lineages is kept in this lineage as its own category until the Delivery lineage and its governing lineage are designed. Measured on a copy of the register: setting down the seven archivable lineages breaks 63 checks of live lineages, because the shared agent roles are carried into the archive. A new change request is fulfilled by a scope change that introduces three goals, three objectives and three deliverables and admits three stories.
+
+**Unplanned work:** Owner ruling G215 of 2026-11-06, given at 11:01 and 11:24 Istanbul, which decides that a finished lineage is concluded and set down, adds the category Lineage governance and routes the work through change management.
+
 ## v5.4.4 — 2026-11-06 (A goal is a requirement met within the development; an obstacle survey and taxonomy are routed)
 
 Records only. The Owner decided on 2026-11-06 that a goal belongs to the development and is proven satisfied within it, that a level reached in an operating or business environment is a benefit that is tracked and never a goal (the requirements set to reach that level can be met and shown, the level itself cannot), that the survey of obstacles is done with another registrant, and that an obstacle taxonomy built from it becomes part of the framework from now on. A new change request is fulfilled by a scope change that introduces three goals, three objectives and three deliverables and admits three stories.
