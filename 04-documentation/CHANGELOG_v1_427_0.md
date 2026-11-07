@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.2 — 2026-11-07 (A roadmap is built from packages: the rule set that requires them)
+
+A new rule set (profile revision 16) binds the lineages that adopt it: the roadmap names its own packages, the simplest lineage has exactly one package that delivers everything, every deliverable is delivered by a package, a package traces to a deliverable, and an item an iteration plans belongs to a package that targets it. A new tool measures the number of packages from the scope, goals, objectives and backlog. Lineage 32 (urgent, pausing the Governance lineage) is closed in box 1; an independent review found six edge cases, four fixed and one left open (a package with no lineage link).
+
+**Unplanned work:** G219: the Owner's package rules (urgent, 2SISA finding), 2026-11-07.
+
 ## v5.5.1 — 2026-11-07 (The seed of an urgent pause is read against the pause (Owner ruling G218))
 
 An emergency pause cannot be declared without naming the urgent work, and the order check read that work as a bypass because it appeared before its lineage had built its chain. The order check (1.22.0) now reads the single seed item that a pause names for another lineage against the pause itself; an item that appeared earlier, that no pause names, or that the pause of its own lineage names, is still a bypass (new probe with two mutants). The Owner's ruling G218 of 2026-11-07 also records, as proposals until the urgent lineage has published its shapes, that a roadmap needs its packages, that the simplest lineage has one, and that the package count is measured from the scope, goals, objectives and backlog. The 2SISA handover on packages in a roadmap is accepted and answered.

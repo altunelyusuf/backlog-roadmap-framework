@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.157.0
+# Backlog & Roadmap Semantic Framework — Standard v1.158.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2615,3 +2615,8 @@ A lineage chooses, when it opens, how it will be judged. An `OpeningProfile` nam
 - The readiness check (G168, release 1.446.0): `ReadinessCheck` and `ReadinessCriterion`; the rule set `RS_ReadinessChecked` (profile revision 6, adaptive profile only) asks an adopting lineage for a check of every Ready item and refuses a Ready item with an unmet criterion.
 - The planned control, the daily checkpoint and the demo run (G169, release 1.447.0): `ControlActivity` with `ControlRun`, `DailyCheckpoint` and `DemoRun`, each recorded whole and each with its kind of work; bound by their own shapes, no rule set.
 - The deployment plan and the blocked review (G170, release 1.448.0): `DeploymentPlan` is made before its box starts and names the one unit that ships from it; the rule set `RS_ReviewNeedsControlRun` (profile revision 7, adaptive profile only) refuses a review while a planned control of the box has no run.
+
+
+## Packages required for a roadmap (Lineage 32, G219)
+
+A lineage that adopts the rule set RS_PackagesRequired (profile revision 16) builds its roadmap from packages. The shapes RoadmapNamesPackageShape (the roadmap names at least one package through roadmapNamesPackage), LineageHasPackageShape (a lineage that has its backlog has a package; with exactly one package, that package delivers every deliverable: the simplest form), DeliverableDeliveredShape (every deliverable is delivered by a package), PackageTracesShape (a package delivers a deliverable of its scope) and PlannedItemInPackageShape (an item an iteration plans belongs to a package that targets that iteration) bind only adopting lineages; earlier lineages are not bound. The number of packages is measured, not guessed: `backlog_package_count` reads each deliverable, the stories that satisfy it, the objectives they pursue and the goals those contribute to, leaves out the mission goal, and groups deliverables that serve the same goals; with `--check` the declared packages must make exactly those groups.

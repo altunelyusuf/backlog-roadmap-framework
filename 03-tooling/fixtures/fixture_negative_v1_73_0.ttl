@@ -4512,3 +4512,27 @@ ex:MA_DROPS_OLD a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M ; bac
 ex:MA_WIDENS a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M3 ; backlog:amendedMissionStatement "A can be named. B can be cleared." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
 ex:MA_FIRST a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlog:amendedMissionStatement "A can be named. B can be cleared." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
 ex:MA_DROPS_EARLIER a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlog:amendedMissionStatement "A can be named. C is governed, and much more is said here." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
+
+# G219 (RS_PackagesRequired): a lineage at Backlogged with no package (RNP_LINEAGE_NOPKG), a deliverable no package delivers (RNP_DEL_UNDELIVERED), a roadmap naming no package (RNP_ROADMAP_NOPKG), a package delivering nothing (RNP_PKG_ORPHAN), an item planned into an iteration no package targets (RNP_SPRINT_NOPKG).
+ex:RNP_L a backlog:Lineage ; backlog:lineageOrdinal 93 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:RNP_Del a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNP_L .
+ex:RNP_Road a backlog:Roadmap ; backlog:belongsToLineage ex:RNP_L .
+ex:RNP_Orphan a backlog:Package ; backlog:belongsToLineage ex:RNP_L ; backlog:hasPackageVersion "1.0.0" .
+ex:RNP_Iter a backlog:Iteration ; backlog:belongsToLineage ex:RNP_L .
+ex:RNP_Story a backlog:Story ; backlog:belongsToLineage ex:RNP_L ; backlog:satisfiesDeliverable ex:RNP_Del .
+ex:RNP_Plan a backlog:PlanningEvent ; backlog:plansItem ex:RNP_Story ; backlog:plannedInto ex:RNP_Iter .
+# G219 good case: one package that delivers the only deliverable and targets the iteration, a roadmap that names it, an item planned into that iteration. No RNP_ rule fires on it.
+ex:RNPG_L a backlog:Lineage ; backlog:lineageOrdinal 94 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:RNPG_Del a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNPG_L .
+ex:RNPG_Iter a backlog:Iteration ; backlog:belongsToLineage ex:RNPG_L .
+ex:RNPG_Pkg a backlog:Package ; backlog:belongsToLineage ex:RNPG_L ; backlog:hasPackageVersion "1.0.0" ; backlog:deliversDeliverable ex:RNPG_Del ; backlog:targetsIteration ex:RNPG_Iter .
+ex:RNPG_Road a backlog:Roadmap ; backlog:belongsToLineage ex:RNPG_L ; backlog:roadmapNamesPackage ex:RNPG_Pkg .
+ex:RNPG_Story a backlog:Story ; backlog:belongsToLineage ex:RNPG_L ; backlog:satisfiesDeliverable ex:RNPG_Del .
+ex:RNPG_Plan a backlog:PlanningEvent ; backlog:plansItem ex:RNPG_Story ; backlog:plannedInto ex:RNPG_Iter .
+ex:RNPN_L a backlog:Lineage ; backlog:lineageOrdinal 95 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+# G219 review cases (must not fire / must fire): a child story planned under an epic that satisfies the delivered deliverable (no fire); a view deliverable a single package leaves out (no fire); a roadmap naming only another lineage's package (RNP_ROADMAP_NOPKG fires).
+ex:RNPG_Epic a backlog:Epic ; backlog:belongsToLineage ex:RNPG_L ; backlog:satisfiesDeliverable ex:RNPG_Del .
+ex:RNPG_Child a backlog:Story ; backlog:belongsToLineage ex:RNPG_L ; backlog:hasParentItem ex:RNPG_Epic .
+ex:RNPG_Plan2 a backlog:PlanningEvent ; backlog:plansItem ex:RNPG_Child ; backlog:plannedInto ex:RNPG_Iter .
+ex:RNPG_View a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNPG_L ; backlog:productViewOf ex:RNPG_Del .
+ex:RNPX_Road a backlog:Roadmap ; backlog:belongsToLineage ex:RNPG_L ; backlog:roadmapNamesPackage ex:RNP_Orphan .

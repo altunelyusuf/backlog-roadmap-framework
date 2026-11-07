@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.214.0> ;
-    owl:versionInfo "1.214.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.215.0> ;
+    owl:versionInfo "1.215.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9937,4 +9937,93 @@ backlog:MissionAmendmentShape a sh:NodeShape ;
             $this backlog:amendsMission ?m ; backlog:amendedMissionStatement ?n .
             ?other backlog:amendsMission ?m ; backlog:amendedMissionStatement ?n2 .
             FILTER (?other != $this && STRLEN(?n2) < STRLEN(?n) && !CONTAINS(?n, ?n2))
+        }""" ] .
+
+# ---- Lineage 32: packages required for a roadmap (G219). Every shape binds only a lineage that adopts RS_PackagesRequired. ----
+
+backlog:RoadmapNamesPackageShape a sh:NodeShape ;
+    sh:targetClass backlog:Roadmap ;
+    sh:severity sh:Violation ;
+    rdfs:label "A roadmap of a lineage that requires packages names at least one package (G219)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_ROADMAP_NOPKG" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_ROADMAP_NOPKG: this roadmap belongs to a lineage that adopts RS_PackagesRequired, yet it names no package. A roadmap says what is deployed when and with which items; name the packages it plans (roadmapNamesPackage)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            FILTER NOT EXISTS { $this backlog:roadmapNamesPackage ?p . ?p backlog:belongsToLineage ?lin }
+        }""" ] .
+
+backlog:LineageHasPackageShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage that requires packages and has its backlog has at least one package, and a single package delivers the whole scope (G219)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_LINEAGE_NOPKG" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_LINEAGE_NOPKG: this lineage adopts RS_PackagesRequired and has reached the Backlog stage, yet it has no package. Even the simplest lineage has at least one package: the one that delivers all of its deliverables." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            FILTER NOT EXISTS { ?p a backlog:Package ; backlog:belongsToLineage $this }
+        }""" ]  ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_SIMPLEST_PARTIAL: this lineage adopts RS_PackagesRequired and has exactly one package, yet that package does not deliver every deliverable of the scope. With one package, that package is the whole delivery." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            ?only a backlog:Package ; backlog:belongsToLineage $this .
+            FILTER NOT EXISTS { ?other a backlog:Package ; backlog:belongsToLineage $this . FILTER (?other != ?only) }
+            ?d a backlog:ScopeDeliverable ; backlog:belongsToLineage $this .
+            FILTER NOT EXISTS { ?d backlog:productViewOf ?src }
+            FILTER NOT EXISTS { ?only backlog:deliversDeliverable ?d }
+        }""" ] .
+
+backlog:DeliverableDeliveredShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeDeliverable ;
+    sh:severity sh:Violation ;
+    rdfs:label "Every deliverable of a lineage that requires packages is delivered by a package (G219)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_DEL_UNDELIVERED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_DEL_UNDELIVERED: this deliverable belongs to a lineage that adopts RS_PackagesRequired and has reached the Backlog stage, yet no package delivers it (deliversDeliverable)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            FILTER NOT EXISTS { $this backlog:productViewOf ?src }
+            FILTER NOT EXISTS { ?p backlog:deliversDeliverable $this }
+        }""" ] .
+
+backlog:PackageTracesShape a sh:NodeShape ;
+    sh:targetClass backlog:Package ;
+    sh:severity sh:Violation ;
+    rdfs:label "A package of a lineage that requires packages traces to a deliverable, so no lineage has more packages than deliverables (G219)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_PKG_ORPHAN" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_PKG_ORPHAN: this package belongs to a lineage that adopts RS_PackagesRequired, yet it delivers no deliverable of the scope. The number of packages is measured from the scope: a package that traces to nothing in it is not counted and is not allowed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired .
+            FILTER NOT EXISTS { $this backlog:deliversDeliverable ?d . ?d backlog:belongsToLineage ?lin }
+        }""" ] .
+
+backlog:PlannedItemInPackageShape a sh:NodeShape ;
+    sh:targetClass backlog:PlanningEvent ;
+    sh:severity sh:Violation ;
+    rdfs:label "An item an iteration plans belongs to a package that targets that iteration (G219)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_SPRINT_NOPKG" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_SPRINT_NOPKG: this planning event takes an item into an iteration, in a lineage that adopts RS_PackagesRequired, yet the item (or the parent it sits under) satisfies a deliverable that no package that targets that iteration delivers, or satisfies none. Sprints are planned to match the packages." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:plansItem ?it ; backlog:plannedInto ?iter .
+            ?it backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired .
+            FILTER NOT EXISTS { ?it backlog:hasParentItem* ?anc . ?anc backlog:satisfiesDeliverable ?d . ?p backlog:deliversDeliverable ?d ; backlog:targetsIteration ?iter }
         }""" ] .
