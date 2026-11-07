@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.4 — 2026-11-08 (Lineage 32 concluded; the Governance lineage resumes)
+
+Records only: the closure report of Lineage 32, its objectives and mission recorded as Achieved on the Owner's confirmation, and the pause of the Governance lineage resolved and resumed.
+
+**Unplanned work:** G221: the Owner confirmed the conclusion of Lineage 32 as Achieved and the end of the pause (closure report, G215).
+
 ## v5.5.3 — 2026-11-07 (Packages are scoped from selected backlog items)
 
 For lineages that adopt the packages-required rule set: every live backlog item is in exactly one package; an item in a package records its priority score, impact and the deliverable it serves; an item depends only on its own package or a package its package depends on; a package is Done only when its items and the sprints that target it are Done; an iteration plans items of one package; and the package-count check names items in no package. Lineage 32 box 2, a change request from the Owner's instruction of 2026-11-07 19:57 Istanbul; an independent review found three defects, fixed, and one gap left open (a child planned into a sprint whose parent sits in another package).
