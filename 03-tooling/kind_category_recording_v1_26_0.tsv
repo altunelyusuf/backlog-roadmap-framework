@@ -719,3 +719,7 @@ property	hasParentItem	http://example.org/backlog#hasParentItem	RelationshipCate
 property	affectsGoal	http://example.org/backlog#affectsGoal	RelationshipCategory_Association	an impact assessment names a goal it affects, a plain link between two records that neither owns nor contains the other	G208
 property	callsForItem	http://example.org/backlog#callsForItem	RelationshipCategory_Association	an impact assessment names a work item that answers it, a plain link between two records	G208
 property	introducesElement	http://example.org/backlog#introducesElement	RelationshipCategory_Association	a scope change names a goal, objective or deliverable it introduces, a plain link between two records	G208
+class	MissionAmendment	http://example.org/backlog#MissionAmendment	ClassKind_InformationArtifact	declared subclass of core:Artifact (tangible deliverables: documents, reports, records), which the package uses for its records	G216
+property	amendsMission	http://example.org/backlog#amendsMission	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G216
+property	amendmentRuling	http://example.org/backlog#amendmentRuling	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G216
+property	amendedBy	http://example.org/backlog#amendedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G216

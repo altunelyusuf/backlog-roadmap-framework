@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.0 — 2026-11-07 (A running lineage's mission can be widened by the Owner, and the impediments lineage becomes the Governance lineage)
+
+A mission amendment is a new record that widens a running lineage's mission: it names the mission, states the new wording, gives the reason and cites the Owner's dated ruling; the new wording keeps the old wording unchanged and says more, and each amendment keeps all earlier ones. A check enforces this. The impediments lineage is renamed the Governance lineage and its mission is widened to the lives of lineages, with obstacles one branch. The governance taxonomy of thirteen branches is recorded in the Owner's ruling; the scope will be built from it by change management. The discipline names the amendment.
+
+**Unplanned work:** Owner rulings G216 and G217 of 2026-11-07 (12:05 Istanbul, option 1: a narrow mission amendment) recorded in this release: the amendment record and its check, the rename to the Governance lineage, and the governance taxonomy.
+
 ## v5.4.8 — 2026-11-06 (The discipline names the step that concludes a finished lineage)
 
 The lineage discipline has a sixth step: a finished lineage is concluded with a closure report, guards read again, the Owner's confirmation and the mission outcome, and is then set down; checks of live records must read the archive too. A new advisory check, proposed to the Owner, names a finished lineage not yet concluded. It refuses nothing. To stay under the size limit of the discipline, a few lines were shortened.

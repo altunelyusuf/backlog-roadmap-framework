@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.155.0
+# Backlog & Roadmap Semantic Framework — Standard v1.156.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -857,6 +857,17 @@ recorded and inert. (`ObligationSet` is the lineage-level counterpart, adopted w
 A `FindingRecord` carries `findingFromShape`, `findingOnNode`, `hasDisposition`,
 `dispositionRationale`, `decidedBy`, and the monitoring the disposition requires. Silence is never an
 exception: a violation with no record is a nonconformity to be fixed.
+
+### 2.5c-xxi-g2 Widening a mission
+
+A **`MissionAmendment`** records the Owner's decision to widen a running lineage's mission (G216). It
+names the mission it amends (`amendsMission`), states the new wording (`amendedMissionStatement`),
+gives the reason (`amendmentReason`), cites the Owner's dated ruling (`amendmentRuling`) and says who
+decided it (`amendedBy`, always the Owner). The new wording contains the mission's wording unchanged
+and says more, and each amendment keeps the wording of every earlier one, so that all work done under
+the mission still counts toward it. The mission record is not rewritten: the mission in force is the
+wording of its latest amendment. `MissionAmendmentShape` enforces this. A stage revision never
+starts at the mission, and a restart answers a bypass; an amendment is the only way to widen a mission.
 
 ### 2.5c-xxi-h Revising a chain from an intermediate stage; and what a package delivers
 

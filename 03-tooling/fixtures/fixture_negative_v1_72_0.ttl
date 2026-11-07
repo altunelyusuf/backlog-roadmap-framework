@@ -4500,3 +4500,15 @@ ex:FIN_S2 a backlog:Story ; backlog:belongsToLineage ex:FIN_NOT_CONCLUDED ; back
 ex:FIN_OPEN a backlog:Lineage ; backlog:lineageOrdinal 92 ; backlog:lineageArchived false ; backlog:lineageForMission ex:FIN_M ; backlog:hasLineageStatus backlog:LS_InProgress .
 ex:FIN_S3 a backlog:Story ; backlog:belongsToLineage ex:FIN_OPEN ; backlog:hasState backlog:Done .
 ex:FIN_S4 a backlog:Story ; backlog:belongsToLineage ex:FIN_OPEN ; backlog:hasState backlog:Proposed .
+
+# G216: MA_BARE has none of the required parts; MA_DROPS_OLD drops the mission's wording; MA_DROPS_EARLIER drops the wording of an earlier amendment of its mission (MA_FIRST);
+# MA_WIDENS keeps all wording and says more (it fires neither wording clause).
+ex:MA_M a backlog:Mission ; backlog:hasMissionStatement "A can be named." .
+ex:MA_M3 a backlog:Mission ; backlog:hasMissionStatement "A can be named." .
+ex:MA_M2 a backlog:Mission ; backlog:hasMissionStatement "A can be named." .
+ex:MA_R a backlog:GovernanceRuling .
+ex:MA_BARE a backlog:MissionAmendment .
+ex:MA_DROPS_OLD a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M ; backlog:amendedMissionStatement "B can be named and cleared." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
+ex:MA_WIDENS a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M3 ; backlog:amendedMissionStatement "A can be named. B can be cleared." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
+ex:MA_FIRST a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlog:amendedMissionStatement "A can be named. B can be cleared." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
+ex:MA_DROPS_EARLIER a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlog:amendedMissionStatement "A can be named. C is governed, and much more is said here." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
