@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.1 — 2026-11-07 (The seed of an urgent pause is read against the pause (Owner ruling G218))
+
+An emergency pause cannot be declared without naming the urgent work, and the order check read that work as a bypass because it appeared before its lineage had built its chain. The order check (1.22.0) now reads the single seed item that a pause names for another lineage against the pause itself; an item that appeared earlier, that no pause names, or that the pause of its own lineage names, is still a bypass (new probe with two mutants). The Owner's ruling G218 of 2026-11-07 also records, as proposals until the urgent lineage has published its shapes, that a roadmap needs its packages, that the simplest lineage has one, and that the package count is measured from the scope, goals, objectives and backlog. The 2SISA handover on packages in a roadmap is accepted and answered.
+
+**Unplanned work:** Owner ruling G218 of 2026-11-07 (decisions at 14:13, 14:33 and 15:23 Istanbul time): the pause for the 2SISA finding cannot be declared without the seed rule; recorded in this release.
+
 ## v5.5.0 — 2026-11-07 (A running lineage's mission can be widened by the Owner, and the impediments lineage becomes the Governance lineage)
 
 A mission amendment is a new record that widens a running lineage's mission: it names the mission, states the new wording, gives the reason and cites the Owner's dated ruling; the new wording keeps the old wording unchanged and says more, and each amendment keeps all earlier ones. A check enforces this. The impediments lineage is renamed the Governance lineage and its mission is widened to the lives of lineages, with obstacles one branch. The governance taxonomy of thirteen branches is recorded in the Owner's ruling; the scope will be built from it by change management. The discipline names the amendment.

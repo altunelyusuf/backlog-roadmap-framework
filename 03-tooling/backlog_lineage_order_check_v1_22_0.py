@@ -8,6 +8,8 @@
 # v1.14.0 (Lineage 22, box 2, D6): the register at a commit is parsed once per commit however many adoptions ask for it (v1.13.0 parsed it again for every probe of every adoption, about 200 times); the verdict is the same.
 """
 
+v1.22.0 (Owner ruling G218, 2026-11-07; urgent route): the seed item an open or ended UrgentInterruption names (urgentItem) for ANOTHER lineage is recorded at the declaration, before that lineage has built its chain, because the interruption cannot be declared without naming it. It is measured against the interruption, not the Backlog output: it must first appear at or after the interruption record itself. An item that appeared before the interruption, or one the interruption does not name, is still a bypass.
+
 v1.21.0 (Lineage 29, request on the elements a change introduces; relaxation, MINOR): an item may carry more than one admission, one for each chain that took it in (the vocabulary 1.172.0 no longer declares the property functional); the admission that counts is any one on an output that is not retracted. Before, one value was read, chosen by chance, so a story re-admitted by a later revision read as work done before the chain (BYPASS) when the value read was the retracted output's. Found when the fourth revision of Lineage 29 admitted again the items its third chain had admitted.backlog_lineage_order_check v1.20.0 — did the chain come before the work, or after?
 
 THE ESCAPE THIS CATCHES. A lineage is Mission -> Scope -> Goal -> Objective -> Backlog,
@@ -439,6 +441,8 @@ def classify(g, L, witness, prefix):
                        [local(r) for r in restarts])
     for i in items:
         prefetch_names += [local(pe) for pe in g.subjects(B.plansItem, i)]
+    for i in items:
+        prefetch_names += [local(u) for u in g.subjects(B.urgentItem, i)]
     for r in restarts:
         prefetch_names += [local(b) for b in g.objects(r, B.answersBypass)]
         prefetch_names += [local(sc) for sc in g.objects(r, B.simplifiedBy)]
@@ -504,6 +508,12 @@ def classify(g, L, witness, prefix):
             # owned by a restart: older than the rebuilt chain by definition. Admission
             # (or its absence) is the shapes' business, not a second bypass finding.
             continue
+        # v1.22.0 (G218): the seed an urgent interruption of ANOTHER lineage names is measured against that interruption
+        seeded = [u for u in g.subjects(B.urgentItem, i) if (u, B.interruptsLineage, L) not in g]
+        if seeded:
+            uf = [witness.first(local(u), prefix) for u in seeded]
+            if any(x and item_first[ln][1] >= x[1] for x in uf):
+                continue
         anchor = backlog_first
         if rev_first is not None and anchor is not None and item_first[ln][1] >= rev_first[1] and any(o in active_backlog for o in g.objects(i, B.admittedByOutput)):
             continue
