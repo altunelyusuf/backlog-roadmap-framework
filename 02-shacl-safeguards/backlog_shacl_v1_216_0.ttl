@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.215.0> ;
-    owl:versionInfo "1.215.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.216.0> ;
+    owl:versionInfo "1.216.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -10026,4 +10026,97 @@ backlog:PlannedItemInPackageShape a sh:NodeShape ;
             $this backlog:plansItem ?it ; backlog:plannedInto ?iter .
             ?it backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired .
             FILTER NOT EXISTS { ?it backlog:hasParentItem* ?anc . ?anc backlog:satisfiesDeliverable ?d . ?p backlog:deliversDeliverable ?d ; backlog:targetsIteration ?iter }
+        }""" ] .
+
+# ---- Lineage 32, box 2: packages are scoped from selected backlog items (G220). Every shape binds only a lineage that adopts RS_PackagesRequired. ----
+
+backlog:ItemInPackageShape a sh:NodeShape ;
+    sh:targetClass backlog:ProductBacklogItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A backlog item of a lineage that requires packages is in exactly one package (G220)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_ITEM_NOPKG" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_ITEM_NOPKG: this backlog item belongs to a lineage that adopts RS_PackagesRequired and has reached the Backlog stage, yet it is a member of no package (memberOfContainer). The whole backlog is implemented through packages; place the item in one." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
+            FILTER NOT EXISTS { $this backlog:memberOfContainer ?p . ?p a backlog:Package }
+        }""" ] .
+
+backlog:ItemInOnePackageShape a sh:NodeShape ;
+    sh:targetClass backlog:ProductBacklogItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "A backlog item is never in two packages (G220)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_ITEM_TWOPKG" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_ITEM_TWOPKG: this backlog item is a member of two packages of a lineage that adopts RS_PackagesRequired. A package is a partition of the backlog: an item sits in one; split the item or choose its package." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            $this backlog:memberOfContainer ?p1 , ?p2 . ?p1 a backlog:Package . ?p2 a backlog:Package . FILTER (?p1 != ?p2)
+        }""" ] .
+
+backlog:ItemSelectionValuesShape a sh:NodeShape ;
+    sh:targetClass backlog:ProductBacklogItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "An item in a package carries the values it was chosen by: priority score, impact and the deliverable it serves (G220)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_ITEM_NOVALUES" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_ITEM_NOVALUES: this backlog item is in a package of a lineage that adopts RS_PackagesRequired, yet it records no priority score, no impact (business value) or no deliverable it satisfies (the cohesion with the rest of its package). Selection rests on priority, business value and cohesion; record them." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            $this backlog:memberOfContainer ?p . ?p a backlog:Package .
+            FILTER (NOT EXISTS { $this backlog:hasPriorityScore ?a } || NOT EXISTS { $this backlog:hasImpact ?b } || NOT EXISTS { $this backlog:hasParentItem* ?anc . ?anc backlog:satisfiesDeliverable ?c })
+        }""" ] .
+
+backlog:ItemDependsForwardShape a sh:NodeShape ;
+    sh:targetClass backlog:ProductBacklogItem ;
+    sh:severity sh:Violation ;
+    rdfs:label "An item depends only on an item of its own package or of a package its package depends on (G220)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_FORWARD_DEP" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_FORWARD_DEP: this backlog item depends on an item of another package that its own package does not depend on (containerDependsOn). A package must not lean on a later one; make the package depend on the other, move the item, or drop the dependency." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            $this backlog:dependsOn ?j . $this backlog:memberOfContainer ?p1 . ?p1 a backlog:Package . ?j backlog:memberOfContainer ?p2 . ?p2 a backlog:Package .
+            FILTER (?p1 != ?p2)
+            FILTER NOT EXISTS { ?p1 backlog:containerDependsOn+ ?p2 }
+        }""" ] .
+
+backlog:PackageReadyDerivedShape a sh:NodeShape ;
+    sh:targetClass backlog:Package ;
+    sh:severity sh:Violation ;
+    rdfs:label "A package is Done only when its items are Done and the iterations that consume it are Done (G220)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_PKG_DONE_EARLY" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_PKG_DONE_EARLY: this package of a lineage that adopts RS_PackagesRequired is marked Done while a member item is not Done or Cancelled, or an iteration that targets it is not Done. Readiness is derived from the items and their sprints, never set by hand." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired . $this backlog:hasState backlog:Done .
+            { ?i backlog:memberOfContainer $this . FILTER NOT EXISTS { ?i backlog:hasState ?st . FILTER (?st IN (backlog:Done, backlog:Cancelled)) } }
+            UNION { $this backlog:targetsIteration ?it . FILTER NOT EXISTS { ?it backlog:hasState backlog:Done } }
+        }""" ] .
+
+backlog:IterationOnePackageShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Violation ;
+    rdfs:label "An iteration plans items of one package only, so that finishing a package's sprints leaves the package ready (G220)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RNP_SPRINT_MIXED" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RNP_SPRINT_MIXED: this iteration plans items of two different packages in a lineage that adopts RS_PackagesRequired. A sprint takes its items from one package; plan the other package's items in a sprint of their own." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?pe1 backlog:plannedInto $this ; backlog:plansItem ?i1 . ?pe2 backlog:plannedInto $this ; backlog:plansItem ?i2 .
+            ?i1 backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired .
+            ?i1 backlog:memberOfContainer ?p1 . ?p1 a backlog:Package . ?i2 backlog:memberOfContainer ?p2 . ?p2 a backlog:Package .
+            FILTER (?p1 != ?p2)
         }""" ] .

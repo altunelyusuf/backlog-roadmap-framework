@@ -2,7 +2,7 @@
 """Probe for backlog_package_count v1.0.0 (Lineage 32, G219): cases and mutants."""
 import os, sys, subprocess, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
-TOOL = os.path.join(HERE, "backlog_package_count_v1_0_0.py")
+TOOL = os.path.join(HERE, "backlog_package_count_v1_1_0.py")
 if sys.argv[1:] == ["--deps"]:
     print("\n".join([TOOL, os.path.abspath(__file__)])); sys.exit(0)
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix fw: <http://example.org/backlog-framework-register#> .\n"
@@ -16,8 +16,8 @@ fw:OA a backlog:Objective ; backlog:contributesToGoal fw:GA .
 fw:OB a backlog:Objective ; backlog:contributesToGoal fw:GB .
 fw:D1 a backlog:ScopeDeliverable ; backlog:belongsToLineage fw:L .
 fw:D2 a backlog:ScopeDeliverable ; backlog:belongsToLineage fw:L .
-fw:S1 a backlog:Story ; backlog:satisfiesDeliverable fw:D1 ; backlog:pursuesObjective fw:OA , fw:OM .
-fw:S2 a backlog:Story ; backlog:satisfiesDeliverable fw:D2 ; backlog:pursuesObjective %s , fw:OM2 .
+fw:S1 a backlog:Story ; backlog:belongsToLineage fw:L ; backlog:satisfiesDeliverable fw:D1 ; backlog:pursuesObjective fw:OA , fw:OM .
+fw:S2 a backlog:Story ; backlog:belongsToLineage fw:L ; backlog:satisfiesDeliverable fw:D2 ; backlog:pursuesObjective %s , fw:OM2 .
 """
 bad = []
 def run(text, tool=TOOL):
@@ -27,12 +27,15 @@ def run(text, tool=TOOL):
 def expect(name, ok):
     print(("PASS  " if ok else "FAIL  ") + name)
     if not ok: bad.append(name)
-two = BASE % "fw:OB" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 .\nfw:P2 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D2 .\n"
+two = BASE % "fw:OB" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 .\nfw:P2 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D2 .\nfw:S1 backlog:memberOfContainer fw:P1 .\nfw:S2 backlog:memberOfContainer fw:P2 .\n"
 rc, out = run(two); expect("two goals, two packages: measured 2, declared match", rc == 0 and "2 package(s) needed" in out)
-one = BASE % "fw:OA" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 , fw:D2 .\n"
+one = BASE % "fw:OA" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 , fw:D2 .\nfw:S1 backlog:memberOfContainer fw:P1 .\nfw:S2 backlog:memberOfContainer fw:P1 .\n"
 rc, out = run(one); expect("same goal, one package: measured 1 (simplest form)", rc == 0 and "1 package(s) needed" in out)
-rc, out = run(BASE % "fw:OB" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 , fw:D2 .\n"); expect("one package over two groups is refused", rc == 1)
-rc, out = run(BASE % "fw:OA" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 .\nfw:P2 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D2 .\n"); expect("two packages over one group is refused", rc == 1)
+rc, out = run(BASE % "fw:OB" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 , fw:D2 .\nfw:S1 backlog:memberOfContainer fw:P1 .\nfw:S2 backlog:memberOfContainer fw:P1 .\n"); expect("one package over two groups is refused", rc == 1)
+rc, out = run(BASE % "fw:OA" + "fw:P1 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D1 .\nfw:P2 a backlog:Package ; backlog:belongsToLineage fw:L ; backlog:deliversDeliverable fw:D2 .\nfw:S1 backlog:memberOfContainer fw:P1 .\nfw:S2 backlog:memberOfContainer fw:P2 .\n"); expect("two packages over one group is refused", rc == 1)
+base_items = two
+rc, out = run(base_items); expect("every item in a package: passes", rc == 0)
+rc, out = run(two.replace("fw:S2 backlog:memberOfContainer fw:P2 .\n","")); expect("an item in no package is refused", rc == 1 and "in no package" in out)
 # mutants: a tool that ignores goals, and one that counts the mission goal
 src = open(TOOL).read()
 for name, m in (("ignores goals", src.replace("goals.add(go)", "pass")), ("counts the mission goal", src.replace("if (go, B.hasGoalFacing, B.Facing_Mission) not in g:", "if True:"))):

@@ -4536,3 +4536,23 @@ ex:RNPG_Child a backlog:Story ; backlog:belongsToLineage ex:RNPG_L ; backlog:has
 ex:RNPG_Plan2 a backlog:PlanningEvent ; backlog:plansItem ex:RNPG_Child ; backlog:plannedInto ex:RNPG_Iter .
 ex:RNPG_View a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNPG_L ; backlog:productViewOf ex:RNPG_Del .
 ex:RNPX_Road a backlog:Roadmap ; backlog:belongsToLineage ex:RNPG_L ; backlog:roadmapNamesPackage ex:RNP_Orphan .
+
+# G220 (box 2). Bad cases: an item in no package (RNP_ITEM_NOPKG: ex:RNP_Story above), an item in two (RNP_ITEM_TWOPKG), an item in a package without its values (RNP_ITEM_NOVALUES), an item that leans on a later package (RNP_FORWARD_DEP), a package marked Done with an open member (RNP_PKG_DONE_EARLY), an iteration that plans two packages (RNP_SPRINT_MIXED).
+ex:RNP2_L a backlog:Lineage ; backlog:lineageOrdinal 96 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:RNP2_Del a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNP2_L .
+ex:RNP2_Iter0 a backlog:Iteration ; backlog:belongsToLineage ex:RNP2_L .
+ex:RNP2_P1 a backlog:Package ; backlog:belongsToLineage ex:RNP2_L ; backlog:hasPackageVersion "1.0.0" ; backlog:hasState backlog:Done ; backlog:deliversDeliverable ex:RNP2_Del ; backlog:targetsIteration ex:RNP2_Iter0 .
+ex:RNP2_P2 a backlog:Package ; backlog:belongsToLineage ex:RNP2_L ; backlog:hasPackageVersion "1.0.0" ; backlog:deliversDeliverable ex:RNP2_Del .
+ex:RNP2_Two a backlog:Story ; backlog:belongsToLineage ex:RNP2_L ; backlog:memberOfContainer ex:RNP2_P1 , ex:RNP2_P2 ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:RNP2_Del ; backlog:hasState backlog:InProgress .
+ex:RNP2_Bare a backlog:Story ; backlog:belongsToLineage ex:RNP2_L ; backlog:memberOfContainer ex:RNP2_P2 ; backlog:hasState backlog:Proposed .
+ex:RNP2_Fwd a backlog:Story ; backlog:belongsToLineage ex:RNP2_L ; backlog:memberOfContainer ex:RNP2_P2 ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:RNP2_Del ; backlog:hasState backlog:Proposed ; backlog:dependsOn ex:RNP2_Early .
+ex:RNP2_Early a backlog:Story ; backlog:belongsToLineage ex:RNP2_L ; backlog:memberOfContainer ex:RNP2_P1 ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:RNP2_Del ; backlog:hasState backlog:Proposed .
+ex:RNP2_Iter a backlog:Iteration ; backlog:belongsToLineage ex:RNP2_L .
+ex:RNP2_Pe1 a backlog:PlanningEvent ; backlog:plansItem ex:RNP2_Early ; backlog:plannedInto ex:RNP2_Iter .
+ex:RNP2_Pe2 a backlog:PlanningEvent ; backlog:plansItem ex:RNP2_Fwd ; backlog:plannedInto ex:RNP2_Iter .
+# Good case (extends ex:RNPG_L above): every item in its one package with its values; a dependency inside the package; a Done package whose items and sprint are Done; an iteration with one package.
+ex:RNPG_Pkg backlog:hasState backlog:Done .
+ex:RNPG_Iter backlog:hasState backlog:Done .
+ex:RNPG_Story backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:hasState backlog:Done .
+ex:RNPG_Epic backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:hasState backlog:Done .
+ex:RNPG_Child backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:RNPG_Del ; backlog:hasState backlog:Done ; backlog:dependsOn ex:RNPG_Story .
