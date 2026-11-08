@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.5 — 2026-11-08 (The Governance lineage plans its backlog in packages (a live test of the package method))
+
+The Governance lineage's fifty stories are placed in nine packages with a roadmap, an order and planned sprints, on the Owner's direction of 2026-11-08. Records only.
+
+**Unplanned work:** G222: the Owner's direction of 2026-11-08 that the Governance lineage is adapted to the package method before it runs on, as a live test of that method.
+
 ## v5.5.4 — 2026-11-08 (Lineage 32 concluded; the Governance lineage resumes)
 
 Records only: the closure report of Lineage 32, its objectives and mission recorded as Achieved on the Owner's confirmation, and the pause of the Governance lineage resolved and resumed.
