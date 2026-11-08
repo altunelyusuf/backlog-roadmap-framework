@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.6 — 2026-11-08 (The Governance lineage adopts the package rules by a fifth stage revision)
+
+The Owner decided that the Governance lineage adopts the package rules. A fifth stage revision rebuilds its backlog stage, and the rules are adopted in the commit where the rebuilt stage first appears. Records only.
+
+**Unplanned work:** G223: the Owner's decision of 2026-11-08 that the Governance lineage adopts the package rules through a stage revision of its backlog stage.
+
 ## v5.5.5 — 2026-11-08 (The Governance lineage plans its backlog in packages (a live test of the package method))
 
 The Governance lineage's fifty stories are placed in nine packages with a roadmap, an order and planned sprints, on the Owner's direction of 2026-11-08. Records only.
