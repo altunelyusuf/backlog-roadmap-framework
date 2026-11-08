@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.7 — 2026-11-08 (The Governance lineage's mission is widened to govern the execution of a production lineage)
+
+A second mission amendment widens the Governance lineage's mission to the general governance of a production lineage's execution, on the Owner's proposal of 2026-11-08, after a fit-gap against the thirteen-branch governance taxonomy. Records only; the goals follow by change management.
+
+**Unplanned work:** G224: the Owner's proposal of 2026-11-08 that the Governance lineage's mission is the general governance of the execution of a production lineage.
+
 ## v5.5.6 — 2026-11-08 (The Governance lineage adopts the package rules by a fifth stage revision)
 
 The Owner decided that the Governance lineage adopts the package rules. A fifth stage revision rebuilds its backlog stage, and the rules are adopted in the commit where the rebuilt stage first appears. Records only.
