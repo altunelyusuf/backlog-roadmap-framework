@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.8 — 2026-11-08 (The Governance lineage's scope grows by deployment planning, time-boxes and a governing link, with goals and objectives)
+
+A change request on the widened mission adds three deliverables with their goals and objectives, six stories in two packages, and five planned time-boxes. Records only.
+
+**Unplanned work:** G225: the Owner's directions of 2026-11-08 that a deployment is planned and marked by a milestone, that time-box is a property of sprints and packages, and that the Governance lineage organises the production lineage.
+
 ## v5.5.7 — 2026-11-08 (The Governance lineage's mission is widened to govern the execution of a production lineage)
 
 A second mission amendment widens the Governance lineage's mission to the general governance of a production lineage's execution, on the Owner's proposal of 2026-11-08, after a fit-gap against the thirteen-branch governance taxonomy. Records only; the goals follow by change management.
