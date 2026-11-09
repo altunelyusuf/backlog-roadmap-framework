@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.11 — 2026-11-09 (A lineage has a role, governance or production, and a governance lineage governs production lineages)
+
+Every lineage can now state whether it governs or produces, and a governance lineage governs production lineages by one typed link. A new rule set (profile revision 17, included in the agentic adaptive profile) binds lineages opened under it; seven checks refuse a missing role, a link between wrong roles or to itself, two governors, two roles, a production lineage with no governor, a governance lineage that governs nothing, and a governance lineage opened under revision 17 or later that does not adopt the rule set; one warning covers the Governance lineage, which cannot adopt it without a stage revision. The Governance lineage states its role and governs the roadmap lineage. Two departures from the Owner's criteria as written are recorded in the ruling for the Owner to accept or reject. Time-box 39 closed after five independent reviews.
+
+**Unplanned work:** The Owner's direction of 2026-11-09 at 09:07 that the role and the lineage duality are set in the corpus at once, ruling G227, so that parallel sessions can build their governance lineages.
+
 ## v5.5.10 — 2026-11-09 (The time-box tool opens a time-box that was planned in advance)
 
 Box 41 of the Governance lineage: the story that lets the time-box tool open a planned time-box is done. The tool is version 1.12.0 with a probe of 32 expectations; the register holds the box, its review and the objective reading.

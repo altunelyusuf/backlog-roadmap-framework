@@ -724,3 +724,6 @@ property	amendsMission	http://example.org/backlog#amendsMission	RelationshipCate
 property	amendmentRuling	http://example.org/backlog#amendmentRuling	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G216
 property	amendedBy	http://example.org/backlog#amendedBy	RelationshipCategory_Provenance	the property names who or what did, approved, produced or originated the thing	G216
 property	roadmapNamesPackage	http://example.org/backlog#roadmapNamesPackage	RelationshipCategory_Intentional	the property states what the roadmap plans to deploy	G219
+class	LineageRole	http://example.org/backlog#LineageRole	ClassKind_ValueDomain	closed set of values: declared with owl:oneOf in the T-Box	G227
+property	hasLineageRole	http://example.org/backlog#hasLineageRole	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G227
+property	governsLineage	http://example.org/backlog#governsLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G227

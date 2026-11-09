@@ -4556,3 +4556,26 @@ ex:RNPG_Iter backlog:hasState backlog:Done .
 ex:RNPG_Story backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:hasState backlog:Done .
 ex:RNPG_Epic backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:hasState backlog:Done .
 ex:RNPG_Child backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:RNPG_Del ; backlog:hasState backlog:Done ; backlog:dependsOn ex:RNPG_Story .
+
+# G227 (box 39). Bad cases: a lineage that adopts RS_GovernanceRequired and states no role (GOV_NOROLE: ex:GOV_NoRole), a governing link whose governor is not a governance lineage, whose governed lineage is not a production lineage, or that points at itself (GOV_ROLES: ex:GOV_BadGov, ex:GOV_SelfGov), a production lineage governed by two lineages (GOV_TWOGOV: ex:GOV_Two), a production lineage, adopting or not, that names no governor (GOV_NOGOVERNOR: ex:GOV_Orphan2), a governance lineage that does not adopt the rule set (GOV_UNBOUND: ex:GOV_Unbound).
+ex:GOV_NoRole a backlog:Lineage ; backlog:lineageOrdinal 201 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired .
+ex:GOV_BadGov a backlog:Lineage ; backlog:lineageOrdinal 202 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Production ; backlog:governsLineage ex:GOV_Orphan .
+ex:GOV_SelfGov a backlog:Lineage ; backlog:lineageOrdinal 203 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance ; backlog:governsLineage ex:GOV_SelfGov .
+ex:GOV_G1 a backlog:Lineage ; backlog:lineageOrdinal 204 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance ; backlog:governsLineage ex:GOV_Two .
+ex:GOV_G2 a backlog:Lineage ; backlog:lineageOrdinal 205 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance ; backlog:governsLineage ex:GOV_Two .
+ex:GOV_Two a backlog:Lineage ; backlog:lineageOrdinal 206 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Production .
+ex:GOV_Orphan a backlog:Lineage ; backlog:lineageOrdinal 207 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Production .
+ex:GOV_Unbound a backlog:Lineage ; backlog:lineageOrdinal 208 ; backlog:lineageArchived false ; backlog:openedUnderRevision backlog:Pr_17 ; backlog:hasLineageRole backlog:LR_Governance .
+ex:GOV_UnboundOld a backlog:Lineage ; backlog:lineageOrdinal 220 ; backlog:lineageArchived false ; backlog:openedUnderRevision backlog:Pr_12 ; backlog:hasLineageRole backlog:LR_Governance .
+ex:GOV_Both a backlog:Lineage ; backlog:lineageOrdinal 221 ; backlog:lineageArchived false ; backlog:hasLineageRole backlog:LR_Governance , backlog:LR_Production .
+ex:GOV_Idle a backlog:Lineage ; backlog:lineageOrdinal 222 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance .
+ex:GOV_BadGoverned a backlog:Lineage ; backlog:lineageOrdinal 223 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance ; backlog:governsLineage ex:GOV_Idle .
+ex:GOV_Plain a backlog:Lineage ; backlog:lineageOrdinal 224 ; backlog:lineageArchived false ; backlog:hasLineageRole backlog:LR_Production ; backlog:governsLineage ex:GOV_Idle .
+backlog:Pr_17 a backlog:ProfileRevision ; backlog:revisionNumber 17 .
+backlog:Pr_12 a backlog:ProfileRevision ; backlog:revisionNumber 12 .
+# Good case: a governance lineage that adopts the rule set governs one production lineage that adopts it and holds the role of production.
+ex:GOV_Orphan2 a backlog:Lineage ; backlog:lineageOrdinal 225 ; backlog:lineageArchived false ; backlog:hasLineageRole backlog:LR_Production .
+ex:GOV_NoRev a backlog:Lineage ; backlog:lineageOrdinal 226 ; backlog:lineageArchived false ; backlog:hasLineageRole backlog:LR_Governance ; backlog:governsLineage ex:GOVG_P2 .
+ex:GOVG_P2 a backlog:Lineage ; backlog:lineageOrdinal 227 ; backlog:lineageArchived false ; backlog:hasLineageRole backlog:LR_Production .
+ex:GOVG_G a backlog:Lineage ; backlog:lineageOrdinal 209 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance ; backlog:governsLineage ex:GOVG_P .
+ex:GOVG_P a backlog:Lineage ; backlog:lineageOrdinal 210 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Production .

@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.216.0> ;
-    owl:versionInfo "1.216.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.217.0> ;
+    owl:versionInfo "1.217.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -10119,4 +10119,124 @@ backlog:IterationOnePackageShape a sh:NodeShape ;
             ?i1 backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired .
             ?i1 backlog:memberOfContainer ?p1 . ?p1 a backlog:Package . ?i2 backlog:memberOfContainer ?p2 . ?p2 a backlog:Package .
             FILTER (?p1 != ?p2)
+        }""" ] .
+
+#################################################################
+#  v1.217.0 (G227) -- the lineage role and the governing link.
+#  Every lineage that adopts RS_GovernanceRequired states whether it governs
+#  or produces; a governance lineage governs production lineages by one typed
+#  link; a production lineage is governed by at most one governance lineage.
+#################################################################
+
+backlog:LineageRoleStatedShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage that adopts the governance rule set states its role, governance or production (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_NOROLE" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_NOROLE: this lineage adopts RS_GovernanceRequired and states no lineage role (hasLineageRole). State governance or production, so that a parallel session knows which lineages govern and which are governed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:adoptsRuleSet backlog:RS_GovernanceRequired .
+            FILTER NOT EXISTS { $this backlog:hasLineageRole ?r }
+        }""" ] .
+
+backlog:GoverningLinkRolesShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A governing link joins a governance lineage to a production lineage, never a lineage to itself (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_ROLES" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_ROLES: this lineage governs another by governsLineage, yet it does not hold the role of governance, or the governed lineage does not hold the role of production, or it governs itself. A governance lineage organises production lineages only." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:governsLineage ?p .
+            FILTER (?p = $this || NOT EXISTS { $this backlog:hasLineageRole backlog:LR_Governance . ?p backlog:hasLineageRole backlog:LR_Production })
+        }""" ] .
+
+backlog:OneGovernorShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A production lineage is governed by at most one governance lineage (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_TWOGOV" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_TWOGOV: two different lineages govern this lineage (governsLineage). A production lineage is organised by one governance lineage; move the link or split the governed work." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            ?g1 backlog:governsLineage $this . ?g2 backlog:governsLineage $this . FILTER (?g1 != ?g2)
+        }""" ] .
+
+backlog:ProductionNamesGovernorShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A production lineage names the lineage that governs it (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_NOGOVERNOR" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_NOGOVERNOR: this production lineage names no governing lineage (no lineage links to it by governsLineage). A production lineage is organised by a governance lineage from the moment it is opened; name its governor." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageRole backlog:LR_Production .
+            FILTER NOT EXISTS { ?g backlog:governsLineage $this }
+        }""" ] .
+
+backlog:GovernanceRoleBoundShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage with the governance role, opened under profile revision 17 or later, adopts the governance rule set (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_UNBOUND" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_UNBOUND: this lineage states the role of governance and was opened under profile revision 17 or later, or states no revision, and does not adopt RS_GovernanceRequired, so the rules that bind a governance lineage do not bind it. Adopt it at opening; State the role only on a lineage that adopts it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageRole backlog:LR_Governance ; 
+            OPTIONAL { $this backlog:openedUnderRevision ?lr . ?lr backlog:revisionNumber ?ln }
+            FILTER (!BOUND(?ln) || ?ln >= 17)
+            FILTER NOT EXISTS { $this backlog:adoptsRuleSet backlog:RS_GovernanceRequired }
+        }""" ] .
+backlog:GovernanceRoleBoundEarlierShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Warning ;
+    rdfs:label "A lineage with the governance role, opened before profile revision 17, is advised to adopt the governance rule set (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_UNBOUND_EARLIER" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_UNBOUND_EARLIER: this lineage states the role of governance, was opened before profile revision 17 and does not adopt RS_GovernanceRequired, so the rules that bind a governance lineage do not bind it. Advisory: a lineage opened earlier cannot adopt a rule set after opening (G89) and adopts it by a stage revision (G192); the gap stays visible until then." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageRole backlog:LR_Governance .
+            OPTIONAL { $this backlog:openedUnderRevision ?lr . ?lr backlog:revisionNumber ?ln }
+            FILTER (BOUND(?ln) && ?ln < 17)
+            FILTER NOT EXISTS { $this backlog:adoptsRuleSet backlog:RS_GovernanceRequired }
+        }""" ] .
+
+backlog:OneRoleShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A lineage has one role, never both governance and production (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_TWOROLES" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_TWOROLES: this lineage holds both the role of governance and the role of production. A lineage is one or the other; split the work into two lineages." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasLineageRole ?r1 , ?r2 . FILTER (?r1 != ?r2)
+        }""" ] .
+
+backlog:GovernanceNamesProductionShape a sh:NodeShape ;
+    sh:targetClass backlog:Lineage ;
+    sh:severity sh:Violation ;
+    rdfs:label "A governance lineage that adopts the governance rule set governs at least one production lineage (G227)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "GOV_IDLE" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "GOV_IDLE: this governance lineage adopts RS_GovernanceRequired and governs no lineage (governsLineage). A governance lineage names the production lineages it organises." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance .
+            FILTER NOT EXISTS { $this backlog:governsLineage ?p }
         }""" ] .

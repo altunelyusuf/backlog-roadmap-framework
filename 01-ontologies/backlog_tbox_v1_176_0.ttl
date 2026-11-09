@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.175.0> ;
-    owl:versionInfo "1.175.0" ;
-    owl:priorVersion <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.176.0> ;
+    owl:versionInfo "1.176.0" ;
+    owl:priorVersion <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -9025,3 +9025,26 @@ backlog:roadmapNamesPackage a owl:ObjectProperty ;
     rdfs:label "roadmap names package"@en ;
     skos:definition "A package the roadmap names as one of the deployments it plans. A roadmap of a lineage that adopts RS_PackagesRequired names at least one, because a roadmap says what is deployed when and with which items, and a roadmap that names no package says none of it."@en .
 backlog:roadmapNamesPackage kb:hasRelationshipCategory kb:RelationshipCategory_Intentional .
+
+# ---- Lineage 29 (the Governance lineage; G227): the lineage role and the governing link ----
+backlog:LineageRole a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    owl:oneOf ( backlog:LR_Governance backlog:LR_Production ) ;
+    rdfs:label "Lineage Role"@en ;
+    skos:definition "What a lineage is for: a governance lineage organises and watches the lives of production lineages (how they run, what blocks them, how they are timed); a production lineage builds a product or deliverable and is governed by one governance lineage. Every lineage has exactly one role (G227, rule set RS_GovernanceRequired)."@en .
+backlog:hasLineageRole a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:LineageRole ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has lineage role"@en ;
+    skos:definition "The role of the lineage: governance or production. Functional. A lineage that adopts RS_GovernanceRequired states one, so that a parallel session knows which lineages govern and which are governed."@en .
+backlog:governsLineage a owl:ObjectProperty ;
+    rdfs:domain backlog:Lineage ; rdfs:range backlog:Lineage ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "governs lineage"@en ;
+    skos:definition "A governance lineage governs a production lineage: the first organises how the second is run. Stated once, in this direction only; the governed lineage's governor is read from it, so the two cannot disagree. A governance lineage governs none of itself, and a production lineage is governed by at most one."@en .
+
+# kinds and categories of the v1.176.0 terms (G227; recorded in the kind ledger)
+backlog:LineageRole kb:hasClassKind kb:ClassKind_ValueDomain .
+backlog:hasLineageRole kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
+backlog:governsLineage kb:hasRelationshipCategory kb:RelationshipCategory_Association .
