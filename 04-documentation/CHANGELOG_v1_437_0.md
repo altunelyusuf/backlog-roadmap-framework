@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.12 — 2026-11-09 (An epic is a backlog item groomed into stories: no package, no score, no closure of its own)
+
+The Owner ruled on 2026-11-09 (G228) that an epic is a product backlog item that only describes a feature of the final product at high level; it is groomed into stories first, and packages and sprints are made from its stories. The package rules no longer ask an epic for a package, a score or an impact, a groomed epic is refused in a package, and the rule that closes a parent whose children are finished no longer applies to an epic. Two vocabulary errors are corrected: the impact value may be put on an item, and a checkpoint is dated by a forecast or a condition, not stated as fixed.
+
+**Unplanned work:** unplanned: the Owner's ruling of 2026-11-09 at 15:26 and a blocking handover from IPage
+
 ## v5.5.11 — 2026-11-09 (A lineage has a role, governance or production, and a governance lineage governs production lineages)
 
 Every lineage can now state whether it governs or produces, and a governance lineage governs production lineages by one typed link. A new rule set (profile revision 17, included in the agentic adaptive profile) binds lineages opened under it; seven checks refuse a missing role, a link between wrong roles or to itself, two governors, two roles, a production lineage with no governor, a governance lineage that governs nothing, and a governance lineage opened under revision 17 or later that does not adopt the rule set; one warning covers the Governance lineage, which cannot adopt it without a stage revision. The Governance lineage states its role and governs the roadmap lineage. Two departures from the Owner's criteria as written are recorded in the ruling for the Owner to accept or reject. Time-box 39 closed after five independent reviews.

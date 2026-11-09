@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.160.0
+# Backlog & Roadmap Semantic Framework — Standard v1.161.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2629,3 +2629,18 @@ For a lineage that adopts RS_PackagesRequired and has its backlog, the packages 
 ## The role of a lineage and the governing link (Lineage 29, G227)
 
 A lineage has one role: a governance lineage (LR_Governance) organises and watches the lives of production lineages, and a production lineage (LR_Production) builds a product or deliverable and is governed by one governance lineage. The class LineageRole holds the two values, the property hasLineageRole states the role, and the property governsLineage joins a governance lineage to a production lineage, in that one direction only. The rule set RS_GovernanceRequired (profile revision 17, included in the agentic adaptive profile) binds the lineages that adopt it. The shapes LineageRoleStatedShape (an adopting lineage states its role), GoverningLinkRolesShape (a link joins a governance lineage to a production lineage and never a lineage to itself), OneGovernorShape (at most one governor), OneRoleShape (never both roles), ProductionNamesGovernorShape (a production lineage names its governor), GovernanceNamesProductionShape (an adopting governance lineage governs at least one production lineage), GovernanceRoleBoundShape (a governance lineage opened under revision 17 or later, or stating no revision, adopts the rule set) and GovernanceRoleBoundEarlierShape (a warning for one opened earlier) enforce it. The checks of one role, the link roles, one governor, a production lineage's governor and the adoption of a governance lineage apply to every lineage that states a role or a link; the other duties bind adopters only. Two departures from the Owner's criteria as written are recorded in the ruling G227 for the Owner to accept or reject.
+
+## An epic is a backlog item that is groomed into stories (Lineage 29, G228)
+
+The Owner ruled on 2026-11-09 that an epic is a product backlog item and not a development subject. Its only mission is to describe a feature of the final product at high level, so it is groomed into stories, to understand its scope and its business value, before packages and sprints are made. It has no closure of its own.
+
+What the rules do with it, in a lineage that adopts the package rules (RS_PackagesRequired):
+
+- An epic is not asked for a package, a priority score or an impact, and an open unscored epic is not a silent gap. Its stories carry them, so the score of a story is never counted twice (the parent-score rule stays as it is; nothing refuses a score on an epic whose stories are not scored).
+- An epic that is a member of a package is refused (EPIC_IN_PACKAGE): put its stories in the package.
+- The rule that a parent whose children are all finished is itself Done does not bind an epic, and a lineage recorded Achieved is not held open by an epic that has stories (its open stories hold it open); an epic with no stories still holds it open. Its state is read from its stories.
+- Which stage holds the grooming is not settled: the Owner's words put it in the roadmap stage before packages are chosen, while the package rules ask for packages from the Backlog stage on (unchanged); the Owner is asked to settle it.
+- Not changed, and held for the next change request: the package-count tool still counts an epic as an item.
+- Not changed: an epic that decomposes into nothing is refused, an epic is refused in an iteration or a deployment unit, and an epic carries its Definition of Done before it decomposes.
+
+Two vocabulary errors are corrected in the same release: reach, impact, confidence and effort may stand on any work item as well as on a score, and the text of a checkpoint no longer says that a condition and a date exclude each other when the date is only a forecast.

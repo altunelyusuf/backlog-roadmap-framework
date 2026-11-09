@@ -4550,11 +4550,11 @@ ex:RNP2_Early a backlog:Story ; backlog:belongsToLineage ex:RNP2_L ; backlog:mem
 ex:RNP2_Iter a backlog:Iteration ; backlog:belongsToLineage ex:RNP2_L .
 ex:RNP2_Pe1 a backlog:PlanningEvent ; backlog:plansItem ex:RNP2_Early ; backlog:plannedInto ex:RNP2_Iter .
 ex:RNP2_Pe2 a backlog:PlanningEvent ; backlog:plansItem ex:RNP2_Fwd ; backlog:plannedInto ex:RNP2_Iter .
-# Good case (extends ex:RNPG_L above): every item in its one package with its values; a dependency inside the package; a Done package whose items and sprint are Done; an iteration with one package.
+# Good case (extends ex:RNPG_L above): every item but an epic in its one package with its values (an epic is in none, G228); a dependency inside the package; a Done package whose items and sprint are Done; an iteration with one package.
 ex:RNPG_Pkg backlog:hasState backlog:Done .
 ex:RNPG_Iter backlog:hasState backlog:Done .
 ex:RNPG_Story backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:hasState backlog:Done .
-ex:RNPG_Epic backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:hasState backlog:Done .
+ex:RNPG_Epic backlog:hasState backlog:Done .  # G228: an epic is in no package and carries no score; its story is packaged
 ex:RNPG_Child backlog:memberOfContainer ex:RNPG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:RNPG_Del ; backlog:hasState backlog:Done ; backlog:dependsOn ex:RNPG_Story .
 
 # G227 (box 39). Bad cases: a lineage that adopts RS_GovernanceRequired and states no role (GOV_NOROLE: ex:GOV_NoRole), a governing link whose governor is not a governance lineage, whose governed lineage is not a production lineage, or that points at itself (GOV_ROLES: ex:GOV_BadGov, ex:GOV_SelfGov), a production lineage governed by two lineages (GOV_TWOGOV: ex:GOV_Two), a production lineage, adopting or not, that names no governor (GOV_NOGOVERNOR: ex:GOV_Orphan2), a governance lineage that does not adopt the rule set (GOV_UNBOUND: ex:GOV_Unbound).
@@ -4579,3 +4579,24 @@ ex:GOV_NoRev a backlog:Lineage ; backlog:lineageOrdinal 226 ; backlog:lineageArc
 ex:GOVG_P2 a backlog:Lineage ; backlog:lineageOrdinal 227 ; backlog:lineageArchived false ; backlog:hasLineageRole backlog:LR_Production .
 ex:GOVG_G a backlog:Lineage ; backlog:lineageOrdinal 209 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance ; backlog:governsLineage ex:GOVG_P .
 ex:GOVG_P a backlog:Lineage ; backlog:lineageOrdinal 210 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Production .
+
+# G228. Bad case: an epic that is a member of a package (EPIC_IN_PACKAGE: ex:EPIC_IN_PACKAGE_Epic). Good cases: an epic groomed into a Done story, in no package, with no score and left InProgress, in a lineage that adopts the package rules and the rule that derives a parent's state (ex:EPCG_Epic): none of RNP_ITEM_NOPKG, RNP_ITEM_NOVALUES or G148 names it.
+ex:EPIC_IN_PACKAGE_L a backlog:Lineage ; backlog:lineageOrdinal 228 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:EPIC_IN_PACKAGE_Pkg a backlog:Package ; backlog:belongsToLineage ex:EPIC_IN_PACKAGE_L ; backlog:hasPackageVersion "1.0.0" .
+ex:EPIC_IN_PACKAGE_Epic a backlog:Epic ; backlog:belongsToLineage ex:EPIC_IN_PACKAGE_L ; backlog:memberOfContainer ex:EPIC_IN_PACKAGE_Pkg ; backlog:hasState backlog:Proposed .
+ex:EPCG_L a backlog:Lineage ; backlog:lineageOrdinal 229 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired , backlog:RS_DecompositionStateAgrees ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:EPCG_Del a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:EPCG_L .
+ex:EPCG_Pkg a backlog:Package ; backlog:belongsToLineage ex:EPCG_L ; backlog:hasPackageVersion "1.0.0" ; backlog:deliversDeliverable ex:EPCG_Del .
+ex:EPCG_Epic a backlog:Epic ; backlog:belongsToLineage ex:EPCG_L ; backlog:hasState backlog:InProgress ; backlog:decomposesInto ex:EPCG_Story .
+ex:EPCG_Story a backlog:Story ; backlog:belongsToLineage ex:EPCG_L ; backlog:hasParentItem ex:EPCG_Epic ; backlog:memberOfContainer ex:EPCG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:EPCG_Del ; backlog:hasState backlog:Done .
+ex:EPCG_Epic2 a backlog:Epic ; backlog:belongsToLineage ex:EPCG_L ; backlog:hasState backlog:Proposed ; backlog:decomposesInto ex:EPCG_Story2 , ex:EPCG_Story3 .
+ex:EPCG_Story2 a backlog:Story ; backlog:belongsToLineage ex:EPCG_L ; backlog:hasParentItem ex:EPCG_Epic2 ; backlog:memberOfContainer ex:EPCG_Pkg ; backlog:hasPriorityScore 3.0 ; backlog:hasImpact 3.0 ; backlog:satisfiesDeliverable ex:EPCG_Del ; backlog:hasState backlog:Proposed .
+ex:EPCG_Story3 a backlog:Story ; backlog:belongsToLineage ex:EPCG_L ; backlog:hasParentItem ex:EPCG_Epic2 ; backlog:hasState backlog:Proposed .  # a story of an epic is still held: RNP_ITEM_NOPKG names it, and the epic above, Proposed and unscored, is named by neither it nor the silent-gap rule
+ex:EPCC_L a backlog:Lineage ; backlog:lineageOrdinal 230 ; backlog:lineageArchived false ; backlog:hasLineageStatus backlog:LS_Achieved .
+ex:EPCC_Epic a backlog:Epic ; backlog:belongsToLineage ex:EPCC_L ; backlog:hasState backlog:InProgress ; backlog:decomposesInto ex:EPCC_Story .
+ex:EPCC_Story a backlog:Story ; backlog:belongsToLineage ex:EPCC_L ; backlog:hasParentItem ex:EPCC_Epic ; backlog:hasState backlog:Done .  # good case: a lineage recorded Achieved whose only open item is an epic with all its stories Done is not named by the closure rule
+ex:EPIC_NOLIN_Pkg a backlog:Package ; backlog:belongsToLineage ex:EPIC_IN_PACKAGE_L ; backlog:hasPackageVersion "1.0.0" .
+ex:EPIC_NOLIN_Epic a backlog:Epic ; backlog:memberOfContainer ex:EPIC_NOLIN_Pkg ; backlog:hasState backlog:Proposed .  # EPIC_IN_PACKAGE also names an epic that states no lineage and sits in a package of an adopting lineage
+ex:EPCC2_L a backlog:Lineage ; backlog:lineageOrdinal 231 ; backlog:lineageArchived false ; backlog:hasLineageStatus backlog:LS_Achieved ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus .
+ex:EPCC2_Epic a backlog:Epic ; backlog:belongsToLineage ex:EPCC2_L ; backlog:hasState backlog:Proposed .  # bad case: an epic with no stories at all still holds a closed lineage open (the closure rule names the lineage)
+

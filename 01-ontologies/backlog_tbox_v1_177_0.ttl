@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.176.0> ;
-    owl:versionInfo "1.176.0" ;
-    owl:priorVersion <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.177.0> ;
+    owl:versionInfo "1.177.0" ;
+    owl:priorVersion <http://example.org/backlog/1.176.0> , <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -853,25 +853,25 @@ backlog:hasJobSize a owl:DatatypeProperty ;
     skos:definition "The WSJF divisor: relative effort to deliver the item."@en .
 
 backlog:hasReach a owl:DatatypeProperty ;
-    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:RICEScore backlog:WorkItem ) ] ; rdfs:range xsd:decimal ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has reach"@en ;
     skos:definition "How many subjects the item affects in a stated period — the R of RICE."@en .
 
 backlog:hasImpact a owl:DatatypeProperty ;
-    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:RICEScore backlog:WorkItem ) ] ; rdfs:range xsd:decimal ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has impact"@en ;
     skos:definition "How much the item moves the target outcome per affected subject — the I of RICE."@en .
 
 backlog:hasConfidence a owl:DatatypeProperty ;
-    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:RICEScore backlog:WorkItem ) ] ; rdfs:range xsd:decimal ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has confidence"@en ;
     skos:definition "How well-evidenced the reach and impact estimates are, expressed as a fraction — the C of RICE."@en .
 
 backlog:hasEffort a owl:DatatypeProperty ;
-    rdfs:domain backlog:RICEScore ; rdfs:range xsd:decimal ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( backlog:RICEScore backlog:WorkItem ) ] ; rdfs:range xsd:decimal ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "has effort"@en ;
     skos:definition "Estimated total work to deliver — the E of RICE, and the divisor of the score."@en .
@@ -4627,7 +4627,7 @@ backlog:checkpointCondition a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range backlog:WorkItem ;
     rdfs:isDefinedBy <http://example.org/backlog> ;
     rdfs:label "checkpoint condition"@en ;
-    skos:definition "The WorkItem whose Done state is what this checkpoint actually waits on, when the real timing is conditional rather than calendar-bound. G31's own distinction made structural here: some checkpoints genuinely are calendar-bound (a regulatory date, an external commitment) and keep checkpointDate; others depend on unpredictable engineering work reaching Done, and inventing a date for those is false precision standing in for a condition. A checkpoint states whichever is honest, not both."@en .
+    skos:definition "The WorkItem whose Done state is what this checkpoint actually waits on, when the real timing is conditional rather than calendar-bound. G31's own distinction made structural here: some checkpoints genuinely are calendar-bound (a regulatory date, an external commitment) and keep checkpointDate; others depend on unpredictable engineering work reaching Done, and inventing a date for those is false precision standing in for a condition. A checkpoint states whichever is honest: a calendar date that is a promise is not stated beside a condition; a date that is only a forecast is named by datePredictedBy and may stand with a condition."@en .
 backlog:checkpointConditionText a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain backlog:ObjectiveCheckpoint ; rdfs:range xsd:string ;
     rdfs:isDefinedBy <http://example.org/backlog> ;

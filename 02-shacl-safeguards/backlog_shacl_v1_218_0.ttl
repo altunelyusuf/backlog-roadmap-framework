@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.217.0> ;
-    owl:versionInfo "1.217.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.218.0> ;
+    owl:versionInfo "1.218.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -701,11 +701,12 @@ backlog:SilentGapShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     rdfs:label "Silent-gap discipline (L2)"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: silent gap — this open item is neither scored nor flagged not-yet-scoreable. Gap discipline is binary and enforced here, not left to judgement." ;
+        sh:message "L2: silent gap — this open item (an epic is not scored, G228) is neither scored nor flagged not-yet-scoreable. Gap discipline is binary and enforced here, not left to judgement." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasState ?s .
             FILTER (?s IN (backlog:Proposed, backlog:Ready))
+            FILTER NOT EXISTS { $this a backlog:Epic }
             FILTER NOT EXISTS { $this backlog:hasPriorityScore ?sc }
             FILTER NOT EXISTS { $this backlog:notYetScoreable true }
             FILTER NOT EXISTS { $this a backlog:ExecutionTask }
@@ -6290,13 +6291,14 @@ backlog:LineageClosureCompleteShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_lineage_succession_negative" ;
     backlog:fixtureCaseName "L_Closed19" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: this lineage is recorded Achieved while a work item or container created during it is still open -- by its asserted or its derived state, or a container whose every member was out-scoped -- and it is neither out-scoped nor dissolved. Owner's rule: closing unfinished work is not allowed. Out-scope unfinished items; a container keeps what it finished and derives Done, and a container left with nothing finished is dissolved (v1.135.0; derived state and dissolution v1.136.0)." ;
+        sh:message "L1: this lineage is recorded Achieved while a work item (an epic that has stories is not held to this: its stories are, G228) or container created during it is still open -- by its asserted or its derived state, or a container whose every member was out-scoped -- and it is neither out-scoped nor dissolved. Owner's rule: closing unfinished work is not allowed. Out-scope unfinished items; a container keeps what it finished and derives Done, and a container left with nothing finished is dissolved (v1.135.0; derived state and dissolution v1.136.0)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasLineageStatus backlog:LS_Achieved .
             FILTER NOT EXISTS { $this backlog:lineageArchived true }
             ?x backlog:belongsToLineage $this .
             ?x a/<http://www.w3.org/2000/01/rdf-schema#subClassOf>* ?c . FILTER (?c IN (backlog:WorkItem, backlog:WorkItemContainer))
+            FILTER NOT EXISTS { ?x a backlog:Epic ; backlog:decomposesInto ?k }
             FILTER NOT EXISTS { ?d backlog:declaresGapFor $this ; backlog:outScopes ?x }
             FILTER NOT EXISTS { ?dz backlog:dissolvesContainer ?x }
             FILTER ( EXISTS { ?x backlog:hasState|backlog:derivedState ?st . FILTER (?st NOT IN (backlog:Done, backlog:Cancelled)) }
@@ -8872,13 +8874,14 @@ backlog:DecompositionStateAgreesShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "DSA_BAD" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "G148: every child of this item is Done or Cancelled and at least one is Done, yet the item itself is neither Done nor Cancelled, in the scope of an adoption of RS_DecompositionStateAgrees. The state the children derive and the state asserted disagree; either record the item as Done, or cancel it, or add the child that is still to come." ;
+        sh:message "G148: every child of this item (an epic is not held to this: it has no closure of its own, G228) is Done or Cancelled and at least one is Done, yet the item itself is neither Done nor Cancelled, in the scope of an adoption of RS_DecompositionStateAgrees. The state the children derive and the state asserted disagree; either record the item as Done, or cancel it, or add the child that is still to come." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             { ?reg backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees . FILTER NOT EXISTS { ?reg a backlog:Lineage } }
             UNION
             { ?reg a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_DecompositionStateAgrees .
               { $this backlog:belongsToLineage ?reg } UNION { $this backlog:admittedByOutput ?o . ?o backlog:belongsToLineage ?reg } }
+            FILTER NOT EXISTS { $this a backlog:Epic }
             $this backlog:hasState ?st . FILTER ( ?st NOT IN ( backlog:Done, backlog:Cancelled ) )
             $this backlog:decomposesInto ?dn . ?dn backlog:hasState backlog:Done .
             FILTER NOT EXISTS { $this backlog:decomposesInto ?c . ?c backlog:hasState ?cs . FILTER ( ?cs NOT IN ( backlog:Done, backlog:Cancelled ) ) }
@@ -10037,10 +10040,11 @@ backlog:ItemInPackageShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RNP_ITEM_NOPKG" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "RNP_ITEM_NOPKG: this backlog item belongs to a lineage that adopts RS_PackagesRequired and has reached the Backlog stage, yet it is a member of no package (memberOfContainer). The whole backlog is implemented through packages; place the item in one." ;
+        sh:message "RNP_ITEM_NOPKG: this backlog item (an epic is not one: it is groomed into stories and its stories are packaged) belongs to a lineage that adopts RS_PackagesRequired and has reached the Backlog stage, yet it is a member of no package (memberOfContainer). The whole backlog is implemented through packages; place the item in one." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            FILTER NOT EXISTS { $this a backlog:Epic }
             FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
             FILTER NOT EXISTS { $this backlog:memberOfContainer ?p . ?p a backlog:Package }
         }""" ] .
@@ -10066,10 +10070,11 @@ backlog:ItemSelectionValuesShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RNP_ITEM_NOVALUES" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "RNP_ITEM_NOVALUES: this backlog item is in a package of a lineage that adopts RS_PackagesRequired, yet it records no priority score, no impact (business value) or no deliverable it satisfies (the cohesion with the rest of its package). Selection rests on priority, business value and cohesion; record them." ;
+        sh:message "RNP_ITEM_NOVALUES: this backlog item (an epic is not held to this: its stories carry the values, G228) is in a package of a lineage that adopts RS_PackagesRequired, yet it records no priority score, no impact (business value) or no deliverable it satisfies (the cohesion with the rest of its package). Selection rests on priority, business value and cohesion; record them." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            FILTER NOT EXISTS { $this a backlog:Epic }
             $this backlog:memberOfContainer ?p . ?p a backlog:Package .
             FILTER (NOT EXISTS { $this backlog:hasPriorityScore ?a } || NOT EXISTS { $this backlog:hasImpact ?b } || NOT EXISTS { $this backlog:hasParentItem* ?anc . ?anc backlog:satisfiesDeliverable ?c })
         }""" ] .
@@ -10239,4 +10244,21 @@ backlog:GovernanceNamesProductionShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:adoptsRuleSet backlog:RS_GovernanceRequired ; backlog:hasLineageRole backlog:LR_Governance .
             FILTER NOT EXISTS { $this backlog:governsLineage ?p }
+        }""" ] .
+
+# ---- G228: an epic is a backlog item groomed into stories; it is not packaged. ----
+
+backlog:EpicNotInPackageShape a sh:NodeShape ;
+    sh:targetClass backlog:Epic ;
+    sh:severity sh:Violation ;
+    rdfs:label "An epic is groomed into stories and is not a member of a package (G228)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "EPIC_IN_PACKAGE" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "EPIC_IN_PACKAGE: this epic is a member of a package of a lineage that adopts RS_PackagesRequired. An epic only describes a feature of the final product at high level; it is groomed into stories first, and the packages are chosen from the stories. Put its stories in the package and take the epic out of it." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:memberOfContainer ?p . ?p a backlog:Package .
+            { $this backlog:belongsToLineage ?lin } UNION { ?p backlog:belongsToLineage ?lin }
+            ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired .
         }""" ] .
