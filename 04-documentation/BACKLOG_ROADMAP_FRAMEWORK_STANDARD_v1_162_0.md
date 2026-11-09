@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.161.0
+# Backlog & Roadmap Semantic Framework — Standard v1.162.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -2639,8 +2639,18 @@ What the rules do with it, in a lineage that adopts the package rules (RS_Packag
 - An epic is not asked for a package, a priority score or an impact, and an open unscored epic is not a silent gap. Its stories carry them, so the score of a story is never counted twice (the parent-score rule stays as it is; nothing refuses a score on an epic whose stories are not scored).
 - An epic that is a member of a package is refused (EPIC_IN_PACKAGE): put its stories in the package.
 - The rule that a parent whose children are all finished is itself Done does not bind an epic, and a lineage recorded Achieved is not held open by an epic that has stories (its open stories hold it open); an epic with no stories still holds it open. Its state is read from its stories.
-- Which stage holds the grooming is not settled: the Owner's words put it in the roadmap stage before packages are chosen, while the package rules ask for packages from the Backlog stage on (unchanged); the Owner is asked to settle it.
+- Which stage holds the grooming: the Owner ruled on 2026-11-09 at 18:00 that it is not tied to one stage (see the section on the score of an epic and the timing of packages); the package rules bind from the status In progress.
 - Not changed, and held for the next change request: the package-count tool still counts an epic as an item.
 - Not changed: an epic that decomposes into nothing is refused, an epic is refused in an iteration or a deployment unit, and an epic carries its Definition of Done before it decomposes.
 
 Two vocabulary errors are corrected in the same release: reach, impact, confidence and effort may stand on any work item as well as on a score, and the text of a checkpoint no longer says that a condition and a date exclude each other when the date is only a forecast.
+
+## The score of an epic and the timing of packages (Lineage 29, G229)
+
+The Owner proposed on 2026-11-09 that an epic is valued before grooming and that, as grooming proceeds, its score is collected from the scores of its stories, updated at the end of each grooming step. In the rules:
+
+- A score can name the score it replaces (`replacesScore`). The replaced score stays on the item, visible and unedited, and is no longer live; only a score that no other score replaces counts. A score may replace only a score of the same item; the check refuses a score that replaces itself, sits on no item, replaces a score of another item or one that replaces it in turn, and, when both are dated, a later one.
+- A roll-up method exists (`Method_RollUp`): the effort-weighted mean of the scores of the children that carry a score and an effort. An epic's live roll-up score is allowed beside scored stories, and must equal that mean (within 0.01), counting only child scores that no other score replaces and children with an effort above zero; a roll-up with nothing to roll up is refused. A roll-up score on a parent that is not an epic is refused by the parent-score rule. A live score of an epic that is not a roll-up is still refused beside scored stories, so no value is counted twice. A partly groomed epic is rolled up from the stories scored so far and replaced at the next step. The weighting and the reading of a partly groomed epic are the framework's choice, put to the Owner to accept or reject.
+- The Owner also ruled that packages are subject of planning: they can be made before the roadmap, inside the backlog when the work is already groomed (a heritage of an earlier lineage), or after the roadmap, because grooming goes on. The package rules therefore bind a lineage from the status In progress, not from the Backlog stage, and an item that is still Proposed is not asked for a package. The package-count tool follows (version 1.2.0).
+
+Not enforced: that a package holds only groomed items, that a roll-up is made at a grooming step (it is compared with the stories when validated), and that the estimate before grooming is labelled. A partly groomed epic is rolled up from its scored stories only.

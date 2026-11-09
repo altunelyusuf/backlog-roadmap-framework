@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_package_count v1.1.0 (Lineage 32, G219, G220: --check also names backlog items in no package) -- how many packages a lineage needs, measured from its chain.
+"""backlog_package_count v1.2.0 (Lineage 29, G229: --check no longer names an epic, or an item still Proposed, as in no package; Lineage 32, G219, G220: --check also names backlog items in no package) -- how many packages a lineage needs, measured from its chain.
 
 For each deliverable of the scope: the stories that satisfy it (backlog), the objectives those stories pursue (objectives), the goals those
 objectives contribute to (goals), leaving out the mission-facing goal that every deliverable serves. Deliverables that serve the same set of
@@ -47,7 +47,7 @@ def main(argv):
     if not a.check: return 0
     pk = declared(g, lin)
     unplaced = sorted(str(i).split("#")[-1] for i in g.subjects(B.belongsToLineage, lin)
-                      if any((i, RDF.type, B[k]) in g for k in ("Story", "Epic", "Task", "Defect")) and (i, B.hasState, B.Cancelled) not in g
+                      if any((i, RDF.type, B[k]) in g for k in ("Story", "Task", "Defect")) and (i, RDF.type, B.Epic) not in g and (i, B.hasState, B.Cancelled) not in g and (i, B.hasState, B.Proposed) not in g
                       and not any((p2, RDF.type, B.Package) in g for p2 in g.objects(i, B.memberOfContainer)))
     if unplaced:
         print("CHECK FAIL: %d backlog item(s) in no package: %s" % (len(unplaced), ", ".join(unplaced))); return 1

@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.218.0> ;
-    owl:versionInfo "1.218.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog/shacl/1.219.0> ;
+    owl:versionInfo "1.219.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -219,13 +219,15 @@ backlog:WorkItemShape a sh:NodeShape ;
         }""" ] ;
 
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L1: an item may not carry two live priority scores produced by the same method." ;
+        sh:message "L1: an item may not carry two live priority scores produced by the same method (a score that another score replaces is not live, G229)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasPriorityScore ?s1 , ?s2 .
             ?s1 backlog:scoredByMethod ?m .
             ?s2 backlog:scoredByMethod ?m .
             FILTER (?s1 != ?s2)
+            FILTER NOT EXISTS { ?r1 backlog:replacesScore ?s1 }
+            FILTER NOT EXISTS { ?r2 backlog:replacesScore ?s2 }
         }""" ] .
 
 backlog:ContainerShape a sh:NodeShape ;
@@ -1346,11 +1348,13 @@ backlog:DecompositionShape a sh:NodeShape ;
             FILTER (?cs NOT IN (backlog:Done, backlog:Cancelled))
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "L2: this decomposed item carries its own priority score as well as scored children; a parent's score computed alongside its children's double-counts the same value." ;
+        sh:message "L2: this decomposed item carries its own live priority score, not, for an epic, a roll-up of its children\'s scores (G229), as well as scored children; a parent's score computed alongside its children's double-counts the same value." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:decomposesInto ?child ; backlog:hasPriorityScore ?ps .
             ?child backlog:hasPriorityScore ?cs .
+            FILTER NOT EXISTS { ?n backlog:replacesScore ?ps }
+            FILTER NOT EXISTS { ?ps backlog:scoredByMethod backlog:Method_RollUp . $this a backlog:Epic }
         }""" ] .
 
 backlog:CommitmentShape a sh:NodeShape ;
@@ -9955,22 +9959,22 @@ backlog:RoadmapNamesPackageShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
-            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             FILTER NOT EXISTS { $this backlog:roadmapNamesPackage ?p . ?p backlog:belongsToLineage ?lin }
         }""" ] .
 
 backlog:LineageHasPackageShape a sh:NodeShape ;
     sh:targetClass backlog:Lineage ;
     sh:severity sh:Violation ;
-    rdfs:label "A lineage that requires packages and has its backlog has at least one package, and a single package delivers the whole scope (G219)"@en ;
+    rdfs:label "A lineage that requires packages and is In progress has at least one package, and a single package delivers the whole scope (G219)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RNP_LINEAGE_NOPKG" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "RNP_LINEAGE_NOPKG: this lineage adopts RS_PackagesRequired and has reached the Backlog stage, yet it has no package. Even the simplest lineage has at least one package: the one that delivers all of its deliverables." ;
+        sh:message "RNP_LINEAGE_NOPKG: this lineage adopts RS_PackagesRequired and is In progress, yet it has no package. Even the simplest lineage has at least one package: the one that delivers all of its deliverables." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
-            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             FILTER NOT EXISTS { ?p a backlog:Package ; backlog:belongsToLineage $this }
         }""" ]  ;
     sh:sparql [ a sh:SPARQLConstraint ;
@@ -9978,7 +9982,7 @@ backlog:LineageHasPackageShape a sh:NodeShape ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
-            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             ?only a backlog:Package ; backlog:belongsToLineage $this .
             FILTER NOT EXISTS { ?other a backlog:Package ; backlog:belongsToLineage $this . FILTER (?other != ?only) }
             ?d a backlog:ScopeDeliverable ; backlog:belongsToLineage $this .
@@ -9993,11 +9997,11 @@ backlog:DeliverableDeliveredShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RNP_DEL_UNDELIVERED" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "RNP_DEL_UNDELIVERED: this deliverable belongs to a lineage that adopts RS_PackagesRequired and has reached the Backlog stage, yet no package delivers it (deliversDeliverable)." ;
+        sh:message "RNP_DEL_UNDELIVERED: this deliverable belongs to a lineage that adopts RS_PackagesRequired and is In progress, yet no package delivers it (deliversDeliverable)." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls .
-            ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             FILTER NOT EXISTS { $this backlog:productViewOf ?src }
             FILTER NOT EXISTS { ?p backlog:deliversDeliverable $this }
         }""" ] .
@@ -10040,12 +10044,13 @@ backlog:ItemInPackageShape a sh:NodeShape ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "RNP_ITEM_NOPKG" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "RNP_ITEM_NOPKG: this backlog item (an epic is not one: it is groomed into stories and its stories are packaged) belongs to a lineage that adopts RS_PackagesRequired and has reached the Backlog stage, yet it is a member of no package (memberOfContainer). The whole backlog is implemented through packages; place the item in one." ;
+        sh:message "RNP_ITEM_NOPKG: this backlog item (an epic is not one, and neither is an item still Proposed, that is not yet groomed: G228, G229) belongs to a lineage that adopts RS_PackagesRequired and is In progress, yet it is a member of no package (memberOfContainer). The whole backlog is implemented through packages; place the item in one." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             FILTER NOT EXISTS { $this a backlog:Epic }
             FILTER NOT EXISTS { $this backlog:hasState backlog:Cancelled }
+            FILTER NOT EXISTS { $this backlog:hasState backlog:Proposed }
             FILTER NOT EXISTS { $this backlog:memberOfContainer ?p . ?p a backlog:Package }
         }""" ] .
 
@@ -10059,7 +10064,7 @@ backlog:ItemInOnePackageShape a sh:NodeShape ;
         sh:message "RNP_ITEM_TWOPKG: this backlog item is a member of two packages of a lineage that adopts RS_PackagesRequired. A package is a partition of the backlog: an item sits in one; split the item or choose its package." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             $this backlog:memberOfContainer ?p1 , ?p2 . ?p1 a backlog:Package . ?p2 a backlog:Package . FILTER (?p1 != ?p2)
         }""" ] .
 
@@ -10073,7 +10078,7 @@ backlog:ItemSelectionValuesShape a sh:NodeShape ;
         sh:message "RNP_ITEM_NOVALUES: this backlog item (an epic is not held to this: its stories carry the values, G228) is in a package of a lineage that adopts RS_PackagesRequired, yet it records no priority score, no impact (business value) or no deliverable it satisfies (the cohesion with the rest of its package). Selection rests on priority, business value and cohesion; record them." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             FILTER NOT EXISTS { $this a backlog:Epic }
             $this backlog:memberOfContainer ?p . ?p a backlog:Package .
             FILTER (NOT EXISTS { $this backlog:hasPriorityScore ?a } || NOT EXISTS { $this backlog:hasImpact ?b } || NOT EXISTS { $this backlog:hasParentItem* ?anc . ?anc backlog:satisfiesDeliverable ?c })
@@ -10089,7 +10094,7 @@ backlog:ItemDependsForwardShape a sh:NodeShape ;
         sh:message "RNP_FORWARD_DEP: this backlog item depends on an item of another package that its own package does not depend on (containerDependsOn). A package must not lean on a later one; make the package depend on the other, move the item, or drop the dependency." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
-            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 5 && ?rk <= 7)
+            $this backlog:belongsToLineage ?lin . ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus ?ls . ?ls backlog:statusRank ?rk . FILTER (?rk >= 6 && ?rk <= 7)
             $this backlog:dependsOn ?j . $this backlog:memberOfContainer ?p1 . ?p1 a backlog:Package . ?j backlog:memberOfContainer ?p2 . ?p2 a backlog:Package .
             FILTER (?p1 != ?p2)
             FILTER NOT EXISTS { ?p1 backlog:containerDependsOn+ ?p2 }
@@ -10261,4 +10266,52 @@ backlog:EpicNotInPackageShape a sh:NodeShape ;
             $this backlog:memberOfContainer ?p . ?p a backlog:Package .
             { $this backlog:belongsToLineage ?lin } UNION { ?p backlog:belongsToLineage ?lin }
             ?lin backlog:adoptsRuleSet backlog:RS_PackagesRequired .
+        }""" ] .
+
+# ---- G229: the score of an epic is rolled up from its stories, and a score replaces a score. ----
+
+backlog:EpicRollUpAgreesShape a sh:NodeShape ;
+    sh:targetClass backlog:Epic ;
+    sh:severity sh:Violation ;
+    rdfs:label "A live roll-up score of an epic equals the effort-weighted mean of its stories' scores (G229)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "ROLLUP_BAD" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "ROLLUP_BAD: this epic carries a live score made by the roll-up method whose value is not the sum of each scored child's score times its effort divided by the sum of those efforts (within 0.01), or it has no child that carries a live score and an effort above zero. A roll-up is collected from the stories at a grooming step and replaced at the next step; it is never typed in." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasPriorityScore ?ps . ?ps backlog:scoredByMethod backlog:Method_RollUp ; backlog:hasScoreValue ?v .
+            FILTER NOT EXISTS { ?n backlog:replacesScore ?ps }
+            FILTER NOT EXISTS { $this backlog:decomposesInto ?c . ?c backlog:hasEffort ?ce ; backlog:hasPriorityScore ?cs . FILTER ( ?ce > 0 ) FILTER NOT EXISTS { ?nr backlog:replacesScore ?cs } FILTER ( isLiteral(?cs) || EXISTS { ?cs backlog:hasScoreValue ?cvx } ) }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "ROLLUP_BAD: this epic carries a live score made by the roll-up method whose value is not the sum of each scored child's score times its effort divided by the sum of those efforts (within 0.01). A roll-up is collected from the stories at a grooming step and replaced at the next step; it is never typed in." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:hasPriorityScore ?ps . ?ps backlog:scoredByMethod backlog:Method_RollUp ; backlog:hasScoreValue ?v .
+            FILTER NOT EXISTS { ?n backlog:replacesScore ?ps }
+            { SELECT ?e ( SUM( ?cv * ?ce ) / SUM( ?ce ) AS ?avg ) WHERE {
+                  ?e backlog:decomposesInto ?c . ?c backlog:hasEffort ?ce ; backlog:hasPriorityScore ?cs . FILTER ( ?ce > 0 ) FILTER NOT EXISTS { ?nr backlog:replacesScore ?cs }
+                  OPTIONAL { ?cs backlog:hasScoreValue ?cvv }
+                  BIND( IF( isLiteral(?cs), ?cs, ?cvv ) AS ?cv ) FILTER( BOUND(?cv) )
+              } GROUP BY ?e }
+            FILTER ( ?e = $this ) FILTER ( ABS( ?v - ?avg ) > 0.01 )
+        }""" ] .
+
+backlog:ScoreReplacedNotLiveShape a sh:NodeShape ;
+    sh:targetClass backlog:PriorityScore ;
+    sh:severity sh:Violation ;
+    rdfs:label "A score replaces an earlier score of the same item, never itself or another item's (G229)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "SCORE_REPLACE" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "SCORE_REPLACE: this score replaces itself, or sits on no item, or replaces a score that is not on the same item, or a score that replaces it in turn, or (when both are dated) a score dated after it. A replaced score stays on the item and is not live; only an earlier score of the same item can be replaced." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:replacesScore ?old .
+            { FILTER ( ?old = $this ) }
+            UNION { FILTER NOT EXISTS { ?i0 backlog:hasPriorityScore $this } }
+            UNION { ?i backlog:hasPriorityScore $this . FILTER NOT EXISTS { ?i backlog:hasPriorityScore ?old } }
+            UNION { ?old backlog:replacesScore $this }
+            UNION { $this backlog:scoredAt ?t1 . ?old backlog:scoredAt ?t0 . FILTER ( ?t0 > ?t1 ) }
         }""" ] .

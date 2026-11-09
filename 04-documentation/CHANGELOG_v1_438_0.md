@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.13 — 2026-11-09 (An epic carries an estimated score that its stories' scores replace; packages are asked for once development is ongoing)
+
+The Owner ruled on 2026-11-09 (G229): before grooming an epic carries an estimated score, and after each grooming step its score is collected from its stories' scores, the old score staying visible; and packages can be made before the roadmap, inside the backlog or after it, as grooming goes on. A score can now name the score it replaces, a roll-up method is added and checked against the stories' scores, the package rules bind from the In progress status instead of the Backlog stage and no longer ask for a package for an ungroomed item, and the package-count tool no longer counts epics or ungroomed items as unplaced.
+
+**Unplanned work:** unplanned: the Owner's ruling of 2026-11-09 at 16:52 (confirmed 16:57, relayed by the IPage handover) and his answer at 18:00 on the timing of packages
+
 ## v5.5.12 — 2026-11-09 (An epic is a backlog item groomed into stories: no package, no score, no closure of its own)
 
 The Owner ruled on 2026-11-09 (G228) that an epic is a product backlog item that only describes a feature of the final product at high level; it is groomed into stories first, and packages and sprints are made from its stories. The package rules no longer ask an epic for a package, a score or an impact, a groomed epic is refused in a package, and the rule that closes a parent whose children are finished no longer applies to an epic. Two vocabulary errors are corrected: the impact value may be put on an item, and a checkpoint is dated by a forecast or a condition, not stated as fixed.

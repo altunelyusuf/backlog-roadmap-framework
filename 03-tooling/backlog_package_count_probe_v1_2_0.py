@@ -2,7 +2,7 @@
 """Probe for backlog_package_count v1.0.0 (Lineage 32, G219): cases and mutants."""
 import os, sys, subprocess, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
-TOOL = os.path.join(HERE, "backlog_package_count_v1_1_0.py")
+TOOL = os.path.join(HERE, "backlog_package_count_v1_2_0.py")
 if sys.argv[1:] == ["--deps"]:
     print("\n".join([TOOL, os.path.abspath(__file__)])); sys.exit(0)
 H = "@prefix backlog: <http://example.org/backlog#> .\n@prefix fw: <http://example.org/backlog-framework-register#> .\n"

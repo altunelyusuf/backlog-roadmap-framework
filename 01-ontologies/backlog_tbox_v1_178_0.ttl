@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.177.0> ;
-    owl:versionInfo "1.177.0" ;
-    owl:priorVersion <http://example.org/backlog/1.176.0> , <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.178.0> ;
+    owl:versionInfo "1.178.0" ;
+    owl:priorVersion <http://example.org/backlog/1.177.0> , <http://example.org/backlog/1.176.0> , <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -9048,3 +9048,13 @@ backlog:governsLineage a owl:ObjectProperty ;
 backlog:LineageRole kb:hasClassKind kb:ClassKind_ValueDomain .
 backlog:hasLineageRole kb:hasRelationshipCategory kb:RelationshipCategory_Characterization .
 backlog:governsLineage kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+
+# ---- Lineage 29 (the Governance lineage; G229): a score replaces a score ----
+backlog:replacesScore a owl:ObjectProperty ;
+    rdfs:domain backlog:PriorityScore ; rdfs:range backlog:PriorityScore ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "replaces score"@en ;
+    skos:definition "The newer score of an item names the older score of the same item that it replaces. The older score stays on the item, visible and unedited, and is no longer live: only a score that no other score replaces counts. Used when an epic's estimated score is replaced by a score rolled up from its stories at a grooming step."@en .
+
+# kinds and categories of the v1.178.0 terms (G229; recorded in the kind ledger)
+backlog:replacesScore kb:hasRelationshipCategory kb:RelationshipCategory_Versioning .

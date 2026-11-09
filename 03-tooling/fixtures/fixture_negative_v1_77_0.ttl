@@ -4514,7 +4514,7 @@ ex:MA_FIRST a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlo
 ex:MA_DROPS_EARLIER a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlog:amendedMissionStatement "A can be named. C is governed, and much more is said here." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
 
 # G219 (RS_PackagesRequired): a lineage at Backlogged with no package (RNP_LINEAGE_NOPKG), a deliverable no package delivers (RNP_DEL_UNDELIVERED), a roadmap naming no package (RNP_ROADMAP_NOPKG), a package delivering nothing (RNP_PKG_ORPHAN), an item planned into an iteration no package targets (RNP_SPRINT_NOPKG).
-ex:RNP_L a backlog:Lineage ; backlog:lineageOrdinal 93 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:RNP_L a backlog:Lineage ; backlog:lineageOrdinal 93 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_InProgress .
 ex:RNP_Del a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNP_L .
 ex:RNP_Road a backlog:Roadmap ; backlog:belongsToLineage ex:RNP_L .
 ex:RNP_Orphan a backlog:Package ; backlog:belongsToLineage ex:RNP_L ; backlog:hasPackageVersion "1.0.0" .
@@ -4522,14 +4522,14 @@ ex:RNP_Iter a backlog:Iteration ; backlog:belongsToLineage ex:RNP_L .
 ex:RNP_Story a backlog:Story ; backlog:belongsToLineage ex:RNP_L ; backlog:satisfiesDeliverable ex:RNP_Del .
 ex:RNP_Plan a backlog:PlanningEvent ; backlog:plansItem ex:RNP_Story ; backlog:plannedInto ex:RNP_Iter .
 # G219 good case: one package that delivers the only deliverable and targets the iteration, a roadmap that names it, an item planned into that iteration. No RNP_ rule fires on it.
-ex:RNPG_L a backlog:Lineage ; backlog:lineageOrdinal 94 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:RNPG_L a backlog:Lineage ; backlog:lineageOrdinal 94 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_InProgress .
 ex:RNPG_Del a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNPG_L .
 ex:RNPG_Iter a backlog:Iteration ; backlog:belongsToLineage ex:RNPG_L .
 ex:RNPG_Pkg a backlog:Package ; backlog:belongsToLineage ex:RNPG_L ; backlog:hasPackageVersion "1.0.0" ; backlog:deliversDeliverable ex:RNPG_Del ; backlog:targetsIteration ex:RNPG_Iter .
 ex:RNPG_Road a backlog:Roadmap ; backlog:belongsToLineage ex:RNPG_L ; backlog:roadmapNamesPackage ex:RNPG_Pkg .
 ex:RNPG_Story a backlog:Story ; backlog:belongsToLineage ex:RNPG_L ; backlog:satisfiesDeliverable ex:RNPG_Del .
 ex:RNPG_Plan a backlog:PlanningEvent ; backlog:plansItem ex:RNPG_Story ; backlog:plannedInto ex:RNPG_Iter .
-ex:RNPN_L a backlog:Lineage ; backlog:lineageOrdinal 95 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:RNPN_L a backlog:Lineage ; backlog:lineageOrdinal 95 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_InProgress .
 # G219 review cases (must not fire / must fire): a child story planned under an epic that satisfies the delivered deliverable (no fire); a view deliverable a single package leaves out (no fire); a roadmap naming only another lineage's package (RNP_ROADMAP_NOPKG fires).
 ex:RNPG_Epic a backlog:Epic ; backlog:belongsToLineage ex:RNPG_L ; backlog:satisfiesDeliverable ex:RNPG_Del .
 ex:RNPG_Child a backlog:Story ; backlog:belongsToLineage ex:RNPG_L ; backlog:hasParentItem ex:RNPG_Epic .
@@ -4538,7 +4538,7 @@ ex:RNPG_View a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNPG_L ; b
 ex:RNPX_Road a backlog:Roadmap ; backlog:belongsToLineage ex:RNPG_L ; backlog:roadmapNamesPackage ex:RNP_Orphan .
 
 # G220 (box 2). Bad cases: an item in no package (RNP_ITEM_NOPKG: ex:RNP_Story above), an item in two (RNP_ITEM_TWOPKG), an item in a package without its values (RNP_ITEM_NOVALUES), an item that leans on a later package (RNP_FORWARD_DEP), a package marked Done with an open member (RNP_PKG_DONE_EARLY), an iteration that plans two packages (RNP_SPRINT_MIXED).
-ex:RNP2_L a backlog:Lineage ; backlog:lineageOrdinal 96 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:RNP2_L a backlog:Lineage ; backlog:lineageOrdinal 96 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_InProgress .
 ex:RNP2_Del a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:RNP2_L .
 ex:RNP2_Iter0 a backlog:Iteration ; backlog:belongsToLineage ex:RNP2_L .
 ex:RNP2_P1 a backlog:Package ; backlog:belongsToLineage ex:RNP2_L ; backlog:hasPackageVersion "1.0.0" ; backlog:hasState backlog:Done ; backlog:deliversDeliverable ex:RNP2_Del ; backlog:targetsIteration ex:RNP2_Iter0 .
@@ -4599,4 +4599,42 @@ ex:EPIC_NOLIN_Pkg a backlog:Package ; backlog:belongsToLineage ex:EPIC_IN_PACKAG
 ex:EPIC_NOLIN_Epic a backlog:Epic ; backlog:memberOfContainer ex:EPIC_NOLIN_Pkg ; backlog:hasState backlog:Proposed .  # EPIC_IN_PACKAGE also names an epic that states no lineage and sits in a package of an adopting lineage
 ex:EPCC2_L a backlog:Lineage ; backlog:lineageOrdinal 231 ; backlog:lineageArchived false ; backlog:hasLineageStatus backlog:LS_Achieved ; backlog:adoptsRuleSet backlog:RS_ObligationsFollowStatus .
 ex:EPCC2_Epic a backlog:Epic ; backlog:belongsToLineage ex:EPCC2_L ; backlog:hasState backlog:Proposed .  # bad case: an epic with no stories at all still holds a closed lineage open (the closure rule names the lineage)
+
+
+# G229. Bad cases: a roll-up score that is not the stories' roll-up (ROLLUP_BAD: ex:ROLLUP_BAD_Epic), a score that replaces a score of another item (SCORE_REPLACE: ex:SCORE_REPLACE_New). Good cases: an epic whose estimate is replaced by a right roll-up (ex:RUG_Epic) raises no parent-score, one-live-score or roll-up message; a lineage at the Backlog stage with no package (ex:PKT_L) raises no package message, and an unplaced Proposed story in an In progress lineage (ex:PKT2_Story) is not named by RNP_ITEM_NOPKG (its lineage, which has no package, still is, by RNP_LINEAGE_NOPKG).
+ex:ROLLUP_BAD_Epic a backlog:Epic ; backlog:hasPriorityScore ex:ROLLUP_BAD_Score ; backlog:decomposesInto ex:ROLLUP_BAD_S1 , ex:ROLLUP_BAD_S2 .
+ex:ROLLUP_BAD_Score a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RollUp ; backlog:hasScoreValue 5.0 ; backlog:hasScoreRationale "rolled up" .
+ex:ROLLUP_BAD_S1 a backlog:Story ; backlog:hasParentItem ex:ROLLUP_BAD_Epic ; backlog:hasPriorityScore 4.0 ; backlog:hasEffort 2.0 .
+ex:ROLLUP_BAD_S2 a backlog:Story ; backlog:hasParentItem ex:ROLLUP_BAD_Epic ; backlog:hasPriorityScore 2.0 ; backlog:hasEffort 2.0 .
+ex:RUG_Epic a backlog:Epic ; backlog:hasPriorityScore ex:RUG_Est , ex:RUG_Roll ; backlog:decomposesInto ex:RUG_S1 , ex:RUG_S2 .
+ex:RUG_Est a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 8.0 ; backlog:hasScoreRationale "estimate before grooming" ; backlog:scoredAt "2026-11-09T10:00:00Z"^^xsd:dateTime .
+ex:RUG_Roll a backlog:PriorityScore ; backlog:replacesScore ex:RUG_Est ; backlog:hasScoreValue 3.0 ; backlog:hasScoreRationale "rolled up" ; backlog:scoredAt "2026-11-09T12:00:00Z"^^xsd:dateTime .
+ex:RUG_Roll backlog:scoredByMethod backlog:Method_RollUp .
+ex:RUG_S1 a backlog:Story ; backlog:hasParentItem ex:RUG_Epic ; backlog:hasPriorityScore 4.0 ; backlog:hasEffort 2.0 .
+ex:RUG_S2 a backlog:Story ; backlog:hasParentItem ex:RUG_Epic ; backlog:hasPriorityScore 2.0 ; backlog:hasEffort 2.0 .
+ex:SCORE_REPLACE_Item a backlog:Story ; backlog:hasPriorityScore ex:SCORE_REPLACE_New .
+ex:SCORE_REPLACE_Other a backlog:Story ; backlog:hasPriorityScore ex:SCORE_REPLACE_Old .
+ex:SCORE_REPLACE_New a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 3.0 ; backlog:hasScoreRationale "x" ; backlog:replacesScore ex:SCORE_REPLACE_Old .
+ex:SCORE_REPLACE_Old a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 2.0 ; backlog:hasScoreRationale "x" .
+ex:PKT_L a backlog:Lineage ; backlog:lineageOrdinal 232 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_Backlogged .
+ex:PKT2_L a backlog:Lineage ; backlog:lineageOrdinal 233 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_InProgress .
+ex:PKT2_Story a backlog:Story ; backlog:belongsToLineage ex:PKT2_L ; backlog:hasState backlog:Proposed .
+ex:RUG2_Epic a backlog:Epic ; backlog:hasPriorityScore ex:RUG2_Roll ; backlog:decomposesInto ex:RUG2_S1 , ex:RUG2_S2 , ex:RUG2_S3 .
+ex:RUG2_Roll a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RollUp ; backlog:hasScoreValue 3.0 ; backlog:hasScoreRationale "rolled up from the live scores" .
+ex:RUG2_S1 a backlog:Story ; backlog:hasParentItem ex:RUG2_Epic ; backlog:hasPriorityScore ex:RUG2_Old , ex:RUG2_New ; backlog:hasEffort 2.0 .  # good case: a re-scored story: only its live score (4.0) counts, so the roll-up (4*2+2*2)/4 = 3.0 is right
+ex:RUG2_Old a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 6.0 ; backlog:hasScoreRationale "first" .
+ex:RUG2_New a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 4.0 ; backlog:hasScoreRationale "second" ; backlog:replacesScore ex:RUG2_Old .
+ex:RUG2_S2 a backlog:Story ; backlog:hasParentItem ex:RUG2_Epic ; backlog:hasPriorityScore 2.0 ; backlog:hasEffort 2.0 .
+ex:RUG2_S3 a backlog:Story ; backlog:hasParentItem ex:RUG2_Epic ; backlog:hasPriorityScore 9.0 ; backlog:hasEffort 0.0 .  # effort zero: left out of the roll-up
+ex:ROLLUP_ZERO_Epic a backlog:Epic ; backlog:hasPriorityScore ex:ROLLUP_ZERO_Score ; backlog:decomposesInto ex:ROLLUP_ZERO_S1 .
+ex:ROLLUP_ZERO_Score a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RollUp ; backlog:hasScoreValue 99.0 ; backlog:hasScoreRationale "x" .
+ex:ROLLUP_ZERO_S1 a backlog:Story ; backlog:hasParentItem ex:ROLLUP_ZERO_Epic ; backlog:hasPriorityScore 4.0 ; backlog:hasEffort 0.0 .
+ex:SCORE_REPLACE_Float a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 1.0 ; backlog:hasScoreRationale "x" ; backlog:replacesScore ex:SCORE_REPLACE_Hidden .
+ex:SCORE_REPLACE_Hidden a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 1.0 ; backlog:hasScoreRationale "x" .
+ex:SCORE_REPLACE_Mut1 a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 1.0 ; backlog:hasScoreRationale "x" ; backlog:replacesScore ex:SCORE_REPLACE_Mut2 .
+ex:SCORE_REPLACE_Mut2 a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RICE ; backlog:hasScoreValue 1.0 ; backlog:hasScoreRationale "x" ; backlog:replacesScore ex:SCORE_REPLACE_Mut1 .
+ex:SCORE_REPLACE_MutItem a backlog:Story ; backlog:hasPriorityScore ex:SCORE_REPLACE_Mut1 , ex:SCORE_REPLACE_Mut2 .
+ex:NEP_Parent a backlog:Story ; backlog:hasPriorityScore ex:NEP_Score , 3.0 ; backlog:decomposesInto ex:NEP_Child .  # a roll-up score on a parent that is not an epic is still refused by the parent-score rule
+ex:NEP_Score a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RollUp ; backlog:hasScoreValue 99.0 ; backlog:hasScoreRationale "x" .
+ex:NEP_Child a backlog:Story ; backlog:hasParentItem ex:NEP_Parent ; backlog:hasPriorityScore 4.0 ; backlog:hasEffort 2.0 .
 
