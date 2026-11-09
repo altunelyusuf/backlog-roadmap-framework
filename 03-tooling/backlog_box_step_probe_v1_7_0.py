@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step_probe v1.6.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3), and reads the obligations of a status from the register (Lineage 22, D3).
+"""backlog_box_step_probe v1.7.0 (Lineage 29, box 41: a time-box planned in advance is opened in place, once, with its base plan kept, and only with member stories; a time-box already open is still refused) -- v1.6.0 -- the step tool accepts a box recorded in order and refuses each fault made by hand (Lineage 21, D3), and reads the obligations of a status from the register (Lineage 22, D3).
 
 A tiny package inside a throwaway git repository (the package sits one folder down, as the real one does). The tool is run as it is run for real; each refusal is planted and the same box then passes once the fault is removed
 (a tool that refuses is not thereby correct). Planted: work before the box opened, a story not Proposed, a box opened twice, a close with no checkpoint, a name changed by hand, a published
@@ -110,6 +110,42 @@ KO = lambda lin: "fw:K a backlog:KickOff ; backlog:kicksOffLineage %s .\n" % lin
 expect("a kick-off of another lineage does not count as the lineage's own (Lineage 25)", not bs.has_own_kickoff(KO(b), a))
 expect("a kick-off of the lineage itself counts, in either spelling (Lineage 25)", bs.has_own_kickoff(KO(a), a) and bs.has_own_kickoff("fw:K a backlog:KickOff ; backlog:kicksOffLineage <http://example.org/backlog-framework-register#L_Mine> .\n", a))
 expect("a lineage whose name is the start of another's is not mistaken for it (Lineage 25)", not bs.has_own_kickoff(KO("fw:L_MineToo"), a))
+
+# v1.7.0: a time-box planned in advance (state Proposed, with its stories and its base plan) is opened in place
+publish()   # box 1 is finished and published: the files it left are the baseline of box 2
+_r = open(REG).read()
+_r += """
+fw:ST_AP_B a backlog:Story ; backlog:hasIdentifier "B" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 2.0 ;
+    backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
+fw:ST_AP_B backlog:memberOfContainer fw:It_AP_2 .
+fw:ST_AP_C a backlog:Story ; backlog:hasIdentifier "C" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ;
+    backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
+fw:AC_AP_B a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:It_AP_2 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-2" ; backlog:hasTitle "planned" ; backlog:hasSprintGoal "g" ; backlog:hasState backlog:Proposed ; backlog:hasCapacity 3.0 ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:PB_AP_2 a backlog:PlanBaseline ; backlog:baselineFor fw:It_AP_2 ; backlog:isCurrentBaseline true ; backlog:hasBaselineStart "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasBaselineEnd "2026-01-01T04:00:00Z"^^xsd:dateTime .
+"""
+open(REG, "w").write(_r)
+rc, out = run("open", "2", "t", "g", "C", "--capacity", "3")
+expect("a planned box is not opened with a story that is not a member of it", rc != 0 and "not a member of the planned box" in out)
+rc, out = run("open", "2", "t", "g", "B", "--capacity", "3")
+expect("a planned box is opened when the membership of its story is a line appended after the story, as in the register", rc == 0)
+fin2 = open(REG).read()
+expect("a planned box is opened in place: it moves to In progress with its start", rc == 0 and "planned in advance" in out and re.search(r"fw:It_AP_2 a backlog:Iteration ;.*?backlog:hasState backlog:InProgress ; backlog:iterationStart \"", fin2, re.S) is not None)
+expect("no second record of the planned box and no second base plan is written", fin2.count("fw:It_AP_2 a backlog:Iteration") == 1 and fin2.count("fw:PB_AP_2 a backlog:PlanBaseline") == 1 and "backlog:hasState backlog:Proposed ; backlog:hasCapacity 3.0 ; backlog:belongsToLineage fw:L_AdaptiveProof" not in fin2.split("fw:PB_AP_2")[0].split("fw:It_AP_2 a")[1].split("\n")[0])
+expect("its story is planned into it and now InProgress", "backlog:plannedInto fw:It_AP_2" in fin2 and re.search(r"fw:ST_AP_B a backlog:Story .*?backlog:hasState backlog:InProgress", fin2, re.S) is not None)
+rc, out = run("open", "2", "t", "g", "B", "--capacity", "3")
+expect("a box already open is still refused after a planned one was opened", rc != 0 and "already has records" in out)
+open(REG, "a").write("""
+fw:It_AP_3 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-3" ; backlog:hasTitle "started" ; backlog:hasState backlog:Proposed ; backlog:iterationStart "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasCapacity 3.0 ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:It_AP_4 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-4" ; backlog:hasTitle "other" ; backlog:hasState backlog:Proposed ; backlog:hasCapacity 3.0 ; backlog:belongsToLineage fw:L_Other .
+fw:It_AP_5 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-5" ; backlog:hasTitle "odd" ; backlog:hasCapacity 3.0 ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage fw:L_AdaptiveProof .
+""")
+rc, out = run("open", "3", "t", "g", "C", "--capacity", "3")
+expect("a planned box that already has a start is refused", rc != 0 and "already has records" in out)
+rc, out = run("open", "4", "t", "g", "C", "--capacity", "3")
+expect("a box planned in another lineage is refused", rc != 0 and "another lineage" in out)
+rc, out = run("open", "5", "t", "g", "C", "--capacity", "3")
+expect("a planned box laid out in a way the tool cannot open in place is refused, not corrupted", rc != 0 and "cannot open in place" in out)
 shutil.rmtree(work, ignore_errors=True)
 print("VERDICT: %s" % ("PASS -- %d expectations hold" % COUNT[0] if not bad else "FAIL -- " + "; ".join(bad)))
 sys.exit(1 if bad else 0)

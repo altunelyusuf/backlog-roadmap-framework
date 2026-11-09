@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step v1.10.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v1.12.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
 Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, each written down as a finding there:
   * a close composed in one pass          -> `close` refuses a box with no checkpoint recorded between its start and the close
@@ -10,6 +10,7 @@ Lineage 21, deliverable D3. The faults came from boxes 4 to 9 of Lineage 20, eac
   * a name changed by hand                -> every identifier is made here from the box number and the story key, and `close` refuses when one the opening wrote is gone
   * the effort read from the wrong place  -> effort is read from `hasEffort` of the stories, nowhere else
 
+v1.12.0 (Lineage 29, story OpenPlanned, box 41): `open` opens a time-box that was planned in advance. A time-box recorded in the state Proposed (with its stories and its base plan) is moved to In progress and given its start; no second record of the time-box and no second base plan is written; its stories must already be members of it. A time-box that is already open or closed, is planned in another lineage, or whose stories are not members of it is refused; membership may be in the story's block or in a line appended after it; a planned time-box with no base plan is given one ("already has records"). Before, the tool could only create a time-box, so every time-box planned in advance was refused.
 v1.11.0 (Lineage 29, story Grantor): the builder run that grants the verifier its access is recorded as acting for a person (prov:actedOnBehalfOf the owner), as the Owner ruled on 2026-11-04 (option 2: an agent may be the giver when it acts for a named person). The record states it; nothing verifies it.
 v1.10.0 (Lineage 28, G187): `open` records a base plan for the box (a PlanBaseline: the box's start, and an end predicted from the effort of its stories and the pace delivered in earlier boxes, with the buffer written beside it) and checks the objectives the box moves against it; `baseline N` records one for a box opened without. A finished box is measured against its baseline, not refused for differing from it.
 v1.9.0 (Lineage 27): the place-unchanged digest also covers the register, git-ignored files and the old path of a renamed file.
@@ -254,7 +255,7 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "1.11.0"
+TOOL_VERSION = "1.12.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
@@ -315,8 +316,20 @@ def cmd_baseline(reg, n, buffer=1.5):
 def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
     P, L = reg.P, reg.L
     ids = box_ids(P, n)
+    planned = None
     if reg.has(ids["it"]):
-        raise SystemExit("REFUSED: box %d already has records" % n)
+        stmt = re.search(r"^fw:%s a backlog:Iteration ;(?:(?!\nfw:|\n#).)*" % ids["it"], reg.s, re.M | re.S).group(0)
+        if "backlog:hasState backlog:Proposed" not in stmt or "backlog:iterationStart" in stmt:
+            raise SystemExit("REFUSED: box %d already has records" % n)
+        if ("backlog:belongsToLineage %s" % L) not in stmt:
+            raise SystemExit("REFUSED: box %d is planned in another lineage" % n)
+        if not re.search(r"backlog:hasState backlog:Proposed ; backlog:hasCapacity [\d.]+ ;", stmt):
+            raise SystemExit("REFUSED: box %d is planned with its state and capacity laid out in a way this tool cannot open in place" % n)
+        planned = True
+        for k in keys:   # a story is a member of a planned box in its own block or in a line appended after it
+            if not (re.search(r"backlog:memberOfContainer[^;]*\bfw:%s\b" % ids["it"], reg.story_block(k).group(0))
+                    or re.search(r"^fw:ST_%s_%s backlog:memberOfContainer[^.\n]*\bfw:%s\b" % (P, k, ids["it"]), reg.s, re.M)):
+                raise SystemExit("REFUSED: story %s is not a member of the planned box %d" % (k, n))
     subprocess.run(["git", "-C", root, "fetch", "-q", "origin"], capture_output=True)
     dirty = governed_changed(root, allow=allow)
     if dirty:
@@ -356,8 +369,12 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
     tp = tick()
     recs.append("fw:%s a backlog:DeploymentPlan ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:deploymentPlanForBox fw:%s ; backlog:plansDeploymentUnit fw:%s ; backlog:deploymentPlannedAt %s ." % (ids["dplan"], ids["it"], ids["rel"], dt(tp)))
     t0 = tick()
-    recs.append("fw:%s a backlog:Iteration ; backlog:hasIdentifier \"%s-BOX-%d\" ; backlog:hasTitle \"%s\" ;\n    backlog:hasSprintGoal \"%s\" ;\n"
-                "    backlog:hasState backlog:InProgress ; backlog:iterationStart %s ;\n    backlog:hasCapacity %s ; backlog:belongsToLineage %s%s ." % (ids["it"], P, n, esc(title), esc(goal), dt(t0), float(capacity), L, (" ;\n    rdfs:comment \"Disclosed at the opening: these governed files already differed from the published tree, so work on them began before the box was open: %s.\"@en" % ", ".join(allow)) if allow else ""))
+    if planned is None:
+        recs.append("fw:%s a backlog:Iteration ; backlog:hasIdentifier \"%s-BOX-%d\" ; backlog:hasTitle \"%s\" ;\n    backlog:hasSprintGoal \"%s\" ;\n"
+                    "    backlog:hasState backlog:InProgress ; backlog:iterationStart %s ;\n    backlog:hasCapacity %s ; backlog:belongsToLineage %s%s ." % (ids["it"], P, n, esc(title), esc(goal), dt(t0), float(capacity), L, (" ;\n    rdfs:comment \"Disclosed at the opening: these governed files already differed from the published tree, so work on them began before the box was open: %s.\"@en" % ", ".join(allow)) if allow else ""))
+    else:  # the planned time-box is opened in place: its state and its start, nothing else
+        pm = re.search(r"^fw:%s a backlog:Iteration ;(?:(?!\nfw:|\n#).)*?backlog:hasState backlog:Proposed ; backlog:hasCapacity" % ids["it"], reg.s, re.M | re.S)
+        reg.s = reg.s[:pm.start()] + pm.group(0).replace("backlog:hasState backlog:Proposed ; backlog:hasCapacity", "backlog:hasState backlog:InProgress ; backlog:iterationStart %s ;\n    backlog:hasCapacity" % dt(t0), 1) + reg.s[pm.end():]
     tpl = tick()
     recs.append("fw:%s a backlog:SprintPlanningCeremony ; backlog:hasWorkKind backlog:WorkKind_Planning ; backlog:ceremonyFor fw:%s ; backlog:heldAt %s ;\n    backlog:includesPlanningEvent %s ." % (ids["plan"], ids["it"], dt(tpl), " , ".join("fw:Plan_%s_%d_%s" % (P, n, k) for k in keys)))
     for k in keys:
@@ -387,6 +404,11 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2):
     reg.append("\n# ---- box %d of %s: opened %s by backlog_box_step ----\n" % (n, L, t0) + "\n".join(recs))
     reg.save()
     print("box %d opened at %s; stories %s now InProgress" % (n, t0, ", ".join(keys)))
+    if planned is not None:
+        if reg.has("PB_%s_%d" % (P, n)):
+            print("box %d was planned in advance: its base plan stands" % n)
+            return
+        print("box %d was planned in advance with no base plan: one is recorded now" % n)
     try:
         cmd_baseline(reg, n)
     except SystemExit as e:

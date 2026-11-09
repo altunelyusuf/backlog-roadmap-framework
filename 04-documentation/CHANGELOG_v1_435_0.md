@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.10 — 2026-11-09 (The time-box tool opens a time-box that was planned in advance)
+
+Box 41 of the Governance lineage: the story that lets the time-box tool open a planned time-box is done. The tool is version 1.12.0 with a probe of 32 expectations; the register holds the box, its review and the objective reading.
+
+**Unplanned work:** None: the story IK-S64 (box 41) moved to Done in this release and accounts for the change to the tool and its probe.
+
 ## v5.5.9 — 2026-11-09 (The Governance lineage takes up lineage duality first: a lineage's role, and the tool opens a planned time-box)
 
 A change request on the widened mission adds the role of a lineage (governance or production) with the rule set a governance lineage adopts, and a story so that the time-box tool opens a planned time-box. Records only.
