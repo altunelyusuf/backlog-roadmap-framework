@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""backlog_agent_monitor_probe v1.4.0 -- re-runnable proof of backlog_agent_monitor (G118). Plants a register with one of each finding and one clean item and checks the report.
+
+v1.4.0 (IPage handover box-tool-for-an-adopting-register, C8): added assertions that --lineage and --closing accept a full IRI
+(<http://...#Name>) or a prefixed name (x:Name), not only the bare local name they always accepted, resolving to the same
+local-name match either way. Every v1.3.0 assertion is kept unchanged."""
+import glob, os, re, subprocess, sys, tempfile
+HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
+sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)\.", p)[0]]
+if sys.argv[1:] == ["--deps"]:
+    print(os.path.join(HERE, "backlog_agent_monitor_v1_4_0.py")); print(os.path.abspath(__file__)); sys.exit(0)
+tool = os.path.join(HERE, "backlog_agent_monitor_v1_4_0.py")
+bad = []
+def expect(name, ok):
+    print(("PASS  " if ok else "FAIL  ") + name)
+    if not ok: bad.append(name)
+D = '^^<http://www.w3.org/2001/XMLSchema#dateTime>'
+TTL = f"""@prefix backlog: <http://example.org/backlog#> .
+@prefix x: <http://example.org/mon-probe#> .
+x:L a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_AgentAccountability ; backlog:humanApprovalLevel 3 .
+x:H a backlog:Executor_IndividualHuman .
+x:DefA a backlog:Executor_SingleAgent . x:DefB a backlog:Executor_SingleAgent .
+x:RA a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; backlog:instanceOf x:DefA ; backlog:instantiatedFromVersion "2.1.0" ; backlog:instantiatedAt "2026-10-15T06:00:00Z"{D} .
+x:RB a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; backlog:instanceOf x:DefB ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T06:00:00Z"{D} ; backlog:retiredAt "2026-10-15T08:00:00Z"{D} .
+x:RT a backlog:ExecutorInstance , backlog:Executor_AgentTeam ; backlog:instanceOf x:DefT ; backlog:instantiatedFromVersion "1.0.0" ; backlog:instantiatedAt "2026-10-15T06:00:00Z"{D} .
+x:DefT a backlog:Executor_AgentTeam .
+x:Stalled a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage x:L ; backlog:responsible x:RA .
+x:E1 a backlog:TransitionEvent ; backlog:transitionedItem x:Stalled ; backlog:transitionedAt "2026-10-13T06:00:00Z"{D} ; backlog:transitionedByExecutor x:RA .
+x:Fresh a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage x:L ; backlog:responsible x:RA .
+x:E2 a backlog:TransitionEvent ; backlog:transitionedItem x:Fresh ; backlog:transitionedAt "2026-10-15T08:30:00Z"{D} ; backlog:transitionedByExecutor x:RA .
+x:Anon a backlog:Task ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage x:L ; backlog:startedAt "2026-10-15T08:00:00Z"{D} .
+x:E3 a backlog:TransitionEvent ; backlog:transitionedItem x:Anon ; backlog:transitionedAt "2026-10-15T08:00:00Z"{D} .
+x:E4 a backlog:TransitionEvent ; backlog:transitionedItem x:Anon ; backlog:transitionedAt "2026-10-15T08:10:00Z"{D} ; backlog:transitionedByExecutor x:DefA .
+x:DoneBare a backlog:Task ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L ; backlog:responsible x:RA ; backlog:integrityLevel 1 .
+x:DoneHigh a backlog:Task ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L ; backlog:responsible x:RA ; backlog:overseenBy x:RB ; backlog:verifiedBy x:RB ; backlog:approvedBy x:RB ; backlog:integrityLevel 4 .
+x:DoneClean a backlog:Task ; backlog:hasState backlog:Done ; backlog:belongsToLineage x:L ; backlog:responsible x:RA ; backlog:overseenBy x:RB ; backlog:verifiedBy x:RB ; backlog:approvedBy x:H ; backlog:integrityLevel 4 .
+x:Audit a backlog:RecurringActivity ; backlog:recurrenceInterval "P7D"^^<http://www.w3.org/2001/XMLSchema#duration> .
+x:AuditPass1 a backlog:Task ; backlog:occurrenceOf x:Audit ; backlog:hasState backlog:Done ; backlog:startedAt "2026-10-01T08:00:00Z"{D} .
+x:Fresh2 a backlog:RecurringActivity ; backlog:recurrenceInterval "P1M"^^<http://www.w3.org/2001/XMLSchema#duration> .
+x:Fresh2Pass a backlog:Task ; backlog:occurrenceOf x:Fresh2 ; backlog:hasState backlog:Done ; backlog:startedAt "2026-10-10T08:00:00Z"{D} .
+x:Ended a backlog:RecurringActivity ; backlog:recurrenceInterval "P1D"^^<http://www.w3.org/2001/XMLSchema#duration> ; backlog:recurrenceEndedAt "2026-09-01T00:00:00Z"{D} .
+x:Never a backlog:RecurringActivity ; backlog:recurrenceInterval "P7D"^^<http://www.w3.org/2001/XMLSchema#duration> .
+x:KindOpen a backlog:ImpedimentKind ; backlog:clearableBy x:WayA .
+x:WayA a backlog:ClearingMethod ; <http://www.w3.org/2000/01/rdf-schema#label> "Way A" .
+x:ObsOpen a backlog:Impediment ; backlog:belongsToLineage x:L ; backlog:raisedAt "2026-10-15T07:30:00Z"{D} ; backlog:hasImpedimentKind x:KindOpen ; backlog:hasImpedimentOwner x:H .
+x:ObsNoKind a backlog:Impediment ; backlog:belongsToLineage x:L ; backlog:raisedAt "2026-10-15T08:30:00Z"{D} .
+x:ObsFuture a backlog:Impediment ; backlog:belongsToLineage x:L ; backlog:raisedAt "2026-10-15T10:00:00Z"{D} .
+x:ObsDone a backlog:Impediment ; backlog:belongsToLineage x:L ; backlog:raisedAt "2026-10-15T06:30:00Z"{D} ; backlog:resolvedAt "2026-10-15T07:00:00Z"{D} .
+x:Teamed a backlog:Task ; backlog:hasState backlog:Ready ; backlog:belongsToLineage x:L ; backlog:responsible x:RT .
+"""
+with tempfile.TemporaryDirectory() as d:
+    f = os.path.join(d, "r.ttl"); open(f, "w").write(TTL)
+    r = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z"], capture_output=True, text=True)
+    out = r.stdout
+    expect("the report ends with an escalation list and exits 1", "== Escalation:" in out and r.returncode == 1)
+    expect("runs: version, retired state and move counts are shown", "v2.1.0" in out and "retired" in out and "moves 2" in out)
+    expect("moves: one with no maker, one made by a definition", "with no recorded maker: 1    made by a definition, not a run: 1" in out)
+    expect("stalled: the item idle for two days is named, the fresh one is not", "Stalled" in out.split("-- 3.")[1].split("-- 4.")[0] and "Fresh" not in out.split("-- 3.")[1].split("-- 4.")[0])
+    expect("accountability: Done without overseer, verifier, approver is named", "DoneBare" in out and "lacks overseenBy, verifiedBy, approvedBy" in out)
+    expect("accountability: Done at the human level approved by an agent needs a person", "DoneHigh" in out and "needs a person to approve" in out)
+    expect("accountability: the item approved by a person is not asked about", "DoneClean" not in out)
+    expect("teams: the team run named for work has no assembly", "RT" in out.split("-- 5.")[1] and "no recorded assembly" in out)
+    rec = out.split("-- 6.")[1]
+    expect("recurring: an activity past its interval and one with no occurrence are named", "Audit" in rec and "Never" in rec and "overdue" in out)
+    expect("recurring: an activity inside its interval and an ended one are not named", "Fresh2" not in rec.split("== Escalation")[0] and "Ended" not in rec.split("== Escalation")[0])
+    ob = out.split("-- 7.")[1]
+    expect("obstacles: an open impediment is named with its age in hours (1.5 h), its kind and the way that clears it", "ObsOpen" in ob and "open 1.5 h" in ob and "can be cleared by: Way A" in ob)
+    expect("obstacles: an open impediment with no kind is named as such and a resolved one is not", "ObsNoKind" in ob and "no kind" in ob and "ObsDone" not in ob.split("== Escalation")[0])
+    expect("obstacles: every open one is in the escalation list", out.count("obstacle ") == 3 and "obstacle ObsOpen" in out.split("== Escalation")[1])
+    expect("obstacles: one raised after now is named with a clock warning, not a negative number of hours", "raised after now" in ob and not re.search(r"-\d+(\.\d+)? h", ob))
+    r3 = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z", "--closing", "Stalled,Anon"], capture_output=True, text=True)
+    st3 = r3.stdout.split("-- 3.")[1].split("-- 4.")[0].split("\n", 1)[1]
+    expect("closing: items named as being closed are not reported as stalled", "Stalled" not in st3 and "Anon" not in st3)
+    r2 = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z", "--lineage", "NoSuch"], capture_output=True, text=True)
+    expect("an unknown lineage is refused", r2.returncode == 2)
+    r4 = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z", "--lineage", "<http://example.org/mon-probe#L>"], capture_output=True, text=True)
+    expect("--lineage accepts a full IRI, not only the bare local name (C8)", r4.returncode == 1 and "lineage L" in r4.stdout)
+    r5 = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z", "--lineage", "x:L"], capture_output=True, text=True)
+    expect("--lineage accepts a prefixed name, not only the bare local name (C8)", r5.returncode == 1 and "lineage L" in r5.stdout)
+    r6 = subprocess.run([sys.executable, "-I", tool, f, "--now", "2026-10-15T09:00:00Z", "--closing", "<http://example.org/mon-probe#Stalled>,x:Anon"], capture_output=True, text=True)
+    st6 = r6.stdout.split("-- 3.")[1].split("-- 4.")[0].split("\n", 1)[1]
+    expect("--closing accepts a mix of full-IRI and prefixed names, not only bare local names (C8)", "Stalled" not in st6 and "Anon" not in st6)
+print("VERDICT   :", "PASS" if not bad else "FAIL"); sys.exit(1 if bad else 0)
