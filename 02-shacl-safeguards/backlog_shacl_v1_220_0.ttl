@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog/shacl/1.219.0> ;
-    owl:versionInfo "1.219.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.220.0> ;
+    owl:versionInfo "1.220.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -9646,22 +9646,24 @@ backlog:VerifierGrantorShape a sh:NodeShape ;
 backlog:PlannedDatesShape a sh:NodeShape ;
     sh:targetClass backlog:ObjectiveCheckpoint ;
     sh:severity sh:Violation ;
-    rdfs:label "A checkpoint date of a lineage that plans its dates rests on a complete forecast (G186)"@en ;
+    rdfs:label "A checkpoint date of a lineage that plans its dates rests on a complete forecast (G186), once its lineage could have one (G231)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "PD_UNPLANNED" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "PD_UNPLANNED: this checkpoint date of a lineage that plans its dates is backed by no complete forecast of its own: it names none or more than one, the forecast is shared with another checkpoint, lacks the time it was made, the date it expects, a non-empty assumption or a velocity above zero, was made after the date it expects, the date is earlier than the forecast expects, or the date is not typed as a dateTime." ;
+        sh:message "PD_UNPLANNED: this checkpoint date of a lineage that plans its dates is backed by no complete forecast of its own: it names none or more than one, the forecast is shared with another checkpoint, lacks the time it was made, the date it expects, a non-empty assumption or a velocity above zero, was made after the date it expects, the date is earlier than the forecast expects, or the date is not typed as a dateTime. Exempt while this lineage has fewer than two started boxes of its own (G231): a velocity needs a pair of boxes, and the lineage's own Objective stage is written before its Backlog stage opens any." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "xsd" ; sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?obj backlog:hasCheckpoint $this ; backlog:belongsToLineage ?lin .
             ?lin backlog:adoptsRuleSet backlog:RS_PlannedDates .
             OPTIONAL { $this backlog:checkpointDate ?cd }
             OPTIONAL { $this backlog:datePredictedBy ?f }
-            FILTER ( !BOUND(?cd) || !BOUND(?f) || datatype(?cd) != xsd:dateTime
+            FILTER ( ( !BOUND(?cd) || !BOUND(?f) || datatype(?cd) != xsd:dateTime
                 || NOT EXISTS { ?f backlog:forecastMadeAt ?fm ; backlog:forecastCompletion ?fc ; backlog:forecastAssumption ?fa ; backlog:forecastObservedVelocity ?fv .
                                 FILTER (?cd >= ?fc && ?fm <= ?fc && STRLEN(REPLACE(STR(?fa), "\\\\s", "")) > 0 && ?fv > 0) }
                 || EXISTS { ?other backlog:datePredictedBy ?f . FILTER (?other != $this) }
                 || EXISTS { $this backlog:datePredictedBy ?f2 . FILTER (?f2 != ?f) } )
+              && EXISTS { ?itA a backlog:Iteration ; backlog:belongsToLineage ?lin ; backlog:iterationStart ?sa .
+                          ?itB a backlog:Iteration ; backlog:belongsToLineage ?lin ; backlog:iterationStart ?sb . FILTER (?itA != ?itB) } )
         }""" ] .
 
 backlog:ForecastDiscussedShape a sh:NodeShape ;
@@ -9683,16 +9685,17 @@ backlog:ForecastDiscussedShape a sh:NodeShape ;
 backlog:BoxBasePlanShape a sh:NodeShape ;
     sh:targetClass backlog:Iteration ;
     sh:severity sh:Violation ;
-    rdfs:label "A box of a lineage that plans its dates carries a base plan (G187)"@en ;
+    rdfs:label "A box of a lineage that plans its dates carries a base plan (G187), once it is not that lineage's own first (G231)"@en ;
     backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
     backlog:fixtureCaseName "BP_NOBASEPLAN" ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "BP_NOBASEPLAN: this box of a lineage that plans its dates has no current base plan with a start and an end. Without one the box cannot be measured against what was planned, and the dates of the objectives it moves have nothing to follow." ;
+        sh:message "BP_NOBASEPLAN: this box of a lineage that plans its dates has no current base plan with a start and an end. Without one the box cannot be measured against what was planned, and the dates of the objectives it moves have nothing to follow. Exempt only for a lineage's own first box (G231): no earlier box of the same lineage exists to predict a pace from." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:belongsToLineage ?lin .
             ?lin backlog:adoptsRuleSet backlog:RS_PlannedDates .
             FILTER NOT EXISTS { ?b backlog:baselineFor $this ; backlog:isCurrentBaseline true ; backlog:hasBaselineStart ?bs ; backlog:hasBaselineEnd ?be }
+            FILTER EXISTS { ?other a backlog:Iteration ; backlog:belongsToLineage ?lin . FILTER (?other != $this) }
         }""" ] .
 
 backlog:ImpedimentKindShape a sh:NodeShape ;
@@ -9988,6 +9991,34 @@ backlog:LineageHasPackageShape a sh:NodeShape ;
             ?d a backlog:ScopeDeliverable ; backlog:belongsToLineage $this .
             FILTER NOT EXISTS { ?d backlog:productViewOf ?src }
             FILTER NOT EXISTS { ?only backlog:deliversDeliverable ?d }
+        }""" ] .
+
+#################################################################
+#  book-ontology handover, 2026-11-10 (HANDOVER_book-ontology_to_BRSF_
+#  scope-deliverables-need-lineage-membership-the-packages-rule-reads-later):
+#  a scope deliverable gets belongsToLineage of its own at the Scope
+#  stage itself, so PackageTracesShape (RNP_PKG_ORPHAN) and
+#  DeliverableDeliveredShape (RNP_DEL_UNDELIVERED) -- both of which
+#  read it later, at the Backlog stage -- need no triple added after
+#  the Scope stage has closed. Remedy 1 of the handover's three
+#  candidates (Owner direction, 2026-11-11): required here, not read
+#  transitively through the scope statement that requires the
+#  deliverable (remedy 2) and not excluded from the stage digest
+#  (remedy 3), because the property belongs to the deliverable from
+#  the moment it is written, not to the scope that names it.
+#################################################################
+
+backlog:DeliverableLineageMembershipShape a sh:NodeShape ;
+    sh:targetClass backlog:ScopeDeliverable ;
+    sh:severity sh:Violation ;
+    rdfs:label "A scope deliverable carries its own lineage membership from the Scope stage, so the Backlog stage's packages rule needs no later addition"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "SCOPE_DEL_NOLINEAGE" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "SCOPE_DEL_NOLINEAGE: this scope deliverable has no belongsToLineage of its own. PackageTracesShape and DeliverableDeliveredShape read a deliverable's lineage directly off the deliverable, not through the scope statement that requires it; written at the Scope stage, when the deliverable is first stated, the property costs nothing -- read for the first time at the Backlog stage, it means moving a Scope-stage digest that was already closed." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            FILTER NOT EXISTS { $this backlog:belongsToLineage ?lin }
         }""" ] .
 
 backlog:DeliverableDeliveredShape a sh:NodeShape ;

@@ -4408,10 +4408,15 @@ vsn:RunGrantor a backlog:ExecutorInstance , backlog:Executor_SingleAgent ; agsys
 vsn:GrantByAgent agsys:grantedBy vsn:RunBuilder .
 vsn:RunBuilder a backlog:ExecutorInstance , backlog:Executor_SingleAgent .
 
-# PD_UNPLANNED  a checkpoint date of a lineage that plans its dates, backed by no forecast (PlannedDatesShape).
+# PD_UNPLANNED  a checkpoint date of a lineage that plans its dates, backed by no forecast (PlannedDatesShape). Not this
+# lineage's bootstrap (G231): vsn:ItPlanEarlier gives it a second started box, so a pace is in principle predictable and
+# the checkpoint's own obligation stands.
 vsn:LPlan a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_PlannedDates ; backlog:humanApprovalLevel 3 .
 vsn:ObjPlan a backlog:Objective ; backlog:belongsToLineage vsn:LPlan ; backlog:hasCheckpoint vsn:CpPlan .
 vsn:CpPlan a backlog:ObjectiveCheckpoint ; backlog:checkpointDate "2026-11-04T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+vsn:ItPlanEarlier a backlog:Iteration ; backlog:hasIdentifier "IT-PLAN-EARLIER" ; backlog:belongsToLineage vsn:LPlan ; backlog:iterationStart "2026-11-01T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+vsn:_ItPlanEarlierMember backlog:memberOfContainer vsn:ItPlanEarlier .
+vsn:PBPlanEarlier a backlog:PlanBaseline ; backlog:baselineFor vsn:ItPlanEarlier ; backlog:isCurrentBaseline true ; backlog:baselinedAt "2026-11-01T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasBaselineStart "2026-11-01T09:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; backlog:hasBaselineEnd "2026-11-01T17:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 
 # FD_UNDISCUSSED  a forecast behind a checkpoint of a lineage that records its forecast discussions, with no discussion record (ForecastDiscussedShape).
 vsn:LDisc a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ForecastDiscussed ; backlog:humanApprovalLevel 3 .
@@ -4512,6 +4517,9 @@ ex:MA_DROPS_OLD a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M ; bac
 ex:MA_WIDENS a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M3 ; backlog:amendedMissionStatement "A can be named. B can be cleared." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
 ex:MA_FIRST a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlog:amendedMissionStatement "A can be named. B can be cleared." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
 ex:MA_DROPS_EARLIER a backlog:MissionAmendment ; backlog:amendsMission ex:MA_M2 ; backlog:amendedMissionStatement "A can be named. C is governed, and much more is said here." ; backlog:amendmentReason "x" ; backlog:amendmentRuling ex:MA_R ; backlog:amendedBy backlog:Owner .
+
+# SCOPE_DEL_NOLINEAGE: a scope deliverable with no belongsToLineage of its own (DeliverableLineageMembershipShape).
+ex:SDNL_Del a backlog:ScopeDeliverable ; backlog:hasDeliverableText "No lineage of its own." .
 
 # G219 (RS_PackagesRequired): a lineage at Backlogged with no package (RNP_LINEAGE_NOPKG), a deliverable no package delivers (RNP_DEL_UNDELIVERED), a roadmap naming no package (RNP_ROADMAP_NOPKG), a package delivering nothing (RNP_PKG_ORPHAN), an item planned into an iteration no package targets (RNP_SPRINT_NOPKG).
 ex:RNP_L a backlog:Lineage ; backlog:lineageOrdinal 93 ; backlog:lineageArchived false ; backlog:adoptsRuleSet backlog:RS_PackagesRequired ; backlog:hasLineageStatus backlog:LS_InProgress .

@@ -210,3 +210,6 @@ ex:Lin_PG backlog:hasLineageStatus backlog:LS_InProgress .
 <http://example.org/pg#S2> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/pg#S3> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/pg#T_S2> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+
+# a scope deliverable carries its own lineage from the Scope stage (G232, SCOPE_DEL_NOLINEAGE)
+ex:CDel backlog:belongsToLineage ex:Lin_PG .

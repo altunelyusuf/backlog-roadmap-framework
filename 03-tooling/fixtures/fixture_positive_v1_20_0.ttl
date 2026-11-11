@@ -941,7 +941,7 @@ ex:Goal_Retention backlog:derivesFromScope ex:Scope_Launch .
 
 ex:Obj_SelfService backlog:metricMovableBy ex:Project , ex:US001 , ex:US002 .
 
-ex:Del_Scope_Launch a backlog:ScopeDeliverable ;
+ex:Del_Scope_Launch a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:Lin1 ;
     backlog:hasDeliverableText "A practitioner locked out of their account regains access without contacting support." .
 ex:Scope_Launch backlog:requiresDeliverable ex:Del_Scope_Launch .
 ex:EP001 backlog:satisfiesDeliverable ex:Del_Scope_Launch .
@@ -950,7 +950,7 @@ ex:EP001 backlog:satisfiesDeliverable ex:Del_Scope_Launch .
 # restated as intent — SingletonDeliverableShape rejects it. A real
 # boundary names more than it has reached: the second deliverable
 # here is unsatisfied, which is the normal healthy state.
-ex:Del2_Scope_Launch a backlog:ScopeDeliverable ;
+ex:Del2_Scope_Launch a backlog:ScopeDeliverable ; backlog:belongsToLineage ex:Lin1 ;
     backlog:hasDeliverableText "Every recovery leaves an audit record." .
 ex:Scope_Launch backlog:requiresDeliverable ex:Del2_Scope_Launch .
 
@@ -1088,6 +1088,7 @@ ex:CMission a backlog:Mission ;
     backlog:missionFor ex:Backlog ; backlog:hasMissionOrigin backlog:IOrigin_OwnerStated ;
     backlog:hasMissionOutcome backlog:Out_InFlight ; backlog:decidedBy backlog:Owner .
 ex:CDel a backlog:ScopeDeliverable ; backlog:hasDeliverableText "Fixture deliverable." ;
+    backlog:belongsToLineage ex:Lin1 ;
     backlog:derivesFromMissionClause "Fixture conformance-goal test mission." ;
     backlog:hasScopeLayer backlog:Layer_Product .
 ex:CScope a backlog:ScopeStatement ;
@@ -1422,7 +1423,7 @@ ex:Rul_DefExecOverride a backlog:GovernanceRuling ;
     backlog:overrideAppliesToWorkItem ex:T_ResetMail ;
     backlog:overridesCompetency backlog:Comp_Coding .
 
-# fixture_positive_v1_19_0 (shapes v1.157.0, owner follow-up closing the four Executor Taxonomy
+# fixture_positive_v1_20_0 (shapes v1.157.0, owner follow-up closing the four Executor Taxonomy
 # gaps, 2026-10-11): Rul_CompOverride and Rul_DefExecOverride above both gained
 # backlog:overridesCompetency, naming the exact gap each already covered -- proving the
 # per-competency override still PASSES when it names the right Competency, now that

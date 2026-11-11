@@ -1,11 +1,12 @@
 # Lineage pipeline — stages built in order, each consuming the last.
 #
-# The same pipeline with its Backlog stage output removed (ruling G101): every digest still reproduces and the chain is
-# a line, so the verifier passes it, and --require-complete refuses it. This is the Lineage_2 state at an adopting project.
+# Experiment A of the v1.85.0 investigation. Every digest reproduces
+# and the chain is a line. Shipped so the passing shape is on record
+# alongside the failing one.
 #
 @prefix backlog: <http://example.org/backlog#> .
 @prefix core: <http://example.org/core#> .
-@prefix ex: <http://example.org/pl#> .
+@prefix ex: <http://example.org/sdlc-obligations#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -102,12 +103,14 @@ ex:Out_Goal a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Goal ;
     backlog:hasStateDigest "3f8c4ef5ba7b3e2d41f0e83e3cdc2df7245edc5c7f4a91afc3f72dd71685eb76" ; backlog:consumesOutput ex:Out_Scope ; backlog:closedAtCommit "fixture-only-3" .
 ex:Out_Objective a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Objective ;
     backlog:hasStateDigest "708196fe4b6f59f34a9be5b756cdf2e9b2cae02618dc7014b01ad36bd84f0631" ; backlog:consumesOutput ex:Out_Goal ; backlog:closedAtCommit "fixture-only-4" .
+ex:Out_Backlog a backlog:StageOutput ; backlog:outputOfStage backlog:Stage_Backlog ;
+    backlog:hasStateDigest "38640a7cf7a6bbd2c5b3495329e9f8da3db2acc9409a23638dc5e83317c34358" ; backlog:consumesOutput ex:Out_Objective ; backlog:closedAtCommit "fixture-only-5" .
 
 ex:D1 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
 ex:D2 backlog:derivesFromMissionClause "practitioners recover unaided" .
 
-<http://example.org/pl#P> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+
 # Conformance-goal pattern (G42/AdoptionConformanceGoalShape), self-contained,
 # using this package's own already-proven Goal_BRSFConformance/Obj_BRSFConformanceHeld
 # structure as the exact template rather than re-deriving requirements by trial.
@@ -222,9 +225,37 @@ ex:Session_20260907 a backlog:RegisterSession ;
 # historical record they are, disclosed in the v1.201.0 changelog.
 # v1.2.0 (2026-09-09): lineage status stated (TBox v1.89.0, LineageStatusShape); derived from the fixture's own outputs and item states.
 ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .
-# v1.3.0 (2026-09-10): status corrected from LS_InProgress to LS_Backlogged -- every item here is
-# Proposed, and InProgressNeedsStartedWorkShape now refuses a claim of work under way with no started work.
-# v1.4.0 (2026-09-10): status corrected LS_Backlogged -> LS_Opened, derived from this fixture's own stage
+
+#################################################################
+#  fixture_sdlc_obligations v1.0.0 -- POSITIVE (2026-09-09). The
+#  conformant pipeline lineage, now PRODUCING what each stage owes
+#  under the standing obligations (backlog_abox v1.4.0):
+#    Scope     -> DomainEntity + Blueprint      (already present: D1, D2 are deliverables; E_PL, BP_PL added)
+#    Goal      -> Specification with a step, and TestScenarios of the nominal and rejection kinds
+#    Objective -> ModelArtifact of Kind_ActivityDiagram and of Kind_SequenceDiagram
+#    Backlog   -> ModelArtifact of Kind_ClassDiagram, and an AcceptanceCriterion
+#  Every artifact belongsToLineage Lin_PL, so StageOutputOwesShape finds it.
+#  Expected: 0 violations, no waiver advisory.
+#################################################################
+ex:E_PL a backlog:DomainEntity ; rdfs:label "Recovery plan"@en ; backlog:belongsToLineage ex:Lin_PL .
+ex:EP backlog:coversEntity ex:E_PL ; backlog:coversStage backlog:Stage_ActiveUse .
+ex:GapE1 a backlog:BlueprintGap ; backlog:gapForEntity ex:E_PL ; backlog:gapForStage backlog:Stage_Creation ; backlog:hasGapReason "Creation is out of this fixture's scope." ; backlog:belongsToLineage ex:Lin_PL .
+ex:GapE2 a backlog:BlueprintGap ; backlog:gapForEntity ex:E_PL ; backlog:gapForStage backlog:Stage_SuspensionException ; backlog:hasGapReason "No suspension path in this fixture." ; backlog:belongsToLineage ex:Lin_PL .
+ex:GapE3 a backlog:BlueprintGap ; backlog:gapForEntity ex:E_PL ; backlog:gapForStage backlog:Stage_Termination ; backlog:hasGapReason "No termination path in this fixture." ; backlog:belongsToLineage ex:Lin_PL .
+ex:BP_PL a backlog:Blueprint ; backlog:blueprintFor ex:BL ; backlog:belongsToLineage ex:Lin_PL .
+ex:Spec_PL a backlog:Specification ; backlog:hasInteractionStep ex:Step_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:Step_PL a backlog:InteractionStep ; backlog:hasStepActor backlog:Builder ; backlog:hasStepOrdinal 1 ; backlog:hasStepAction "The practitioner opens the recovery plan and marks the day complete." .
+ex:AC_PL a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a recovery plan with an incomplete day, when the practitioner marks that day complete, then the plan advances to the next day." ; backlog:belongsToLineage ex:Lin_PL .
+ex:Scen_PL_Nom a backlog:TestScenario ; backlog:scenarioOf ex:AC_PL ; backlog:scenarioKind backlog:Scen_Nominal ; backlog:belongsToLineage ex:Lin_PL .
+ex:Scen_PL_Rej a backlog:TestScenario ; backlog:scenarioOf ex:AC_PL ; backlog:scenarioKind backlog:Scen_Rejection ; backlog:belongsToLineage ex:Lin_PL .
+ex:MA_PL_Act a backlog:ModelArtifact ; backlog:hasModelKind backlog:Kind_ActivityDiagram ; backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:MA_PL_Seq a backlog:ModelArtifact ; backlog:hasModelKind backlog:Kind_SequenceDiagram ; backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:MA_PL_Cls a backlog:ModelArtifact ; backlog:hasModelKind backlog:Kind_ClassDiagram ; backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:BP_PL backlog:hasDomainEntity ex:E_PL .
+
+ex:Lin_PL backlog:adoptsObligationSet backlog:OS_SDLC_v1 ; backlog:adoptionRecordedAtOpen true .
+<http://example.org/sdlc-obligations#> backlog:hasExpectedPolarity backlog:Polarity_Positive .
+# v1.1.0 (2026-09-10): status corrected LS_InProgress -> LS_Opened, derived from this fixture's own stage
 # outputs and item states. The claim was unsupported by the data it sits in; InProgressNeedsStartedWorkShape
 # and LineageStatusShape now refuse such a claim.
 
@@ -236,10 +267,33 @@ ex:Out_Goal backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Objective backlog:belongsToLineage ex:Lin_PL .
 ex:Out_Backlog backlog:belongsToLineage ex:Lin_PL .
 
+# v(next) 2026-09-11 -- the positive side of level, depth and concern. This lineage adopts obligation
+# set 2 at its opening and carries BOTH levels of the paired notations, the fully developed
+# specification, and the design-level model its declared concern owes. Every new rule stays silent.
+ex:Lin_PL backlog:adoptsObligationSet backlog:OS_SDLC_v2 ; backlog:adoptionRecordedAtOpen true .
+ex:MA_PL_Cls backlog:hasModelLevel backlog:Level_Analysis .
+ex:MA_PL_Act backlog:hasModelLevel backlog:Level_Analysis .
+ex:MA_PL_Seq backlog:hasModelLevel backlog:Level_Analysis .
+ex:MA_PL_DesignCls a backlog:ModelArtifact ; rdfs:label "design class model"@en ;
+    backlog:hasModelKind backlog:Kind_ClassDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:MA_PL_DesignSeq a backlog:ModelArtifact ; rdfs:label "object sequence model"@en ;
+    backlog:hasModelKind backlog:Kind_SequenceDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:MA_PL_Comp a backlog:ModelArtifact ; rdfs:label "component view"@en ;
+    backlog:hasModelKind backlog:Kind_ComponentDiagram ; backlog:hasModelLevel backlog:Level_Design ;
+    backlog:describesItem ex:S_PL ; backlog:belongsToLineage ex:Lin_PL .
+ex:Spec_PL backlog:hasSpecificationDepth backlog:Depth_FullyDeveloped .
+
 # auto-fix (v1.123.0 Executor work): mandatory backlog:responsible for 2 pre-existing in-scope WorkItem(s); a single shared default Executor, since an individual responsible is always permitted whether the item is atomic or complex.
 # relabelled (v1.380.0, owner-directed "set yourself as the default executor"): the same IRI, now typed Executor_SingleAgent and carrying its own label/definition -- Claude, the AI agent, consolidated in place per L-119 rather than duplicated as a second individual.
 <http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/backlog#Executor_SingleAgent> .
 <http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2000/01/rdf-schema#label> "Claude \u2014 default AI-agent executor"@en .
 <http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2004/02/skos/core#definition> "The one default Executor this framework currently attributes AI-agent-performed work in this package to: Claude, the AI agent carrying out BRSF's own ontology-engineering sessions, typed backlog:Executor_SingleAgent because it is one non-human executing party with no standing team membership and no human identity behind it. First planted, untyped beyond a bare Executor_IndividualHuman triple, as a throwaway stand-in when backlog:responsible became mandatory and sixteen pre-existing fixture/reference files each needed one filled in; relabelled here in place, same IRI, per L-119 (consolidate rather than duplicate) once the owner ruled the framework should name its own executing party honestly rather than misclassify an AI agent as a human."@en .
-<http://example.org/pl#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
-<http://example.org/pl#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/sdlc-obligations#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+<http://example.org/sdlc-obligations#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+
+# a scope deliverable carries its own lineage from the Scope stage (G232, SCOPE_DEL_NOLINEAGE)
+ex:CDel backlog:belongsToLineage ex:Lin_PL .
+ex:D1 backlog:belongsToLineage ex:Lin_PL .
+ex:D2 backlog:belongsToLineage ex:Lin_PL .

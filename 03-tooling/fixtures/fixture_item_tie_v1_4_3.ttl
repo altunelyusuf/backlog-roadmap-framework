@@ -259,3 +259,6 @@ ex:Lin_T2 backlog:hasLineageStatus backlog:LS_Opened .
 <http://example.org/t2#US004> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/t2#US005> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/t2#US006> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+
+# a scope deliverable carries its own lineage from the Scope stage (G232, SCOPE_DEL_NOLINEAGE)
+ex:CDel backlog:belongsToLineage ex:Lin_T2 .

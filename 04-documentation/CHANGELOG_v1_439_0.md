@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.14 — 2026-11-11 (PATCH: the box tool and the date plan read effort and the register root from the register; a lineage's first box is not owed a forecast; a scope deliverable carries its lineage)
+
+Answers three handovers from the book-ontology session (2026-11-10). (1) backlog_box_step 3.0.0 and backlog_date_plan 1.2.0 read a story's effort from hasEffort or, when absent, from hasEffortEstimate of its cost estimate, and find the register's own root by its marker; box step also works on an adopting register's own namespace (IPage handover). (2) G231: a lineage's own first box and the checkpoints written before a second box has started are exempt from the base-plan and forecast rules (PlannedDatesShape, BoxBasePlanShape); the exemption ends when a second box of that lineage starts. (3) G232 and DeliverableLineageMembershipShape (SCOPE_DEL_NOLINEAGE): a scope deliverable carries belongsToLineage of its own from the Scope stage. Shapes 1.220.0; fixtures gain the cases that prove each.
+
+**Unplanned work:** Owner rulings G231 and G232 of 2026-11-11, recorded in this release's register: the Owner directed that these handover findings be finished and committed, confirmed the remedy for the first-box forecast gap (defer to the first box's opening) and chose to require lineage membership of a scope deliverable at the Scope stage.
+
 ## v5.5.13 — 2026-11-09 (An epic carries an estimated score that its stories' scores replace; packages are asked for once development is ongoing)
 
 The Owner ruled on 2026-11-09 (G229): before grooming an epic carries an estimated score, and after each grooming step its score is collected from its stories' scores, the old score staying visible; and packages can be made before the roadmap, inside the backlog or after it, as grooming goes on. A score can now name the score it replaces, a roll-up method is added and checked against the stories' scores, the package rules bind from the In progress status instead of the Backlog stage and no longer ask for a package for an ungroomed item, and the package-count tool no longer counts epics or ungroomed items as unplaced.
