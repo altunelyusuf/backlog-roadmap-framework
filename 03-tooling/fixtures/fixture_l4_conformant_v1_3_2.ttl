@@ -535,3 +535,8 @@ ex:Lin1 backlog:hasLineageStatus backlog:LS_InProgress .
 <http://example.org/l4#US_Big> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/l4#US_Split1> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/l4#US_Split2> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+
+# a scope deliverable carries its own lineage from the Scope stage (G232, SCOPE_DEL_NOLINEAGE)
+ex:CDel backlog:belongsToLineage <http://example.org/l4#Lin1> .
+ex:Del2_Scope backlog:belongsToLineage <http://example.org/l4#Lin1> .
+ex:Del_Scope backlog:belongsToLineage <http://example.org/l4#Lin1> .

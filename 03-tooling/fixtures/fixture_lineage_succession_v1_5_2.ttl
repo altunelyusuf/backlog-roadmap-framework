@@ -389,3 +389,9 @@ ex:GContain backlog:belongsToLineage ex:Lin_PL ; backlog:hasGoalOrigin backlog:G
 <http://example.org/fixture-succession#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/fixture-succession#S_Carried> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/fixture-succession#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+
+# a scope deliverable carries its own lineage from the Scope stage (G232, SCOPE_DEL_NOLINEAGE)
+ex:CDel backlog:belongsToLineage ex:Lin_PL .
+ex:D1 backlog:belongsToLineage ex:Lin_PL .
+ex:D2 backlog:belongsToLineage ex:Lin_PL .
+ex:D_Old backlog:belongsToLineage ex:Lin_Old .

@@ -276,3 +276,8 @@ ex:Lin_PL backlog:hasLineageStatus backlog:LS_Backlogged .
 <http://example.org/fixture-autofix#DefaultExecutor> <http://www.w3.org/2004/02/skos/core#definition> "The one default Executor this framework currently attributes AI-agent-performed work in this package to: Claude, the AI agent carrying out BRSF's own ontology-engineering sessions, typed backlog:Executor_SingleAgent because it is one non-human executing party with no standing team membership and no human identity behind it. First planted, untyped beyond a bare Executor_IndividualHuman triple, as a throwaway stand-in when backlog:responsible became mandatory and sixteen pre-existing fixture/reference files each needed one filled in; relabelled here in place, same IRI, per L-119 (consolidate rather than duplicate) once the owner ruled the framework should name its own executing party honestly rather than misclassify an AI agent as a human."@en .
 <http://example.org/lineage-restart#EP> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/lineage-restart#S_PL> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+
+# a scope deliverable carries its own lineage from the Scope stage (G232, SCOPE_DEL_NOLINEAGE)
+ex:CDel backlog:belongsToLineage ex:Lin_PL .
+ex:D1 backlog:belongsToLineage ex:Lin_PL .
+ex:D2 backlog:belongsToLineage ex:Lin_PL .

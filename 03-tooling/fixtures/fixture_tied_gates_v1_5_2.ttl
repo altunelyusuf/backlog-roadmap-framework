@@ -247,3 +247,6 @@ ex:Lin_Tied backlog:hasLineageStatus backlog:LS_Opened .
 <http://example.org/fixture-tied#InBeta> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/fixture-tied#InZulu> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
 <http://example.org/fixture-tied#Outside> <http://example.org/backlog#responsible> <http://example.org/fixture-autofix#DefaultExecutor> .
+
+# a scope deliverable carries its own lineage from the Scope stage (G232, SCOPE_DEL_NOLINEAGE)
+ex:CDel backlog:belongsToLineage ex:Lin_Tied .
