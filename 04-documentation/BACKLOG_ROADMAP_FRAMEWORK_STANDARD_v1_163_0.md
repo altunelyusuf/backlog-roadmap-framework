@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.162.0
+# Backlog & Roadmap Semantic Framework — Standard v1.163.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -185,6 +185,7 @@ delivered in full and deliver nothing.
 | `Opportunity` | Identified upside not yet committed as work, converted into an item explicitly when someone decides to pursue it |
 | `FailureMode` / `SuccessMode` | A named, reusable pattern by which real progress can go wrong or be confirmed, checkable structurally rather than asserted — a `RetrospectiveFinding` may be typed against one via `hasFailureMode`/`hasSuccessMode`. Membership is earned by a real check that can detect the pattern from data, not by a name alone |
 | `ScopeStatement` / `ScopeExclusion` | The declared boundary and the owner-decided things deliberately outside it, each with a rationale |
+| `CriterionBound` | The end of a Definition-of-Done criterion of the kind "every case a reviewer could raise": the cases kept (`keepsCase`), the test that proves every part of the check (`provesEveryPartBy`) and the iteration to which later findings go (`laterFindingsGoTo`); a criterion of that kind carries one (`hasCriterionBound`, G233) |
 | `RefinementEvent` | The dated act that makes an item Ready — readiness is done to an item, not drifted into |
 | `EstimationBasisKind` — `hasBasisKind`, `basisObservation`, `analogousTo` | Whether an estimate or score was **Measured**, **Analogous** or **Judged**. `hasCostBasis` records *what* a figure rested on; this records whether that basis was **run**. A Measured claim must name the `MetricObservation` that produced it, an Analogous one the completed item it was drawn from. Judgement is legitimate and is the majority case — what is refused is a judgement being indistinguishable from a measurement. An advisory fires where measuring pays best: a judged estimate on an item inside a launch gate |
 | `CostEstimate` | Unit-neutral estimate carrying its basis and confidence; a naked number fails |
@@ -2654,3 +2655,4 @@ The Owner proposed on 2026-11-09 that an epic is valued before grooming and that
 - The Owner also ruled that packages are subject of planning: they can be made before the roadmap, inside the backlog when the work is already groomed (a heritage of an earlier lineage), or after the roadmap, because grooming goes on. The package rules therefore bind a lineage from the status In progress, not from the Backlog stage, and an item that is still Proposed is not asked for a package. The package-count tool follows (version 1.2.0).
 
 Not enforced: that a package holds only groomed items, that a roll-up is made at a grooming step (it is compared with the stories when validated), and that the estimate before grooming is labelled. A partly groomed epic is rolled up from its scored stories only.
+- A Definition-of-Done criterion that asks for every case a reviewer could raise has no end, so it must carry a `CriterionBound` with its three parts (`BoundedCriterionShape`, `CriterionBoundShape`, G233). A remedy of a retrospective finding that was already carried out has a light record: `remedyCarriedOutIn` names the one iteration, which must be Done, and `remedyShownBy` the evidence (`RemedyCarriedOutShape`). The box tool (3.1.0) opens a story with typed tasks (`KEY:analysis+design+build+verification`; nine kinds, a bare key is one build task), and reads a time with no zone as UTC.

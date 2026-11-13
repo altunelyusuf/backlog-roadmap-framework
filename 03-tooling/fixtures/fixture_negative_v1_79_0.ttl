@@ -4646,3 +4646,18 @@ ex:NEP_Parent a backlog:Story ; backlog:hasPriorityScore ex:NEP_Score , 3.0 ; ba
 ex:NEP_Score a backlog:PriorityScore ; backlog:scoredByMethod backlog:Method_RollUp ; backlog:hasScoreValue 99.0 ; backlog:hasScoreRationale "x" .
 ex:NEP_Child a backlog:Story ; backlog:hasParentItem ex:NEP_Parent ; backlog:hasPriorityScore 4.0 ; backlog:hasEffort 2.0 .
 
+
+# BC_NoBound -- a criterion worded as every case a reviewer could raise, with no bound (BoundedCriterionShape, G233).
+ex:BC_NoBound a backlog:DoDCriterion ; rdfs:label "Every case a reviewer could raise is kept in the committed tests"@en ;
+    backlog:hasCheckQuery "run the committed tests" ; backlog:hasExpectedResult "all pass" ; backlog:hasCriterionStatus backlog:Holds .
+# BC_BoundEmpty -- a bound that keeps no case, shows nothing and names no iteration (CriterionBoundShape, G233).
+ex:BC_BoundEmpty a backlog:CriterionBound .
+# RC_BoxNotDone -- a finding whose remedy was carried out in an iteration still in progress (RemedyCarriedOutShape, G233).
+ex:RC_BoxNotDone a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:remedyCarriedOutIn ex:RC_OpenBox ; backlog:remedyShownBy ex:RC_Evidence .
+ex:RC_OpenBox a backlog:Iteration ; backlog:hasIdentifier "RC-OPEN" ; backlog:hasTitle "A box still open" ; backlog:hasState backlog:InProgress .
+ex:RC_Evidence a backlog:Evidence .
+# RC_NoEvidence -- a finding whose remedy was carried out in a closed iteration and shows no evidence (RemedyCarriedOutShape, G233).
+ex:RC_NoEvidence a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:remedyCarriedOutIn ex:RC_ClosedBox .
+ex:RC_ClosedBox a backlog:Iteration ; backlog:hasIdentifier "RC-CLOSED" ; backlog:hasTitle "A box closed" ; backlog:hasState backlog:Done .

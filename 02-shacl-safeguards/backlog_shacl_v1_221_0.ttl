@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.220.0> ;
-    owl:versionInfo "1.220.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.221.0> ;
+    owl:versionInfo "1.221.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.220.0> , <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -1559,12 +1559,16 @@ backlog:ScoreAccountabilityShape a sh:NodeShape ;
         }""" ] ;
     sh:sparql [ a sh:SPARQLConstraint ;
         sh:message "L3: this score predates the most recent completion in the register and was never re-run; a ranking is a snapshot of value per cost at one moment, not a committed order (BP-D11)." ;
-        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] , [ sh:prefix "xsd" ; sh:namespace "http://www.w3.org/2001/XMLSchema#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             ?item backlog:hasPriorityScore $this ; backlog:hasState ?st .
             FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
-            $this backlog:scoredAt ?sa .
-            ?other backlog:finishedAt ?f .
+            $this backlog:scoredAt ?sa0 .
+            ?other backlog:finishedAt ?f0 .
+            # course-management handover (2026-11-12): a time written without a zone is valid Turtle and true to the clock; it is read as UTC here, as in the tools,
+            # so that times with and without a zone compare, and neither raises a comparison error nor silently never fires.
+            BIND (IF(TZ(?sa0) = "", xsd:dateTime(CONCAT(STR(?sa0), "Z")), ?sa0) AS ?sa)
+            BIND (IF(TZ(?f0) = "", xsd:dateTime(CONCAT(STR(?f0), "Z")), ?f0) AS ?f)
             FILTER (?f > ?sa)
         }""" ] .
 
@@ -10345,4 +10349,60 @@ backlog:ScoreReplacedNotLiveShape a sh:NodeShape ;
             UNION { ?i backlog:hasPriorityScore $this . FILTER NOT EXISTS { ?i backlog:hasPriorityScore ?old } }
             UNION { ?old backlog:replacesScore $this }
             UNION { $this backlog:scoredAt ?t1 . ?old backlog:scoredAt ?t0 . FILTER ( ?t0 > ?t1 ) }
+        }""" ] .
+
+#################################################################
+#  Lineage 29, box 45 (G233, 2SISA delivery handover)
+#  A Definition of Done criterion that asks for every case a reviewer could raise has no natural end, so it must carry
+#  its bound; a finding whose remedy was carried out records the closed iteration and the evidence, and nothing more.
+#################################################################
+
+backlog:BoundedCriterionShape a sh:NodeShape ;
+    sh:targetClass backlog:DoDCriterion ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "BC_NoBound" ;
+    rdfs:label "L1: a criterion worded as every case a reviewer could raise states its bound"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this Definition of Done criterion asks for every case, spelling or form a reviewer could raise and states no bound. Such a criterion cannot be satisfied, because each fresh reviewer finds another case. Give it a criterion bound (hasCriterionBound): the cases raised so far kept as test scenarios (keepsCase), the evidence that every part of the check is held by a case (provesEveryPartBy), and the iteration that takes later cases as defect items (laterFindingsGoTo)." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            OPTIONAL { $this rdfs:label ?l } OPTIONAL { $this rdfs:comment ?c } OPTIONAL { $this backlog:hasCheckQuery ?q }
+            BIND (CONCAT(COALESCE(STR(?l), ""), " . ", COALESCE(STR(?c), ""), " . ", COALESCE(STR(?q), "")) AS ?txt)
+            FILTER REGEX(?txt, "(every|any|all|each|whatever|no)( possible| single| of the| the)* (case|spelling|form|variant|wording|way|input)s?[^.;]*(reviewer|raise)|(reviewer|raise)[^.;]*(every|any|all|each|whatever|no)( possible| single| of the| the)* (case|spelling|form|variant|wording|way|input)s?|(every|any|all|each) reviewer[- ]raised|no reviewer (can|could|will|may)", "i")
+            FILTER NOT EXISTS { $this backlog:hasCriterionBound ?b . ?b backlog:keepsCase ?k ; backlog:provesEveryPartBy ?e ; backlog:laterFindingsGoTo ?i }
+        }""" ] .
+
+backlog:CriterionBoundShape a sh:NodeShape ;
+    sh:targetClass backlog:CriterionBound ;
+    sh:severity sh:Violation ;
+    rdfs:label "L1: a criterion bound keeps cases, shows every part held, and names the iteration for later cases"@en ;
+    sh:property [ sh:path backlog:keepsCase ; sh:minCount 1 ;
+        sh:message "L1: a criterion bound keeps no case. A bound that keeps none says nothing about what the criterion has been held to." ] ;
+    sh:property [ sh:path backlog:provesEveryPartBy ; sh:minCount 1 ;
+        sh:message "L1: a criterion bound names no evidence that every part of the check is held by a case. A part held by no case is a part nobody has tested." ] ;
+    sh:property [ sh:path backlog:laterFindingsGoTo ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "L1: a criterion bound names no iteration for the cases found later. Without one, a later case reopens the criterion and the criterion has no end again." ] .
+
+backlog:RemedyCarriedOutShape a sh:NodeShape ;
+    sh:targetClass backlog:RetrospectiveFinding ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RC_BoxNotDone" ;
+    rdfs:label "L1: a finding whose remedy was carried out names a closed iteration and the evidence"@en ;
+    sh:property [ sh:path backlog:remedyCarriedOutIn ; sh:maxCount 1 ;
+        sh:message "L1: a finding names one iteration in which its remedy was carried out." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this finding says its remedy was carried out in an iteration that is not Done. A remedy is carried out when the box that did it is closed; until then it is open work for its own item." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:remedyCarriedOutIn ?it .
+            FILTER NOT EXISTS { ?it backlog:hasState backlog:Done }
+        }""" ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this finding says its remedy was carried out and names no evidence (remedyShownBy) that shows it. A remedy without evidence is a claim." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:remedyCarriedOutIn ?it .
+            FILTER NOT EXISTS { $this backlog:remedyShownBy ?e }
         }""" ] .

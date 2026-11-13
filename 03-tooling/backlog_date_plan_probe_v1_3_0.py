@@ -52,6 +52,10 @@ with tempfile.TemporaryDirectory() as d:
     rp = os.path.join(d, "r.ttl"); open(rp, "w").write(REG); em = os.path.join(d, "f.ttl")
     r = subprocess.run([sys.executable, "-I", TOOL, rp, "predict", "--lineage", "L", "--prefix", "T", "--now", "2026-11-02T00:00:00Z", "--buffer", "1.0", "--emit", em], capture_output=True, text=True)
     # 3.5 points still to do (S1 is Done) / 1.75 per hour = 2 hours -> 02:00 on the 2nd, earliest checkpoint the 3rd; the stated 2026-11-02T00:00 is earlier than the forecast
+    mixed = REG.replace('"2026-11-01T00:00:00Z"^^xsd:dateTime', '"2026-11-01T00:00:00"^^xsd:dateTime', 1).replace("backlog:hasEffort 2.0", 'backlog:hasEffort "2"^^xsd:decimal', 1)
+    rm = os.path.join(d, "m.ttl"); open(rm, "w").write(mixed)
+    rx = subprocess.run([sys.executable, "-I", TOOL, rm, "predict", "--lineage", "L", "--prefix", "T", "--now", "2026-11-02T00:00:00Z", "--buffer", "1.0"], capture_output=True, text=True)
+    expect("a register that mixes times with and without a zone, and writes an effort as a typed number, is predicted from without a traceback (a time without a zone is read as UTC)", "Traceback" not in rx.stderr and "1.75 delivered points per elapsed hour" in rx.stdout)
     expect("velocity is the median of the pairs of consecutive boxes (1.75 points per elapsed hour)", "1.75 delivered points per elapsed hour" in r.stdout)
     expect("the work still to do is the points of the movers that are not Done (3.5)", "3.5 points" in r.stdout)
     expect("the expected completion is now + points / velocity", "expected 2026-11-02 02:00Z" in r.stdout and "earliest checkpoint 2026-11-03" in r.stdout)

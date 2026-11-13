@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_date_plan v1.2.0 -- predicts the measure dates of a lineage from its scope, its work and the velocity observed in earlier boxes (G186).
+"""backlog_date_plan v1.3.0 -- predicts the measure dates of a lineage from its scope, its work and the velocity observed in earlier boxes (G186).
 
+v1.3.0 (course-management handover, box-step-tool-stops-on-typed-effort-and-on-mixed-time-zones, 2026-11-12): a time without a zone (`"2026-09-24T14:35:00"^^xsd:dateTime`, valid Turtle) and a time with one cannot be compared in Python, so the sort of the iterations' starts stopped with a TypeError. `dt` now reads a time without a zone as UTC, says so here, and returns an aware time in every case; nothing in the register is rewritten.
 v1.2.0 (book-ontology handover, box-step-tool-reads-only-the-framework-own-register-namespace, 2026-11-10): effort was read only from
 hasEffort, which a register built on the validator's own cost-estimate vocabulary (hasEffortEstimate on a backlog:CostEstimate, reached by
 hasCostEstimate) does not carry; it is now read through that fallback too (effort_of), wherever this tool reads a story's or an objective's
@@ -22,7 +23,8 @@ def U(x): return URIRef(B + x)
 def local(x): return str(x).rsplit("#", 1)[-1]
 def dt(v):
     d = v.toPython() if v is not None else None
-    return d if isinstance(d, datetime.datetime) else None
+    if not isinstance(d, datetime.datetime): return None
+    return d if d.tzinfo is not None else d.replace(tzinfo=datetime.timezone.utc)   # v1.3.0: no zone means UTC, so times with and without one compare
 
 def effort_of(g, subject):
     """A story's (or other work item's) effort: hasEffort when present, otherwise hasEffortEstimate of the

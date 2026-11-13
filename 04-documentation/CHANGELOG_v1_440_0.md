@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.15 — 2026-11-13 (PATCH: the box tool reads typed effort and every task kind; unzoned times are read as UTC; a criterion needs a bound; a remedy already carried out has a light record)
+
+Answers four 2SISA delivery-handover gaps and two course-management stops (2026-11-12). (1) backlog_box_step 3.1.0: nine typed task kinds per story (analysis, requirements, architecture, design, build, integration, verification, validation, correction; a bare key stays one build task), a refused step prints all its violations, typed effort values are read and an unreadable value is refused with a message, the close checks every task kind. (2) backlog_date_plan 1.3.0 and the stale-score rule read a time without a zone as UTC. (3) G233: a done-definition criterion of the kind 'every case a reviewer could raise' needs a bound (BoundedCriterionShape, CriterionBoundShape), and a remedy already carried out has a light record (RemedyCarriedOutShape). T-box 1.179.0, shapes 1.221.0; fixtures and probes prove each. Box 45 of package 14, reviewed independently.
+
+**Unplanned work:** unplanned: the Owner's urgent instruction of 2026-11-12 19:11 to unblock the lineages that stopped on typed effort and mixed time zones, and his direction of 2026-11-12 17:13 that a story is processed into typed tasks
+
 ## v5.5.14 — 2026-11-11 (PATCH: the box tool and the date plan read effort and the register root from the register; a lineage's first box is not owed a forecast; a scope deliverable carries its lineage)
 
 Answers three handovers from the book-ontology session (2026-11-10). (1) backlog_box_step 3.0.0 and backlog_date_plan 1.2.0 read a story's effort from hasEffort or, when absent, from hasEffortEstimate of its cost estimate, and find the register's own root by its marker; box step also works on an adopting register's own namespace (IPage handover). (2) G231: a lineage's own first box and the checkpoints written before a second box has started are exempt from the base-plan and forecast rules (PlannedDatesShape, BoxBasePlanShape); the exemption ends when a second box of that lineage starts. (3) G232 and DeliverableLineageMembershipShape (SCOPE_DEL_NOLINEAGE): a scope deliverable carries belongsToLineage of its own from the Scope stage. Shapes 1.220.0; fixtures gain the cases that prove each.

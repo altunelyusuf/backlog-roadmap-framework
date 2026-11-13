@@ -1430,3 +1430,13 @@ ex:Rul_DefExecOverride a backlog:GovernanceRuling ;
 # CompetencyMatchShape requires that match rather than accepting any ruling on the item. ex:FR_Good
 # (above, in the FailureRecordTemporalShape block) changed hasOutcome from a free-text string to
 # backlog:Outcome_Failure, the closed value FailureRecord's own definition now names.
+
+# G233 (box 45): the accepted forms of the two new shapes. A criterion worded as every case a reviewer could raise that carries its bound,
+# and a finding whose remedy was carried out in a closed iteration and shows the evidence.
+ex:BC_Ok a backlog:DoDCriterion ; rdfs:label "Every case a reviewer could raise is kept in the committed tests"@en ;
+    backlog:hasCheckQuery "run the committed tests" ; backlog:hasExpectedResult "all pass" ; backlog:hasCriterionStatus backlog:Holds ;
+    backlog:hasCriterionBound ex:BC_OkBound .
+ex:BC_OkBound a backlog:CriterionBound ; backlog:keepsCase ex:BC_OkCase ; backlog:provesEveryPartBy ex:US001_Test ; backlog:laterFindingsGoTo ex:Sprint12 .
+ex:BC_OkCase a backlog:TestScenario ; backlog:scenarioOf ex:BC_Ok ; backlog:scenarioKind backlog:Kind_Nominal .
+ex:RC_Ok a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:remedyCarriedOutIn ex:Sprint11 ; backlog:remedyShownBy ex:US001_Test .

@@ -728,3 +728,10 @@ class	LineageRole	http://example.org/backlog#LineageRole	ClassKind_ValueDomain	c
 property	hasLineageRole	http://example.org/backlog#hasLineageRole	RelationshipCategory_Characterization	the range is a closed value set: the thing has a level, status or kind by taking one value of a set of permitted values	G227
 property	governsLineage	http://example.org/backlog#governsLineage	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G227
 property	replacesScore	http://example.org/backlog#replacesScore	RelationshipCategory_Versioning	one item replaces another and the replaced one is kept	G229
+class	CriterionBound	http://example.org/backlog#CriterionBound	ClassKind_Specification	the definition calls it a statement of a criterion's end, the cases kept and the test that holds them	G233
+property	hasCriterionBound	http://example.org/backlog#hasCriterionBound	RelationshipCategory_Requirement	the bound is what an open-ended criterion requires of itself	G233
+property	keepsCase	http://example.org/backlog#keepsCase	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G233
+property	provesEveryPartBy	http://example.org/backlog#provesEveryPartBy	RelationshipCategory_Assessment	the evidence assesses whether every part of the check is held by a case	G233
+property	laterFindingsGoTo	http://example.org/backlog#laterFindingsGoTo	RelationshipCategory_OrderingSequence	the cases found later go to a named iteration, after the bound was set	G233
+property	remedyCarriedOutIn	http://example.org/backlog#remedyCarriedOutIn	RelationshipCategory_Association	related, and the definition names no finer relation than the link itself	G233
+property	remedyShownBy	http://example.org/backlog#remedyShownBy	RelationshipCategory_Assessment	the evidence assesses whether the remedy was carried out	G233

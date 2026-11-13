@@ -19,9 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.178.0> ;
-    owl:versionInfo "1.178.0" ;
-    owl:priorVersion <http://example.org/backlog/1.177.0> , <http://example.org/backlog/1.176.0> , <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
+    owl:versionIRI <http://example.org/backlog/1.179.0> ;
+    owl:versionInfo "1.179.0" ;
+    owl:priorVersion <http://example.org/backlog/1.178.0> , <http://example.org/backlog/1.177.0> , <http://example.org/backlog/1.176.0> , <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
     owl:priorVersion <http://example.org/backlog/1.115.0> ;
@@ -9058,3 +9058,64 @@ backlog:replacesScore a owl:ObjectProperty ;
 
 # kinds and categories of the v1.178.0 terms (G229; recorded in the kind ledger)
 backlog:replacesScore kb:hasRelationshipCategory kb:RelationshipCategory_Versioning .
+
+#################################################################
+# Lineage 29, box 45 (G233, 2SISA delivery handover): a bounded criterion, and a remedy already carried out
+#################################################################
+
+backlog:CriterionBound a owl:Class ;
+    rdfs:subClassOf backlog:BacklogConcept ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "Criterion Bound"@en ;
+    skos:definition "The end a done-definition criterion of the kind every case, spelling or form a reviewer could raise is given. Such a criterion has no natural end, because each fresh reviewer finds another case; the bound keeps the cases raised so far as test scenarios, names the test that shows every part of the check is held by one of those cases, and names the iteration that takes the cases found later as defect items."@en .
+
+backlog:hasCriterionBound a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:DoDCriterion ; rdfs:range backlog:CriterionBound ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "has criterion bound"@en ;
+    skos:definition "The bound of an open-ended Definition of Done criterion. A criterion worded as every case a reviewer could raise states none of its own, so it names this one."@en .
+
+backlog:keepsCase a owl:ObjectProperty ;
+    rdfs:domain backlog:CriterionBound ; rdfs:range backlog:TestScenario ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "keeps case"@en ;
+    skos:definition "A case raised so far that the committed tests keep, as a test scenario. The criterion holds for these cases, and it is the bound's own statement of what it covers."@en .
+
+backlog:provesEveryPartBy a owl:ObjectProperty ;
+    rdfs:domain backlog:CriterionBound ; rdfs:range backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "proves every part by"@en ;
+    skos:definition "The evidence that every part of the check is held by a kept case, so that no part of the check stands on no case at all."@en .
+
+backlog:laterFindingsGoTo a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:CriterionBound ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "later findings go to"@en ;
+    skos:definition "The iteration that takes the cases found after the bound was set, as defect items. A case a reviewer raises later is a new item for that iteration; it does not reopen the criterion."@en .
+
+backlog:remedyCarriedOutIn a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range backlog:Iteration ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "remedy carried out in"@en ;
+    skos:definition "The closed iteration in which the remedy of this finding was carried out. It is the light record of a remedy already done: the finding names the iteration and the evidence, and no defect item is made for work long finished."@en .
+
+backlog:remedyShownBy a owl:ObjectProperty ;
+    rdfs:domain backlog:RetrospectiveFinding ; rdfs:range backlog:Evidence ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "remedy shown by"@en ;
+    skos:definition "The evidence that shows the remedy of this finding was carried out in the iteration named by remedyCarriedOutIn."@en .
+
+backlog:CriterionBound kb:hasClassKind kb:ClassKind_Specification .
+backlog:hasCriterionBound kb:hasRelationshipCategory kb:RelationshipCategory_Requirement .
+backlog:keepsCase kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:provesEveryPartBy kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+backlog:laterFindingsGoTo kb:hasRelationshipCategory kb:RelationshipCategory_OrderingSequence .
+backlog:remedyCarriedOutIn kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:remedyShownBy kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
