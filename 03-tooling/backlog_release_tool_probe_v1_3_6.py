@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool_probe v1.3.4 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
+"""backlog_release_tool_probe v1.3.6 -- the release tool refuses what it must refuse and does what it says (G99 release A; OE rule R4).
 
 Each case is a fact about backlog_release_tool, shown on a throwaway folder, and each failing case must really fail:
   1 a header bump renames the file and moves versionInfo, versionIRI and priorVersion (the old version is added to the prior list);
@@ -16,6 +16,7 @@ Each case is a fact about backlog_release_tool, shown on a throwaway folder, and
      when the derivation did not produce it the public copy's own is kept; a file the public copy does not have is not invented.
   11 (v1.3.4) the release path exports the measured probe inputs beside the proof stamps.
   12 (v1.3.5) ensure_stamps creates both stamp files when absent and leaves an existing one (and its bytes) alone.
+  13 (v1.3.6) kind_probe_failures: with no kind probe beside the tool nothing is asked; a failing newest probe stops the preflight with its own first FAIL line; a passing newest probe lets it go on; the preflight calls it.
 Exit 0 all hold; 2 a case failed.
 """
 import importlib.util, os, subprocess, sys, tempfile, glob
@@ -133,6 +134,16 @@ def main():
     p = subprocess.run([sys.executable, os.path.join(HERE, os.path.basename(RT.__file__)), "release", "99.99.99", "--dry-run"], capture_output=True, text=True)
     check("5 release refused for a version with no changelog entry", p.returncode == 2 and "no entry" in p.stdout)
     check("5 the refused dry run changed nothing", (open(ver).read() if os.path.exists(ver) else None) == before)
+    with tempfile.TemporaryDirectory() as dk:
+        w = lambda n, t: open(os.path.join(dk, n), "w").write(t)
+        check("13 no kind probe beside the tool, nothing to ask", RT.kind_probe_failures(dk, dk) == [])
+        w("backlog_kind_category_probe_v1_0_0.py", "print('FAIL  stale')\nraise SystemExit(1)\n")
+        w("backlog_kind_category_probe_v1_2_0.py", "print('PASS  a')\nprint('FAIL  2 a category the kinds do not fit')\nprint('FAILED: x')\nraise SystemExit(1)\n")
+        f = RT.kind_probe_failures(dk, dk)
+        check("13 a failing newest probe stops the preflight with its own FAIL line", len(f) == 1 and "2 a category the kinds do not fit" in f[0] and "stale" not in f[0])
+        w("backlog_kind_category_probe_v1_3_0.py", "print('OK')\n")
+        check("13 a passing newest probe lets it go on", RT.kind_probe_failures(dk, dk) == [])
+    check("13 the preflight calls it", "bad += kind_probe_failures(HERE, PKG)" in open(RT.__file__).read())
     print("VERDICT : " + ("ALL HOLD" if not FAILS else "FAILED -- " + "; ".join(FAILS)))
     return 0 if not FAILS else 2
 

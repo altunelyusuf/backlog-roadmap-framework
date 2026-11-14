@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.222.0> ;
-    owl:versionInfo "1.222.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.221.0> , <http://example.org/backlog-shapes/1.220.0> , <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.223.0> ;
+    owl:versionInfo "1.223.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.222.0> , <http://example.org/backlog-shapes/1.221.0> , <http://example.org/backlog-shapes/1.220.0> , <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -6914,6 +6914,23 @@ backlog:FindingRecordShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:hasFindingDisposition backlog:Disp_Observation ; backlog:dispositionRationale ?r .
             FILTER ( ! CONTAINS(LCASE(?r), "rule") && ! CONTAINS(LCASE(?r), "obligation") )
+        }""" ] .
+
+backlog:FindingNeedsRepairShape a sh:NodeShape ;
+    sh:targetClass backlog:RetrospectiveFinding ;
+    sh:severity sh:Violation ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "FR_NoRepair" ;
+    rdfs:label "L1: a finding raised by the review of a finished item has a repair item, a remedy carried out, or a recorded disposition (G235)"@en ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "L1: this finding was raised by the review of a finished item and has no repair item (repairedByItem, a Defect), no remedy shown as carried out (remedyCarriedOutIn a Done iteration, with remedyShownBy), and is not a finding record with a disposition other than Nonconformity, a preventive mechanism and a review date. A defect found by a review and left in a list can stay open for ever." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:raisedByReviewOf ?item .
+            FILTER NOT EXISTS { $this backlog:repairedByItem ?d . ?d a backlog:Defect }
+            FILTER NOT EXISTS { $this backlog:remedyCarriedOutIn ?it . ?it backlog:hasState backlog:Done . $this backlog:remedyShownBy ?e }
+            FILTER NOT EXISTS { $this a backlog:FindingRecord ; backlog:hasFindingDisposition ?disp ; backlog:preventiveMechanism ?pm ; backlog:dispositionReviewDue ?rd .
+                                FILTER (?disp != backlog:Disp_Nonconformity) }
         }""" ] .
 
 backlog:StaleDispositionShape a sh:NodeShape ;

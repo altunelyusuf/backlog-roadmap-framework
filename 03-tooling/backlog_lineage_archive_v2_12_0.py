@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v2.12.0 (Lineage 29, box 47, story ArchiveOutcome; G235, IPage handover of 2026-11-10): (1) the trigger text on the live pointer states the outcome the mission has (Out_Achieved or Out_Abandoned) and names the closure report and the cancelled items it names, where it said "found achieved" for every lineage; (2) move_header reads the version line whichever way it ends (a semicolon or a full stop) and with any spacing, and a refusal names the form it expects.
 # v2.11.0 (Lineage 29, governance story: setting down a lineage leaves live what a live lineage uses): the cluster closure counted a subject that no lineage owns, such as the run of a live lineage, as a candidate for the archive, so a shared definition (the builder, verifier, overseer and approver roles) whose every user was an archived run or a candidate was set down with them, and the live runs lost their definition: 63 violations of live lineages on a copy of the register after the seven archivable lineages were set down (64 on the register of 5.4.5, which holds one more run). A candidate that touches anything outside the partition and the candidates is now dropped first, until none is left to drop.
 # v2.10.0 (Lineage 22, D2): a statement whose subject is written as a full IRI moves with its lineage like one written as a prefixed name (split_statements); 59 statements of Lineage 20 stayed in the live register because only the second form was read
 # v2.9.0 (G134): an entry names its lineage, mission and outcome by LINKS (never text); a mission or outcome that is not recorded is left out, not written as a blank or as the word unrecorded
@@ -7,7 +8,7 @@
 # v2.6.0 (G99 release B): the version a new live or archive file supersedes joins the header's owl:priorVersion chain (it was added by hand each time; move_header does it, and refuses a header that has no chain to extend).
 # v2.5.0 (Lineage 19, DC-S01 and DC-S03): an abandoned mission needs a closure report too, and every cancelled item of the lineage must be named by it (reportsCancelledItem); the archived copy of the lineage is marked archived with its confirmation pending, at the moment it is moved, so no later step has to find it. v2.4.0 accepted an abandoned mission with only its stated reason, which the owner has ruled is not enough.
 # v2.4.0 (Lineage 18, OC-S06): an abandoned lineage is archivable (its stated reason is its record), and the existing entries follow the archive file to its new version. v2.3.0 (Lineage 18, OC-S05): follows the archive folder. The archive data file now lives in 01-ontologies/archive/.
-"""backlog_lineage_archive v2.11.0 — set an achieved lineage down, out of every processing path.
+"""backlog_lineage_archive v2.12.0 — set an achieved lineage down, out of every processing path.
 
 WHY. A lineage whose mission is settled keeps costing every run until it is ARCHIVED: the SHACL
 suite validates its every individual, the git witness re-measures its every subject, the roadmap
@@ -237,17 +238,35 @@ def partition(g, lineages):
                 part.add(s); cand.discard(s); changed = True
     return part, keep_live
 
+def trigger_text(g, L):
+    """v2.12.0: the archival trigger written on the live pointer states the outcome the mission has, not 'achieved' for every lineage (IPage handover of 2026-11-10)."""
+    m = g.value(L, B.lineageForMission)
+    oc = g.value(m, B.hasMissionOutcome) if m is not None else None
+    word = "Out_Abandoned" if oc == B.Out_Abandoned else "Out_Achieved" if oc == B.Out_Achieved else "an outcome not recorded"
+    reps = sorted(local(r) for r in g.subjects(B.closesForMission, m)) if m is not None else []
+    named = {x for r in g.subjects(B.closesForMission, m) for x in g.objects(r, B.reportsCancelledItem)} if m is not None else set()
+    lead = "Found abandoned and un-archived" if oc == B.Out_Abandoned else "Found achieved and un-archived"
+    rule = "Owner's rule 2026-09-09: a settled lineage found un-archived triggers the archival activity."
+    return (f"{lead} by backlog_lineage_archive_v2_12_0: mission {word}, closure report {', '.join(reps) or 'none'} present"
+            + (f" naming {len(named)} cancelled item(s)" if oc == B.Out_Abandoned else "") + f", every item Done or Cancelled, not frozen. {rule}")
+
+
 def move_header(txt, oldv, newv, first_chain_ok=False):
     """Move a data file's header from OLDV to NEWV: versionInfo, versionIRI, and the superseded version joins owl:priorVersion at the front.
     Returns (text, None), or (None, reason) when the header does not read OLDV or has no priorVersion to extend."""
-    if f'owl:versionInfo "{oldv}" ;' not in txt:
-        return None, f"the header does not read versionInfo {oldv}"
+    vi = re.compile(r'owl:versionInfo\s+"' + re.escape(oldv) + r'"(\s*[;.])')
+    if not vi.search(txt):
+        return None, f'the header does not read versionInfo {oldv}; the form expected is owl:versionInfo "{oldv}" followed by ; or . (any spacing)'
     if not re.search(r"owl:priorVersion <[^>]*/", txt):
         m0 = re.search(r"owl:versionIRI <([^>]*/)" + re.escape(oldv) + r">[^\n]*\n", txt)
         if not (first_chain_ok and m0):
             return None, "the header has no owl:priorVersion to extend"
-        txt = txt[:m0.end()] + f"    owl:priorVersion <{m0.group(1)}{oldv}> ;\n" + txt[m0.end():]
-    txt = txt.replace(f'owl:versionInfo "{oldv}" ;', f'owl:versionInfo "{newv}" ;', 1)
+        line = m0.group(0)
+        if line.rstrip().endswith("."):   # the version IRI closes the header: it hands the full stop to the chain statement added after it
+            txt = txt[:m0.start()] + line.rstrip()[:-1].rstrip() + " ;\n" + f"    owl:priorVersion <{m0.group(1)}{oldv}> .\n" + txt[m0.end():]
+        else:
+            txt = txt[:m0.end()] + f"    owl:priorVersion <{m0.group(1)}{oldv}> ;\n" + txt[m0.end():]
+    txt = vi.sub(lambda m: f'owl:versionInfo "{newv}"' + m.group(1), txt, count=1)
     txt = re.sub(r"(owl:versionIRI <[^>]*/)" + re.escape(oldv) + ">", lambda m: m.group(1) + newv + ">", txt, count=1)
     if not re.search(r"owl:priorVersion <[^>]*/" + re.escape(oldv) + ">", txt):
         txt = re.sub(r"owl:priorVersion (<[^>]*/)", lambda mm: "owl:priorVersion " + mm.group(1) + oldv + "> , " + mm.group(1), txt, count=1)
@@ -371,7 +390,7 @@ def main():
         # statement is moved in place (L-112 pointer rule); the dated block below is the history
         pat = re.compile(r"(^" + re.escape(prefix_of(g, L) + local(L)) + r" a backlog:Lineage\b[^\n]*(?:\n[ \t][^\n]*)*?)backlog:lineageArchived false", re.M)
         live_txt, n = pat.subn(lambda m: m.group(1) + "backlog:lineageArchived true", live_txt, count=1)
-        live_txt += f'{prefix_of(g, L)}{local(L)}' + (' backlog:lineageArchived true ;' if n == 0 else '') + f' backlog:archiveFile "{rel}" ;\n    backlog:archivedAt "{now}"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;\n    backlog:archivalTrigger "Found achieved and un-archived by backlog_lineage_archive_v2_1_0: mission Out_Achieved, closure report present, every item Done or Cancelled, not frozen. Owner\'s rule 2026-09-09: an achieved lineage found triggers the archival activity." .\n'
+        live_txt += f'{prefix_of(g, L)}{local(L)}' + (' backlog:lineageArchived true ;' if n == 0 else '') + f' backlog:archiveFile "{rel}" ;\n    backlog:archivedAt "{now}"^^xsd:dateTime ; backlog:hasLineageStatus backlog:LS_Archived ;\n    backlog:archivalTrigger "' + trigger_text(g, L) + '" .\n'
     arch_txt = open(arch_path).read().rstrip("\n")
     olda = ".".join(map(str, semver(arch_path))); newa = ".".join(map(str, semver(new_arch)))
     arch_txt, why = move_header(arch_txt, olda, newa, first_chain_ok=True)

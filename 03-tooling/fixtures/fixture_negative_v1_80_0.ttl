@@ -4661,3 +4661,6 @@ ex:RC_Evidence a backlog:Evidence .
 ex:RC_NoEvidence a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ;
     backlog:remedyCarriedOutIn ex:RC_ClosedBox .
 ex:RC_ClosedBox a backlog:Iteration ; backlog:hasIdentifier "RC-CLOSED" ; backlog:hasTitle "A box closed" ; backlog:hasState backlog:Done .
+# FR_NoRepair -- a finding raised by the review of a finished item with no repair item, no remedy carried out and no record (FindingNeedsRepairShape, G235).
+ex:FR_NoRepair a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ; backlog:raisedByReviewOf ex:FR_Item .
+ex:FR_Item a backlog:BacklogConcept ; rdfs:label "stand-in for the finished item a review judged"@en .

@@ -1440,3 +1440,9 @@ ex:BC_OkBound a backlog:CriterionBound ; backlog:keepsCase ex:BC_OkCase ; backlo
 ex:BC_OkCase a backlog:TestScenario ; backlog:scenarioOf ex:BC_Ok ; backlog:scenarioKind backlog:Kind_Nominal .
 ex:RC_Ok a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ;
     backlog:remedyCarriedOutIn ex:Sprint11 ; backlog:remedyShownBy ex:US001_Test .
+findingdisposi:FR_KnownError backlog:raisedByReviewOf ex:US001 .
+ex:FN_Defect a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:raisedByReviewOf ex:US001 ; backlog:repairedByItem ex:FN_Repair .
+ex:FN_Repair a backlog:Defect ; backlog:hasTitle "A repair of a defect a review found" ; backlog:hasIdentifier "DEF-1" ; backlog:hasState backlog:Cancelled ; backlog:hasRationale "A stand-in repair for the fixture: it shows a finding naming a defect item conforms." ; backlog:belongsToLineage ex:Lin1 .
+ex:FN_Remedy a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ;
+    backlog:raisedByReviewOf ex:US001 ; backlog:remedyCarriedOutIn ex:Sprint11 ; backlog:remedyShownBy ex:US001_Test .

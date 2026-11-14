@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_release_tool v1.8.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
+"""backlog_release_tool v1.16.0 -- the release steps a session used to do by hand, as one tested tool (G99 release A; OE rule R4).
 
 Subcommands (each prints what it did and exits non-zero on any refusal):
   bump-data NEWVER                      rename the package data file to the new version and move its header (versionInfo, versionIRI, priorVersion)
@@ -17,6 +17,7 @@ Subcommands (each prints what it did and exits non-zero on any refusal):
                                         duration; --dry-run prints the plan and the refusals it already knows (missing changelog entry) and runs nothing
   prune-cache [DIR] [--days N] [--legacy]          remove cache files (shape_*.ttl, memo *.json, stamps) older than N days (default 14) from the validation cache; they are rebuilt on demand
   republish VERSION                     only the publisher and the tag check (after a transient failure of the public push)
+v1.16.0 (Lineage 29, box 47, story KindProbePreflight; G235): the preflight also runs the kind and category probe (about 2 s), so a refusal the gate raised 38 minutes in (release 5.5.15) comes at once, with the probe's own FAIL line; `kind_probe_failures` holds it.
 v1.13.0 (Lineage 29, story Preflight): the preflight also runs the vocabulary probe (about 6 s, and the release path asks the preflight twice), so a vocabulary refusal comes before the long gate and not after it (finding of the review of Lineage 29).
 v1.12.0 (Lineage 31, story Probes): prune-cache also removes the validator's kept inputs (aux_reference, aux_shapes, aux_list files) older than N days (the review of box 2 found they would grow without bound).
 v1.11.0 (Lineage 31, story Probes): the gate-times file is a record file, so a stage release that writes it is not refused as changing more than records (the independent review of box 1 found this).
@@ -249,6 +250,19 @@ def inbox_arrivals():
     return sorted(f for f in r.stdout.split() if not f.endswith("README.md") and not known(f))
 
 
+def kind_probe_failures(here, pkg):
+    """The kind and category probe, asked in seconds (the gate asks it too, 38 minutes in: release 5.5.15 was refused there). Empty = go."""
+    kp = newest(os.path.join(here, "backlog_kind_category_probe_v*.py"))
+    if not kp:
+        return []
+    r = subprocess.run([sys.executable, kp], capture_output=True, text=True, cwd=pkg)
+    if r.returncode == 0:
+        return []
+    out = r.stdout.strip().splitlines()
+    fl = [l for l in out if l.startswith("FAIL")]
+    return ["the kind and category probe fails: " + (fl[0] if fl else (out or ["failed"])[-1])[:240]]
+
+
 def preflight(v):
     """Returns the list of refusals found in seconds (empty = go). Nothing here replaces the gate; it only asks the cheap questions first."""
     bad = []
@@ -310,6 +324,7 @@ def preflight(v):
             r = subprocess.run([sys.executable, lc], capture_output=True, text=True, cwd=PKG)
             if r.returncode != 0:
                 bad.append("the link-control probe fails: " + (r.stdout.strip().splitlines() or ["failed"])[-1][:240])
+        bad += kind_probe_failures(HERE, PKG)
         ai = newest(os.path.join(HERE, "backlog_archive_integrity_v*.py"))
         if ai:
             r = subprocess.run([sys.executable, ai], capture_output=True, text=True, cwd=PKG)
