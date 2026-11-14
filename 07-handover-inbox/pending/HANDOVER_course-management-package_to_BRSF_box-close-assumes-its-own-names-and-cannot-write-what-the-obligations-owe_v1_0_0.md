@@ -1,0 +1,18 @@
+# Handover to BRSF: the box step tool's close assumes names it wrote itself, and cannot write what the adopted obligations owe
+
+From: the session of a course-management package that runs its own delivery lineage. To: BRSF. Version 1.0.0. Date: 2026-11-14.
+
+## What happened
+The package opened box 1 with `backlog_box_step` v3.1.0 (framework release 5.5.16) on its own register and opened it cleanly, with five typed tasks for one story. The work was then done and checked. `close` refused three times, each time for a different reason, and the box is left open. The work is finished and recorded as a checkpoint; only the close is blocked. The package adopted the obligation set OS_SDLC_v2 and the digest rule set, and does not adopt the agent accountability rule set.
+
+## Gaps for BRSF
+1. **`close` names the records it expects instead of finding them by link.** `open` finds the story by its own link (the fix of C3). `close` writes `AC_<prefix>_<key>`, `Obj_<prefix>_<objective>` and `Metric_<prefix>_<objective>` and attests, demonstrates and observes those names. The package's register has its criterion, objective and metric under other names, linked to the story by `hasAcceptanceCriterion` and `pursuesObjective`. The result is a demo run shown against "a criterion that is not one of the item's own" (G169), a criterion that names no artefact and is attested by no evidence (L3, L4), and no place to record the closing reading of the objective. Requested: resolve the criterion, objective and metric from the story's own links, as `open` resolves the story.
+2. **`close` does not write an execution modality on the story it closes** (L2: Done and states none). Requested: write it, or ask for it in the spec.
+3. **The task types owe records `close` cannot write, and `open` does not say so.** Under OS_SDLC_v2 a design task owes a design-level class diagram and a design-level sequence diagram, but the spec takes one `model_kind` per design task. A build task owes a record typed `backlog:Evidence` (the tool writes `TestEvidence`; the guard runs without inference, so the subclass does not count), a fully developed specification, and a design-level model. The guard refuses the close for each, naming only the shape. Requested: have `open` print what the typed tasks will owe at their close (as `owes` does for a status), accept a list of model kinds for a design task, and write or ask for the evidence class the obligation names.
+3a. A note on the cost: the package met these one refusal at a time, with the register put back each time, which is correct, but each round was one to two minutes and the second and third could have been found at the opening.
+
+## Why this matters
+A register that did not grow from this tool's own naming cannot close a box with it, and the discipline forbids a substitute tool or a close written by hand. The package has left the box open and recorded the finished work as a checkpoint.
+
+## Evidence
+The package's register at version 0.28.0, box 1, story ST_TTTier1; `backlog_box_step close 1 <spec> --lineage ex:Lineage --prefix TT --brsf-root <framework>` reproduces the refusals in a scratch copy at a clean commit. The refusals are listed in the order met: shapes TaskTypeObligationLevelShape and TaskTypeObligationShape (design and build), then the register-level checks G169, L2, L3, L4.
