@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.16 — 2026-11-14 (PATCH: the stale-score rule leaves out a replaced score and an epic whose stories are all finished)
+
+Answers the blocking IPage handover of 2026-11-10 (G234, box 46 of package 15, reviewed independently). Constraint L3 of the score accountability shape (BP-D11, shapes 1.222.0) no longer judges a score that another score replaces, which G229 keeps on the item as history, nor the scores of an epic whose decomposed stories are all Done or Cancelled, whose value cannot change any more; a live score of an open item, an epic with an open story at any depth and an epic with no story are still judged. Probe backlog_score_history_probe 1.0.0 holds each case and fails under five planted faults.
+
+**Unplanned work:** unplanned: the IPage handover of 2026-11-10 that blocks that lineage's first box, answered on the Owner's direction of 2026-11-14
+
 ## v5.5.15 — 2026-11-13 (PATCH: the box tool reads typed effort and every task kind; unzoned times are read as UTC; a criterion needs a bound; a remedy already carried out has a light record)
 
 Answers four 2SISA delivery-handover gaps and two course-management stops (2026-11-12). (1) backlog_box_step 3.1.0: nine typed task kinds per story (analysis, requirements, architecture, design, build, integration, verification, validation, correction; a bare key stays one build task), a refused step prints all its violations, typed effort values are read and an unreadable value is refused with a message, the close checks every task kind. (2) backlog_date_plan 1.3.0 and the stale-score rule read a time without a zone as UTC. (3) G233: a done-definition criterion of the kind 'every case a reviewer could raise' needs a bound (BoundedCriterionShape, CriterionBoundShape), and a remedy already carried out has a light record (RemedyCarriedOutShape). T-box 1.179.0, shapes 1.221.0; fixtures and probes prove each. Box 45 of package 14, reviewed independently.

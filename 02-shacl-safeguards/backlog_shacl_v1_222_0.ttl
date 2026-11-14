@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.221.0> ;
-    owl:versionInfo "1.221.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.220.0> , <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.222.0> ;
+    owl:versionInfo "1.222.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.221.0> , <http://example.org/backlog-shapes/1.220.0> , <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -1564,6 +1564,13 @@ backlog:ScoreAccountabilityShape a sh:NodeShape ;
             ?item backlog:hasPriorityScore $this ; backlog:hasState ?st .
             FILTER (?st NOT IN (backlog:Done, backlog:Cancelled))
             $this backlog:scoredAt ?sa0 .
+            # IPage handover (2026-11-10, G234): a score that another score replaces is history (G229 keeps it on the item on purpose), not a ranking;
+            # an epic whose decomposed stories are all Done or Cancelled ranks nothing, because its value cannot change any more.
+            FILTER NOT EXISTS { ?newer backlog:replacesScore $this }
+            FILTER NOT EXISTS {
+                ?item a backlog:Epic ; backlog:decomposesInto+ ?anyStory . ?anyStory a backlog:Story .
+                FILTER NOT EXISTS { ?item backlog:decomposesInto+ ?openStory . ?openStory a backlog:Story ; backlog:hasState ?os . FILTER (?os NOT IN (backlog:Done, backlog:Cancelled)) }
+            }
             ?other backlog:finishedAt ?f0 .
             # course-management handover (2026-11-12): a time written without a zone is valid Turtle and true to the clock; it is read as UTC here, as in the tools,
             # so that times with and without a zone compare, and neither raises a comparison error nor silently never fires.
