@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""backlog_box_step v3.1.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v3.3.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
+v3.3.0 (Lineage 29, package 17, box 50, story OwesAtOpen; course-management handover of 2026-11-14, gap 3): (1) `open` prints, for each typed task it records, what that task will owe at its close under the obligation sets the lineage adopts (the Required obligations, read from the register by their links), and says which of them this tool writes and which are to be supplied in the register. (2) A design or architecture task of the close spec may give `model_kinds`, a list of kinds (or {kind, level} pairs), and one model is recorded for each; `model_kind` still gives one. (3) The evidence record of a task is also typed with the general evidence class when an adopted obligation of that task type owes it, since the guard runs without inference and a test evidence record does not count as the general class.
+v3.2.0 (Lineage 29, package 17, box 49, stories CloseByLinks and DoDRead; course-management handover of 2026-11-14, G236): (1) `close` finds the acceptance criteria, the objective and the metric of each story by the story's own links (hasAcceptanceCriterion, pursuesObjective, and the objective's hasSuccessMetric), as `open` finds the story, and attests, demonstrates and observes those records; the names this tool mints (AC_<prefix>_<key>, Obj_<prefix>_<key>, Metric_<prefix>_<key>) remain the fallback for a story that holds no such link, and a closing observation named by a story key is about the objective that story pursues. (2) `close` writes an execution modality on the story it closes when it holds none (the spec may give `modality`, default Mode_Automated). (3) `close` refuses a spec that names no finding, before anything is written: the retrospective shape needs one. (The Definition of Done the guard reads is a shapes change, shapes 1.224.0.) Before: a register whose records were named otherwise was refused three times at the close, and the closing observations of boxes 47 and 48 of this lineage were written against objectives that do not exist.
 v3.1.0 (Lineage 29, package 14, stories TypedTasks and AllViolations; 2SISA delivery handover of 2026-11-11, G233):
 (1) `open` takes typed tasks: a story key may be followed by the kinds of its tasks, `KEY:design+build+verification`, and the tool then records a design task (Task_DesignDefinition),
 a build task (Task_Implementation) and a verification task (Task_Verification) of that story, each with its own planning link, readiness check, transitions and, at the close, its own
@@ -502,7 +504,7 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "3.1.0"
+TOOL_VERSION = "3.3.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
@@ -559,6 +561,47 @@ def cmd_baseline(reg, n, buffer=1.5):
                 d = dp.dt(g.value(cp, URIRef(B + "checkpointDate")))
                 if d and d < end:
                     print("WARNING: the checkpoint %s of %s is dated %s, before this box is planned to end (%s)" % (str(cp).rsplit("#", 1)[-1], str(obj).rsplit("#", 1)[-1], d.strftime("%Y-%m-%d %H:%MZ"), end.strftime("%Y-%m-%d %H:%MZ")))
+
+
+BL_NS = "http://example.org/backlog#"
+EVIDENCE_SUPERCLASSES = {"Evidence"}   # the classes a TestEvidence record is a kind of in the T-box; the guard reads types without inference, so each is written on the record when owed
+
+
+def obligations_of(reg):
+    """The Required obligations the lineage adopts, read from the register by their links: {task type local name: [(class, kind, level, depth)]}."""
+    from rdflib import Graph, URIRef, RDF
+    g = Graph(); g.parse(data=reg.s, format="turtle")
+    B = lambda x: URIRef(BL_NS + x)
+    loc = lambda u: str(u).split("#")[-1] if u is not None else None
+    lin = [u for u in g.subjects(RDF.type, B("Lineage")) if str(u).split("#")[-1] == reg.L.replace("fw:", "")]
+    sets = {o for l in lin for o in g.objects(l, B("adoptsObligationSet"))}
+    out = {}
+    for ob in g.subjects(RDF.type, B("StageObligation")):
+        if g.value(ob, B("inObligationSet")) not in sets or loc(g.value(ob, B("obligationSeverity"))) != "Oblig_Required":
+            continue
+        tt, cls = loc(g.value(ob, B("obligationOfTaskType"))), loc(g.value(ob, B("owesClass")))
+        if tt and cls:
+            out.setdefault(tt, []).append((cls, loc(g.value(ob, B("owesKind"))), loc(g.value(ob, B("owesLevel"))), loc(g.value(ob, B("owesDepth")))))
+    return {t: sorted(v, key=lambda x: tuple(y or "" for y in x)) for t, v in out.items()}
+
+
+def owed_lines(reg, kinds):
+    """What each typed task of the box will owe at its close, one line per task, saying what this tool writes (G236, gap 3)."""
+    ob = obligations_of(reg)
+    lines = []
+    for k, names in kinds.items():
+        for nm in names:
+            tt = TASK_KINDS[nm.lower()][1].replace("backlog:", "")
+            for cls, kind, level, depth in ob.get(tt, []):
+                what = cls + "".join(" %s" % x for x in (kind, level, depth) if x)
+                if cls == "ModelArtifact" and nm.lower() in ("design", "architecture"):
+                    how = "written by the close from the spec's model_kind or model_kinds"
+                elif cls == "TestEvidence" or cls in EVIDENCE_SUPERCLASSES:
+                    how = "written by the close on the task's evidence"
+                else:
+                    how = "not written by this tool: supply it in the register"
+                lines.append("the %s task of story %s owes %s (%s)" % (nm.lower(), k, what, how))
+    return lines
 
 
 def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2, kinds=None):
@@ -790,8 +833,27 @@ def latest_file(root, folder, stem):
     return os.path.join(d, fs[-1]) if fs else None
 
 
+def links_of(reg, subj, prop):
+    """The local names SUBJ points to with PROP, read from every statement SUBJ appears in (v3.2.0, G236): the tool finds a story's records by the story's own links."""
+    return [x.split(":", 1)[-1] for m in re.finditer(r"backlog:%s\s+([^;.]+?)\s*(?:;|\.(?:\s|$))" % prop, whole_subject_text(reg, subj)) for x in re.split(r"\s*,\s*", m.group(1).strip()) if x.startswith("fw:")]
+
+
+def records_of(reg, P, k, sid):
+    """(criteria, objective, metric) of story K: by its links hasAcceptanceCriterion and pursuesObjective and the objective's hasSuccessMetric; where the story holds no such link, the names this tool mints
+    (AC_<prefix>_<key>, Obj_<prefix>_<key>, Metric_<prefix>_<key>), so a register that grew from this tool's naming closes as before."""
+    ac = links_of(reg, sid, "hasAcceptanceCriterion") or ["AC_%s_%s" % (P, k)]
+    ob = (links_of(reg, sid, "pursuesObjective") or ["Obj_%s_%s" % (P, k)])[0]
+    me = (links_of(reg, ob, "hasSuccessMetric") or ["Metric_%s_%s" % (P, k)])[0]
+    return ac, ob, me
+
+
 def cmd_close(reg, root, n, spec):
     P, L = reg.P, reg.L
+    _ob = obligations_of(reg)
+    def evtypes(nm):
+        """The classes the evidence record of a NM task is typed with: test evidence, and the general evidence class where an adopted obligation of that task type owes it (G236, gap 3)."""
+        tt = TASK_KINDS[nm.lower()][1].replace("backlog:", "")
+        return "".join(sorted(", backlog:%s" % c for c, _k, _l, _d in set(x for x in _ob.get(tt, [])) if c in EVIDENCE_SUPERCLASSES))
     ids, t0, st = read_box(reg, n)
     if st != "InProgress":
         raise SystemExit("REFUSED: box %d is not in progress" % n)
@@ -854,6 +916,7 @@ def cmd_close(reg, root, n, spec):
         raise SystemExit("REFUSED: governed files changed before the box was opened: " + ", ".join(os.path.relpath(x, root) for x in stale))
     efforts = {k: reg.effort_of_story(k) for k in keys}
     sid = {k: reg.story_ident(k) for k in keys}   # C3: the local name each key actually refers to, resolved once
+    rec_of = {k: records_of(reg, P, k, sid[k]) for k in keys}   # v3.2.0 (G236): the criteria, objective and metric of each story, by its own links
     recs = []
     agentic = is_agentic(reg)
     if agentic:
@@ -910,10 +973,11 @@ def cmd_close(reg, root, n, spec):
         for nm in tasks[k]:
             recs.append("fw:Ev%d_%s_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:%s ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ." % (n, tname(P, k, nm), tname(P, k, nm), dt(tf)))
         recs.append("fw:Ev%d_ST_%s_%s_T_Complete a backlog:TransitionEvent ; backlog:transitionedItem fw:%s ; backlog:viaTransition backlog:T_Complete ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ." % (n, P, k, sid[k], dt(tf)))
-        recs.append("fw:Ev_%s_%s a backlog:TestEvidence ; rdfs:label \"The check for story %s\"@en ;\n    backlog:evidenceVerified true ; backlog:hasTestId \"%s\" ;\n    backlog:hasTestSpec \"%s\" ;\n    backlog:attestsCriterion fw:AC_%s_%s ;\n    backlog:hasVerificationMethod \"%s\" ;\n    backlog:verifiedAt %s ; backlog:verifiedByTool \"%s\" ;\n    backlog:satisfiedByArtifact \"%s\" ; backlog:belongsToLineage %s ." % (P, k, k, k, s["artifact"], P, k, esc(s["method"]), dt(tf), esc(s["tool"]), s["artifact"], L))
-        recs.append("fw:AC_%s_%s backlog:satisfiedByArtifact \"%s\" ." % (P, k, s["artifact"]))
+        recs.append("fw:Ev_%s_%s a backlog:TestEvidence%s ; rdfs:label \"The check for story %s\"@en ;\n    backlog:evidenceVerified true ; backlog:hasTestId \"%s\" ;\n    backlog:hasTestSpec \"%s\" ;\n    backlog:attestsCriterion %s ;\n    backlog:hasVerificationMethod \"%s\" ;\n    backlog:verifiedAt %s ; backlog:verifiedByTool \"%s\" ;\n    backlog:satisfiedByArtifact \"%s\" ; backlog:belongsToLineage %s ." % (P, k, evtypes("Build"), k, k, s["artifact"], " , ".join("fw:" + a for a in rec_of[k][0]), esc(s["method"]), dt(tf), esc(s["tool"]), s["artifact"], L))
+        for _a in rec_of[k][0]:
+            recs.append("fw:%s backlog:satisfiedByArtifact \"%s\" ." % (_a, s["artifact"]))
         recs.append("fw:H_%s_%s a backlog:TestHarness ; rdfs:label \"Harness for story %s\"@en ;\n    backlog:harnessFor fw:%s ; backlog:hasHarnessEvidence fw:Ev_%s_%s ; backlog:harnessComplete true ;\n    backlog:hasRationale \"%s\" ." % (P, k, k, sid[k], P, k, esc(s["harness"])))
-        recs.append("fw:Demo_%s_%s a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:%s ; backlog:demonstratedAgainst fw:AC_%s_%s ; backlog:demoAt %s ;\n    backlog:hasDemoShown \"%s\" ;\n    backlog:hasDemoResult \"%s\" ." % (P, k, sid[k], P, k, dt(tick()), esc(s["demo"]), esc(s["result"])))
+        recs.append("fw:Demo_%s_%s a backlog:DemoRun ; backlog:hasWorkKind backlog:WorkKind_Control ; backlog:demonstratesItem fw:%s ; backlog:demonstratedAgainst fw:%s ; backlog:demoAt %s ;\n    backlog:hasDemoShown \"%s\" ;\n    backlog:hasDemoResult \"%s\" ." % (P, k, sid[k], rec_of[k][0][0], dt(tick()), esc(s["demo"]), esc(s["result"])))
         reg.set_state(k, "InProgress", "Done")
         for nm in tasks[k]:
             tn = tname(P, k, nm)
@@ -921,20 +985,24 @@ def cmd_close(reg, root, n, spec):
             if nm != "Build":
                 te = s["tasks"][nm.lower()]
                 evid = "Ev_%s_%s_%s" % (P, k, nm)
-                recs.append("fw:%s a backlog:TestEvidence ; rdfs:label \"The check for the %s task of story %s\"@en ;\n    backlog:evidenceVerified true ; backlog:hasTestId \"%s-%s\" ;\n    backlog:hasTestSpec \"%s\" ;\n    backlog:attestsCriterion fw:AC_%s_%s ;\n    backlog:hasVerificationMethod \"%s\" ;\n    backlog:verifiedAt %s ; backlog:verifiedByTool \"%s\" ;\n    backlog:satisfiedByArtifact \"%s\" ; backlog:belongsToLineage %s ." % (evid, nm.lower(), k, k, nm.lower(), te["artifact"], P, k, esc(te["method"]), dt(tf), esc(te["tool"]), te["artifact"], L))
-            if nm in ("Design", "Architecture") and te.get("model_kind"):
-                mk = te["model_kind"].replace("backlog:", "")
+                recs.append("fw:%s a backlog:TestEvidence%s ; rdfs:label \"The check for the %s task of story %s\"@en ;\n    backlog:evidenceVerified true ; backlog:hasTestId \"%s-%s\" ;\n    backlog:hasTestSpec \"%s\" ;\n    backlog:attestsCriterion %s ;\n    backlog:hasVerificationMethod \"%s\" ;\n    backlog:verifiedAt %s ; backlog:verifiedByTool \"%s\" ;\n    backlog:satisfiedByArtifact \"%s\" ; backlog:belongsToLineage %s ." % (evid, evtypes(nm), nm.lower(), k, k, nm.lower(), te["artifact"], " , ".join("fw:" + a for a in rec_of[k][0]), esc(te["method"]), dt(tf), esc(te["tool"]), te["artifact"], L))
+            _mks = []
+            if nm in ("Design", "Architecture"):
+                for _e in (te.get("model_kinds") or ([{"kind": te["model_kind"], "level": te.get("model_level")}] if te.get("model_kind") else [])):
+                    _e = _e if isinstance(_e, dict) else {"kind": _e, "level": te.get("model_level")}
+                    _mks.append((_e["kind"].replace("backlog:", ""), (_e.get("level") or "").replace("backlog:", "") or None))
+            for _i, (mk, ml) in enumerate(_mks):
                 if mk not in KNOWN_MODEL_KINDS:
                     raise SystemExit("REFUSED: %s is not a model kind the framework declares (e.g. Kind_ClassDiagram, Kind_UseCaseDiagram)" % mk)
-                ml = te.get("model_level")
-                if ml and ml.replace("backlog:", "") not in KNOWN_MODEL_LEVELS:
+                if ml and ml not in KNOWN_MODEL_LEVELS:
                     raise SystemExit("REFUSED: %s is not a model level the framework declares (e.g. Level_Design, Level_Analysis)" % ml)
-                recs.append("fw:Model_%s_%s_%s a backlog:ModelArtifact ; backlog:hasModelKind backlog:%s ;%s backlog:describesItem fw:%s ; backlog:satisfiedByArtifact \"%s\" ; backlog:belongsToLineage %s .\nfw:%s backlog:producesModelArtifact fw:Model_%s_%s_%s ." % (P, k, nm, mk, (" backlog:hasModelLevel backlog:%s ;" % ml.replace("backlog:", "")) if ml else "", sid[k], te["artifact"], L, tn, P, k, nm))
+                mn = "Model_%s_%s_%s" % (P, k, nm) + ("" if _i == 0 else "_%d" % (_i + 1))
+                recs.append("fw:%s a backlog:ModelArtifact ; backlog:hasModelKind backlog:%s ;%s backlog:describesItem fw:%s ; backlog:satisfiedByArtifact \"%s\" ; backlog:belongsToLineage %s .\nfw:%s backlog:producesModelArtifact fw:%s ." % (mn, mk, (" backlog:hasModelLevel backlog:%s ;" % ml) if ml else "", sid[k], te["artifact"], L, tn, mn))
             m = re.search(r"^fw:%s a backlog:ExecutionTask .*?backlog:startedAt \"[^\"]+\"\^\^xsd:dateTime \." % re.escape(tn), reg.s, re.M | re.S)
             blk = m.group(0).replace("backlog:hasState backlog:InProgress ;", "backlog:hasState backlog:Done ;", 1)
             blk = blk[:-1].rstrip() + " ; backlog:finishedAt %s ; backlog:hasEvidence fw:%s ." % (dt(tf), evid)
             reg.s = reg.s[:m.start()] + blk + reg.s[m.end():]
-        recs.append("fw:%s backlog:finishedAt %s ; backlog:lastAuditedAt %s ; backlog:hasEvidence fw:Ev_%s_%s ; backlog:memberOfContainer fw:%s ." % (sid[k], dt(tf), dt(tf), P, k, ids["rel"]))
+        recs.append("fw:%s backlog:finishedAt %s ; backlog:lastAuditedAt %s ; backlog:hasEvidence fw:Ev_%s_%s ; backlog:memberOfContainer fw:%s%s ." % (sid[k], dt(tf), dt(tf), P, k, ids["rel"], "" if "backlog:hasExecutionModality" in whole_subject_text(reg, sid[k]) else " ; backlog:hasExecutionModality backlog:%s" % (s.get("modality") or spec.get("modality") or "Mode_Automated").replace("backlog:", "")))
     trun = tick()
     recs.append("fw:%s a backlog:ControlRun ; backlog:runOfActivity fw:%s ; backlog:ranAt %s ;\n    backlog:hasRunResult \"%s\" ." % (ids["run"], ids["act"], dt(trun), esc(spec["run_result"])))
     trev = tick()
@@ -954,14 +1022,21 @@ def cmd_close(reg, root, n, spec):
                 continue
             fks.append("fw:Find_%s_Esc%d_%d" % (P, n, i))
             recs.append("fw:Find_%s_Esc%d_%d a backlog:RetrospectiveFinding ;\n    backlog:hasFindingScope backlog:Scope_LineageLocal ;\n    backlog:relatesToWorkItem fw:%s ;\n    backlog:hasRootCause \"%s\" ;\n    backlog:hasRemedy \"%s\" ." % (P, n, i, sid[keys[0]], esc(line), esc(ans)))
+    if not fks:
+        raise SystemExit("REFUSED: the spec names no finding. A sprint retrospective must produce at least one finding (the retrospective shape refuses none); name what went wrong or was found in this box, with its cause and its remedy (findings: key, root_cause, remedy). Nothing was written.")
     tret = tick()
     # pre-existing defect, fixed here (not in v1.12.0, kept as the historical baseline): with no findings at all, fks is empty and
     # " , ".join(fks) is "", which used to write "backlog:producesFinding  ." -- a predicate with no object, invalid Turtle that a
     # real RDF parser (rdflib, a SHACL validator, the agent monitor) refuses to read. The clause is now simply omitted when there
     # is nothing to name, exactly as every other optional clause in this tool already does.
     recs.append("fw:%s a backlog:SprintRetrospective ; backlog:hasWorkKind backlog:WorkKind_Closure ;\n    backlog:followsReview fw:%s ; backlog:heldAt %s%s ." % (ids["retro"], ids["review"], dt(tret), " ; backlog:producesFinding " + " , ".join(fks) if fks else ""))
+    def obs_names(ob):
+        """The objective and metric a closing observation is about: OB is a story key (the objective that story pursues, by its link, and that objective's metric) or, failing that, the name this tool mints."""
+        if ob in rec_of:
+            return rec_of[ob][1], rec_of[ob][2]
+        return "Obj_%s_%s" % (P, ob), "Metric_%s_%s" % (P, ob)
     for o in spec["observations"]:
-        recs.append("fw:Obs_%s_%s_B%d a backlog:MetricObservation ; rdfs:label \"After box %d: %s\"@en ;\n    backlog:observesMetric fw:Metric_%s_%s ; backlog:observationFor fw:Obj_%s_%s ; backlog:hasObservedValue %s ; backlog:observedAt %s ;\n    backlog:hasObservationMethod \"%s\" ." % (P, o["obj"], n, n, o["obj"], P, o["obj"], P, o["obj"], float(o["value"]), dt(trun), esc(o["method"])))
+        recs.append("fw:Obs_%s_%s_B%d a backlog:MetricObservation ; rdfs:label \"After box %d: %s\"@en ;\n    backlog:observesMetric fw:%s ; backlog:observationFor fw:%s ; backlog:hasObservedValue %s ; backlog:observedAt %s ;\n    backlog:hasObservationMethod \"%s\" ." % (P, o["obj"], n, n, o["obj"], obs_names(o["obj"])[1], obs_names(o["obj"])[0], float(o["value"]), dt(trun), esc(o["method"])))
     mins = round((parse_t(tret) - parse_t(t0)).total_seconds() / 60, 1)
     # the InProgress/start and the capacity are read and rewritten independently of their order in the file (C1/C5): capacity's own value is never moved, so its position never matters
     m = re.search(r"^fw:%s a backlog:Iteration .*?backlog:hasState\s+backlog:InProgress\s*;\s*backlog:iterationStart\s+(\"[^\"]+\"\^\^xsd:dateTime)\s*;" % ids["it"], reg.s, re.M | re.S)
@@ -1117,6 +1192,9 @@ def main(argv):
         if o:
             print("owed at LS_InProgress, before the box is opened:\n  " + "\n  ".join("%s: %s" % x for x in o))
         okeys, okinds = parse_keys(a[5])
+        _ol = owed_lines(reg, okinds)
+        if _ol:
+            print("owed at the close of these tasks under the adopted obligations:\n  " + "\n  ".join(_ol))
         guarded(path, lambda: cmd_open(reg, root, int(a[2]), a[3], a[4], okeys, capacity, allow, integrity, okinds))
     elif cmd == "freeze":
         cmd_freeze(reg, root, a[2])

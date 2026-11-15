@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_adopting_register_probe v1.0.0 -- re-runnable proof that backlog_box_step generalizes to a register that is
+"""backlog_adopting_register_probe v1.1.0 (box tool 3.2.0 refuses a close that names no finding, so every close spec carries one) -- re-runnable proof that backlog_box_step generalizes to a register that is
 NOT the framework's own (IPage handover box-tool-for-an-adopting-register, v1.1.0, C1-C8). Builds a throwaway package
 whose register lives in its own namespace (prefix pcl:, <http://example.org/ipage-register#>) and own story-naming
 convention, and drills the same ten acceptance criteria that backlog_box_step_probe and backlog_agent_monitor_probe
@@ -85,7 +85,7 @@ def run(pk, reg, *a):
 
 def close_spec(work, extra_findings=None):
     spec = {"stories": {"Story4_D1": {"artifact": "03-tooling/artifact.txt", "method": "m", "tool": "t", "harness": "h", "demo": "d", "result": "r"}},
-            "run_result": "ok", "release_title": "rel", "findings": extra_findings or [], "observations": []}
+            "run_result": "ok", "release_title": "rel", "findings": extra_findings or [{"key": "F", "root_cause": "rc", "remedy": "rm"}], "observations": []}
     sp = os.path.join(work, "spec.json")
     json.dump(spec, open(sp, "w"))
     return sp

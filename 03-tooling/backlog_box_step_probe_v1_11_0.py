@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step_probe v1.9.0 (Lineage 29, package 14; 2SISA delivery handover, G233): a story opened with `KEY:design+build+verification` holds three tasks of those three types, each with its own readiness check, transitions and, at the close, its own evidence, and a task or a task's evidence that is missing is refused; a bare KEY still records the one build task; a refused step prints every violation it found, grouped by the check that raised it, not the first few, and puts the register back. v1.8.0 (IPage handover box-tool-for-an-adopting-register, C5): a planned box is opened in place whatever ORDER its own predicates
+"""backlog_box_step_probe v1.11.0 (box 50: an owed general evidence class is now written by the close, so the case that proved its refusal now proves it is covered). v1.10.0 (box 49: every close spec carries a finding, since the box tool v3.2.0 refuses a close that names none; the refusal itself is proved in backlog_box_close_links_probe). v1.9.0 (Lineage 29, package 14; 2SISA delivery handover, G233): a story opened with `KEY:design+build+verification` holds three tasks of those three types, each with its own readiness check, transitions and, at the close, its own evidence, and a task or a task's evidence that is missing is refused; a bare KEY still records the one build task; a refused step prints every violation it found, grouped by the check that raised it, not the first few, and puts the register back. v1.8.0 (IPage handover box-tool-for-an-adopting-register, C5): a planned box is opened in place whatever ORDER its own predicates
 are written in, because a graph serializer is free to reorder them (it alphabetises them) and the tool must still open the box, not refuse it. v1.7.0
 treated box 5's layout (hasCapacity before hasState, named "odd") as one the tool "cannot open in place" and refused; that was this exact reordering,
 so v1.7.0's assertion is superseded here, not silently dropped: box 5 now opens correctly, and a genuinely unrecoverable layout (box 6, no hasCapacity
@@ -221,7 +221,7 @@ open(os.path.join(pk, "03-tooling", "typed_verify.txt"), "w").write("v\n")
 time.sleep(1.1)
 rc, out = run("act", "7", "E", "worked")
 spec7 = {"stories": {"E": {"artifact": "03-tooling/typed_build.txt", "method": "m", "tool": "t", "harness": "h", "demo": "d", "result": "r",
-                          "tasks": {"architecture": {"artifact": "03-tooling/typed_arch.txt", "tool": "t", "method": "m", "model_kind": "Kind_ClassDiagram", "model_level": "Level_Design"}, "design": {"artifact": "03-tooling/typed_design.txt", "tool": "t", "method": "m"}}}}, "run_result": "ok", "release_title": "rel7", "findings": [], "observations": []}
+                          "tasks": {"architecture": {"artifact": "03-tooling/typed_arch.txt", "tool": "t", "method": "m", "model_kind": "Kind_ClassDiagram", "model_level": "Level_Design"}, "design": {"artifact": "03-tooling/typed_design.txt", "tool": "t", "method": "m"}}}}, "run_result": "ok", "release_title": "rel7", "findings": [{"key": "F7", "root_cause": "rc", "remedy": "rm"}], "observations": []}
 json.dump(spec7, open(os.path.join(work, "spec7.json"), "w"))
 _cur9 = open(REG).read()
 open(REG, "w").write(_t9)
@@ -267,7 +267,7 @@ expect("an Advisory obligation is not demanded", SHAPEMSG not in out)
 rc, out = closes(ADOPT + "fw:L_AdaptiveProof backlog:adoptsObligationSet fw:OS_U .\n" + OB("Ob1", DES, "ModelArtifact", "Kind_ClassDiagram", "Level_Design", st="OS_U") + OB("Ob2", DES, "ModelArtifact", "Kind_SequenceDiagram", "Level_Design", st="OS_U"), "spec7d.json")
 expect("every adopted set is read, not the first", rc != 0 and "TaskTypeObligationShape" in out)
 rc, out = closes(ADOPT + OB("Ob1", BLD, "Evidence"))
-expect("an owed Evidence is not covered by the TestEvidence the tool writes (the shapes match the class exactly)", rc != 0 and "TaskTypeObligationShape" in out)
+expect("an owed Evidence is covered since the close types the evidence record with the class the obligation names (box 50; before 3.3.0 the shapes, which match the class exactly, refused it)", "TaskTypeObligationShape" not in out)
 rc, out = closes(ADOPT + OB("Ob1", DES, "ModelArtifact", "Kind_ClassDiagram", "Level_Design", "Depth_Brief"), "spec7d.json")
 expect("an owed depth on a model the tool writes without one is refused", rc != 0 and "TaskTypeObligationLevelShape" in out)
 rc, out = closes(ADOPT + OB("Ob1", VER, "TestEvidence", level="Level_Design"))
