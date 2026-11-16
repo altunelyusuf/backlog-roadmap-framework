@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-"""backlog_box_step v3.3.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v3.5.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
+v3.5.0 (box 56, same release): no change of behaviour; the file is renamed because box 54 changed it after its release (BP-D7). The carried-forward story it names on a closing review is now left out of the container state by the shapes 1.227.0 (rules R1a-R1c), so the closed box derives Done instead of In progress.
+v3.4.0 (Lineage 29, package 20, box 53, story BasePlanLink; IPage handover of 2026-11-16): the base plan of a box is found by its link, as the box record already is (`resolve_it_id`), and not by this tool's own name. `base_plan_of` finds a backlog:PlanBaseline that points to the box by `baselineFor` and carries `isCurrentBaseline true`, in whatever prefix and under whatever name the register gives it, reading every statement of the subject; `has_base_plan` adds this tool's own name `PB_<prefix>_<n>` as the fallback. `open` of a box planned in advance says its base plan stands, and writes none, when either finds one; `baseline` refuses, saying a base plan exists and moving it is a rebaseline, when either finds one. A base plan linked to another box, or not current, is not the box's. A box with no linked base plan still gets one under the tool's own name. Before: a base plan planned under another name was not seen, `open` printed that it had none and reached the refusal about pace, and a second current base plan would have been written once a pace existed.
+v3.4.0 (box 54, same release): `close` names on the closing review, as carried forward, each story planned into the box that this close does not finish (`carry_over_clause`), so a box planned with a story that was not opened in it can close; before, such a story was left unflagged and the shape IterationNotCleanedShape would refuse the closed box.
 v3.3.0 (Lineage 29, package 17, box 50, story OwesAtOpen; course-management handover of 2026-11-14, gap 3): (1) `open` prints, for each typed task it records, what that task will owe at its close under the obligation sets the lineage adopts (the Required obligations, read from the register by their links), and says which of them this tool writes and which are to be supplied in the register. (2) A design or architecture task of the close spec may give `model_kinds`, a list of kinds (or {kind, level} pairs), and one model is recorded for each; `model_kind` still gives one. (3) The evidence record of a task is also typed with the general evidence class when an adopted obligation of that task type owes it, since the guard runs without inference and a test evidence record does not count as the general class.
 v3.2.0 (Lineage 29, package 17, box 49, stories CloseByLinks and DoDRead; course-management handover of 2026-11-14, G236): (1) `close` finds the acceptance criteria, the objective and the metric of each story by the story's own links (hasAcceptanceCriterion, pursuesObjective, and the objective's hasSuccessMetric), as `open` finds the story, and attests, demonstrates and observes those records; the names this tool mints (AC_<prefix>_<key>, Obj_<prefix>_<key>, Metric_<prefix>_<key>) remain the fallback for a story that holds no such link, and a closing observation named by a story key is about the objective that story pursues. (2) `close` writes an execution modality on the story it closes when it holds none (the spec may give `modality`, default Mode_Automated). (3) `close` refuses a spec that names no finding, before anything is written: the retrospective shape needs one. (The Definition of Done the guard reads is a shapes change, shapes 1.224.0.) Before: a register whose records were named otherwise was refused three times at the close, and the closing observations of boxes 47 and 48 of this lineage were written against objectives that do not exist.
 v3.1.0 (Lineage 29, package 14, stories TypedTasks and AllViolations; 2SISA delivery handover of 2026-11-11, G233):
@@ -504,7 +507,7 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "3.3.0"
+TOOL_VERSION = "3.5.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
@@ -519,6 +522,33 @@ def _date_plan():
     return m
 
 
+def base_plan_of(reg, it):
+    """The current base plan of the box whose Iteration is IT (a bare local name): a backlog:PlanBaseline that points to the box by baselineFor and carries isCurrentBaseline true, under whatever name and prefix the register gives it (the register is read with its own prefix as fw:). Every statement of the subject is read (whole_subject_text). None when there is none."""
+    for subj in sorted(set(re.findall(r"^fw:(\S+) a [^\n]*\bbacklog:PlanBaseline\b", reg.s, re.M))):
+        blk = whole_subject_text(reg, subj)
+        if re.search(r"backlog:baselineFor\s+fw:%s\b" % re.escape(it), blk) and re.search(r"backlog:isCurrentBaseline\s+true\b", blk):
+            return subj
+    return None
+
+
+def has_base_plan(reg, P, n, it):
+    """A base plan of box n exists: found by its link to the box, else by this tool's own name."""
+    return base_plan_of(reg, it) is not None or reg.has("PB_%s_%d" % (P, n))
+
+
+def carry_over_clause(reg, it, finished):
+    """The members of box IT that this close does not finish, named on the closing review as carried forward on purpose (the shape IterationNotCleanedShape asks every member of a closed iteration to be Done or flagged): a story planned into the box and not opened in it stays Proposed and is carried. FINISHED is the set of story names this close finishes. Returns the clause to append to the review statement, or ''."""
+    out = []
+    for subj in sorted(set(re.findall(r"^fw:(\S+) a backlog:Story\b", reg.s, re.M))):
+        if subj in finished:
+            continue
+        blk = whole_subject_text(reg, subj)
+        member = any(re.search(r"\bfw:%s\b" % re.escape(it), m.group(1)) for m in re.finditer(r"backlog:memberOfContainer\s+(.*?)(?:;|\s\.(?:\s|$))", blk, re.S))
+        if member and not re.search(r"backlog:hasState\s+backlog:Done\b", blk):
+            out.append("fw:" + subj)
+    return (" ; backlog:flagsForCarryOver " + " , ".join(out)) if out else ""
+
+
 def cmd_baseline(reg, n, buffer=1.5):
     """The base plan of box n: its start, and an end predicted from the effort of its stories and the pace delivered in earlier boxes. Refused when the register holds no pace to predict from."""
     P = reg.P
@@ -527,7 +557,7 @@ def cmd_baseline(reg, n, buffer=1.5):
     bid = "PB_%s_%d" % (P, n)
     if not reg.has(ids["it"]):
         raise SystemExit("REFUSED: box %d is not open" % n)
-    if reg.has(bid):
+    if has_base_plan(reg, P, n, ids["it"]):
         raise SystemExit("REFUSED: box %d already has a base plan; moving it is a Rebaseline decided by the Owner" % n)
     dp = _date_plan()
     if dp is None:
@@ -710,7 +740,7 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2, k
     reg.save()
     print("box %d opened at %s; stories %s now InProgress" % (n, t0, ", ".join(keys)))
     if planned is not None:
-        if reg.has("PB_%s_%d" % (P, n)):
+        if has_base_plan(reg, P, n, resolve_it_id(reg, P, n, reg.L)):
             print("box %d was planned in advance: its base plan stands" % n)
             return
         print("box %d was planned in advance with no base plan: one is recorded now" % n)
@@ -1006,7 +1036,7 @@ def cmd_close(reg, root, n, spec):
     trun = tick()
     recs.append("fw:%s a backlog:ControlRun ; backlog:runOfActivity fw:%s ; backlog:ranAt %s ;\n    backlog:hasRunResult \"%s\" ." % (ids["run"], ids["act"], dt(trun), esc(spec["run_result"])))
     trev = tick()
-    recs.append("fw:%s a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;\n    backlog:ceremonyFor fw:%s ; backlog:heldAt %s ; backlog:reviewsCeremony fw:%s ;\n    backlog:closesIteration fw:%s ; backlog:closesStory %s ." % (ids["review"], ids["it"], dt(trev), ids["plan"], ids["it"], " , ".join("fw:%s" % sid[k] for k in keys)))
+    recs.append("fw:%s a backlog:SprintReviewCeremony ; backlog:hasWorkKind backlog:WorkKind_Closure ;\n    backlog:ceremonyFor fw:%s ; backlog:heldAt %s ; backlog:reviewsCeremony fw:%s ;\n    backlog:closesIteration fw:%s ; backlog:closesStory %s%s ." % (ids["review"], ids["it"], dt(trev), ids["plan"], ids["it"], " , ".join("fw:%s" % sid[k] for k in keys), carry_over_clause(reg, ids["it"], set(sid.values()))))
     trel = tick()
     recs.append("fw:%s a backlog:DeploymentUnit ;\n    backlog:hasIdentifier \"%s-REL-%d\" ; backlog:hasTitle \"%s\" ;\n    backlog:hasState backlog:Done ; backlog:hasDeploymentDate %s ;\n    backlog:deploysFrom fw:%s ; backlog:deploysItem %s ;\n    backlog:decidedBy backlog:Builder ; backlog:hasSelectionBasis backlog:Sel_Committed ; backlog:belongsToLineage %s ." % (ids["rel"], P, n, esc(spec["release_title"]), dt(trel), ids["it"], " , ".join("fw:%s" % sid[k] for k in keys), L))
     if "plansDeploymentUnit fw:%s " % ids["rel"] not in reg.s:  # the plan names its unit at the opening (G170); the unit may not carry unfinished work, so it is written at the close

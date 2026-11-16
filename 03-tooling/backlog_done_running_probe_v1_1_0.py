@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_done_running_probe v1.0.0 -- Lineage 29, box 51 (G237; risk 2 of the 2SISA handover of 2026-11-10, Done under a Definition of Done with no running criterion).
+"""backlog_done_running_probe v1.1.0 (box 54, G240: an item whose every lineage is archived is left out; --shapes PATH runs the probe on another copy of the shapes, for the planted-fault check) -- v1.0.0 was Lineage 29, box 51 (G237; risk 2 of the 2SISA handover of 2026-11-10, Done under a Definition of Done with no running criterion).
 
 Runs DoneNeedsRunningCriterionShape itself, copied from the newest shapes file, with pyshacl exactly as the validator runs it (advanced, no inference) over the newest T-box and a small
 register planted with each case. Nothing is re-derived here: a case either makes the shape fire or it does not. Cases: a Done item whose Definition of Done has only criteria that report not yet enforceable, or has none, fires; one criterion that holds, or that is violated, lets it conform;
@@ -20,7 +20,8 @@ def newest(folder, stem):
     return sorted(fs, key=lambda f: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", f)[0]])[-1]
 
 
-SHAPES = Graph(); SHAPES.parse(newest("02-shacl-safeguards", "backlog_shacl"), format="turtle")
+SHAPES_FILE = sys.argv[sys.argv.index("--shapes") + 1] if "--shapes" in sys.argv else newest("02-shacl-safeguards", "backlog_shacl")
+SHAPES = Graph(); SHAPES.parse(SHAPES_FILE, format="turtle")
 TBOX = newest("01-ontologies", "backlog_tbox")
 if sys.argv[1:] == ["--deps"]:
     print(os.path.abspath(__file__)); print(TBOX); print(newest("02-shacl-safeguards", "backlog_shacl")); sys.exit(0)
@@ -83,5 +84,19 @@ expect("a Done item with no Definition at all is left to the rule that asks for 
 TWO = "ex:C backlog:appliesDefinitionOfDone ex:D2 .\n" + DEF % (HAS % "ex:A") + "ex:D2 a backlog:DefinitionOfDone ; backlog:hasDoDCriterion ex:B .\n" + CRIT % ("B", "NotYetEnforceable")
 expect("a Done item under two Definitions is accepted when one of them has a running criterion", not fires(done(APPLIES + "; backlog:memberOfContainer ex:C", TWO + CRIT % ("A", "Holds"))))
 expect("a Done item under two Definitions is refused when neither has a running criterion", fires(done(APPLIES + "; backlog:memberOfContainer ex:C", TWO + CRIT % ("A", "NotYetEnforceable"))))
+# G240: an item of a lineage the register marks archived was judged under the rules of its own day, so a rule written after its archiving leaves it out
+ARCH = "ex:L a backlog:Lineage ; backlog:lineageArchived %s .\n"
+INL = "; backlog:belongsToLineage ex:L"
+expect("a Done item of an archived lineage with nothing running is left out", not fires(done(APPLIES + INL, DEF % (HAS % "ex:A") + NYE + ARCH % "true")))
+expect("the same item in a lineage marked lineageArchived false is refused", fires(done(APPLIES + INL, DEF % (HAS % "ex:A") + NYE + ARCH % "false")))
+expect("the same item in a lineage that carries no archive mark is refused", fires(done(APPLIES + INL, DEF % (HAS % "ex:A") + NYE + "ex:L a backlog:Lineage .\n")))
+expect("the same item with no lineage at all is refused", fires(done(APPLIES, DEF % (HAS % "ex:A") + NYE)))
+expect("a Done item of an archived lineage under a Definition with no criterion is left out too", not fires(done(APPLIES + INL, DEF % "" + ARCH % "true")))
+expect("the exemption is for the item's own lineage: an item of a live lineage is refused while another lineage is archived", fires(done(APPLIES + "; backlog:belongsToLineage ex:Live", DEF % (HAS % "ex:A") + NYE + ARCH % "true" + "ex:Live a backlog:Lineage ; backlog:lineageArchived false .\n")))
+TWOL = "; backlog:belongsToLineage ex:L , ex:Live"
+expect("an item that belongs to an archived and to a live lineage is refused: the exemption cannot hide a live lineage's item", fires(done(APPLIES + TWOL, DEF % (HAS % "ex:A") + NYE + ARCH % "true" + "ex:Live a backlog:Lineage ; backlog:lineageArchived false .\n")))
+expect("an item that belongs to an archived and to a lineage with no archive mark is refused", fires(done(APPLIES + TWOL, DEF % (HAS % "ex:A") + NYE + ARCH % "true" + "ex:Live a backlog:Lineage .\n")))
+expect("an item that belongs to two archived lineages is left out", not fires(done(APPLIES + TWOL, DEF % (HAS % "ex:A") + NYE + ARCH % "true" + "ex:Live a backlog:Lineage ; backlog:lineageArchived true .\n")))
+expect("an item with no lineage is refused even when an archived lineage exists elsewhere in the register", fires(done(APPLIES, DEF % (HAS % "ex:A") + NYE + ARCH % "true")))
 print("VERDICT: %s -- %d expectations %s" % ("PASS" if not FAILS else "FAIL", N[0], "hold" if not FAILS else "(%d failed)" % len(FAILS)))
 sys.exit(1 if FAILS else 0)

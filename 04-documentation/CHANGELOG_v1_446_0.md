@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.21 — 2026-11-16 (The box tool finds a base plan by its link and carries unfinished stories; archived lineages are left out of the Done rule)
+
+Box 53 (G239): the box tool 3.4.0 finds the base plan of a box by its link, under any name and prefix (IPage handover); probe of 12 cases. Box 54 (G240): shapes 1.226.0 leave an item whose every lineage is archived out of the rule on Done items without a running criterion (IPage's register and archive: 14 violations to 0); probe of 23 cases; the box tool names a planned story it did not finish as carried forward on the closing review (probe of 8 cases). Box 55 (the single-status rule on an archived lineage) is planned and carried.
+
+**Unplanned work:** none
+
 ## v5.5.20 — 2026-11-16 (The date planner on a register of any package)
 
 Box 52 (package 19, G238): the date planner takes the namespace of its forecasts from the register it is given, counts the open effort of an epic's stories once, refuses a forecast of zero or unsized work, and can borrow a pace or add the points of sequential objectives only when asked and says so. Planner 1.4.0, a 21-case probe proven by 14 mutations, and fresh independent reviews.
