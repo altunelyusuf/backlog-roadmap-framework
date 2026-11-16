@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.19 — 2026-11-16 (Refuse Done when no running criterion governs)
+
+Box 51 (package 18): the register refuses an item in Done when none of the Definitions of Done that govern it has a criterion that runs. New shape, two fixture cases, a 13-expectation probe proven by mutation, and a fresh independent review.
+
+**Unplanned work:** none
+
 ## v5.5.18 — 2026-11-15 (PATCH: the box tool closes by the story's own links and says at the opening what each task will owe; the guard reads a Definition of Done applied on the item or its container)
 
 Answers the course-management handover of 2026-11-14 on the Owner's direction (G236, boxes 49 and 50 of package 17, each reviewed independently). Box tool 3.3.0: the close finds the acceptance criteria, objective and metric of a story by its own links (hasAcceptanceCriterion, pursuesObjective, hasSuccessMetric) and writes an execution modality on the story; it refuses a spec that names no finding before writing anything; the opening prints what each typed task will owe at its close under the adopted obligations and says which of those the tool writes; a design or architecture task may give a list of model kinds and one model is recorded for each; the evidence record is also typed with the general evidence class when an obligation owes it. Shapes 1.224.0: the item-completeness rule accepts a Definition of Done applied on the item or on its container, which is what the guard sees without inference. The older step probe is 1.11.0; three new probes hold each change.

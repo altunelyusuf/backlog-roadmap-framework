@@ -25,7 +25,8 @@ ex:P a backlog:AdoptionProfile ; backlog:profileAppliesTo "progress probe" ;
     backlog:adoptsFacet backlog:CoreFacet , backlog:EvidenceFacet , backlog:InvariantFacet , backlog:AuditFacet .
 ex:BL a backlog:Backlog ; backlog:hasIdentifier "BL" ; backlog:hasState backlog:InProgress ;
     backlog:appliesDefinitionOfDone ex:DoD_PG ; backlog:hasCommitment ex:Commit_PG .
-ex:DoD_PG a backlog:DefinitionOfDone .
+ex:DoD_PG a backlog:DefinitionOfDone ; backlog:hasDoDCriterion ex:DoD_PG_Run .
+ex:DoD_PG_Run a backlog:DoDCriterion ; rdfs:label "A criterion that runs"@en ; backlog:hasCheckQuery "ASK { ?e a backlog:TestEvidence }" ; backlog:hasExpectedResult "true" ; backlog:hasCriterionStatus backlog:Holds .
 ex:Commit_PG a backlog:Commitment ; backlog:commitsToGoal ex:CGoal .
 ex:Lin_PG a backlog:Lineage ; backlog:lineageArchived false ; backlog:lineageForMission ex:CMission ; backlog:lineageOrdinal 1 .
 # a parent one-quarter through: 1 of 4 children resolved

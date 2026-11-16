@@ -4664,3 +4664,7 @@ ex:RC_ClosedBox a backlog:Iteration ; backlog:hasIdentifier "RC-CLOSED" ; backlo
 # FR_NoRepair -- a finding raised by the review of a finished item with no repair item, no remedy carried out and no record (FindingNeedsRepairShape, G235).
 ex:FR_NoRepair a backlog:RetrospectiveFinding ; backlog:hasRootCause "a cause" ; backlog:hasFindingScope backlog:Scope_LineageLocal ; backlog:raisedByReviewOf ex:FR_Item .
 ex:FR_Item a backlog:BacklogConcept ; rdfs:label "stand-in for the finished item a review judged"@en .
+# RD_NoRunning -- a Done item under a Definition of Done in which every criterion reports not yet enforceable (DoneNeedsRunningCriterionShape, G237).
+ex:RD_NoRunning a backlog:Story ; backlog:hasState backlog:Done ; backlog:appliesDefinitionOfDone ex:RD_Def .
+ex:RD_Def a backlog:DefinitionOfDone ; backlog:hasDoDCriterion ex:RD_Crit .
+ex:RD_Crit a backlog:DoDCriterion ; rdfs:label "A criterion that does not run yet"@en ; backlog:hasCheckQuery "to be written" ; backlog:hasExpectedResult "to be written" ; backlog:hasCriterionStatus backlog:NotYetEnforceable .
