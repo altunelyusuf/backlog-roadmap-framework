@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.20 — 2026-11-16 (The date planner on a register of any package)
+
+Box 52 (package 19, G238): the date planner takes the namespace of its forecasts from the register it is given, counts the open effort of an epic's stories once, refuses a forecast of zero or unsized work, and can borrow a pace or add the points of sequential objectives only when asked and says so. Planner 1.4.0, a 21-case probe proven by 14 mutations, and fresh independent reviews.
+
+**Unplanned work:** none
+
 ## v5.5.19 — 2026-11-16 (Refuse Done when no running criterion governs)
 
 Box 51 (package 18): the register refuses an item in Done when none of the Definitions of Done that govern it has a criterion that runs. New shape, two fixture cases, a 13-expectation probe proven by mutation, and a fresh independent review.
