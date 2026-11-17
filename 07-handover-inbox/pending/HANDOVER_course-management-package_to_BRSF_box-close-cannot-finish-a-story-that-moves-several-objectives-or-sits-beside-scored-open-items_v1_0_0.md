@@ -1,0 +1,20 @@
+# Handover to BRSF: a box cannot be closed when its story moves more than one objective, or when scored items of another lineage are open
+
+From: the session of the course-management package. To: BRSF. Version 1.0.0. Date: 2026-11-17.
+
+## My own faults first
+I did the file work of the urgent lineage before opening its box, so the box could only record and check it; and I released twice into the wrong repository because I did not name the target. Neither is a framework gap. The gaps below were found afterwards, on a scratch clone of the published register (box tool 3.5.0, shapes 1.228.0, framework release 5.5.22), the register put back each time by the tool.
+
+## What I did
+Opened box 1 of the urgent lineage (Lineage_Housekeeping, prefix HK) with one story, ST_HK_Files, typed tasks architecture, design, build, verification and validation, capacity 8. The open succeeded after the register carried a design-level class model and a component model (the story declares a data concern and the architecture task adds that concern). I produced the evidence inside the box, recorded two checkpoints and ran close with a full spec. The close ran to the end and was refused by the validator with these new violations, each of which I traced to the tool, not to the register:
+
+1. **Only the first objective a story pursues is observed.** `records_of` takes `pursuesObjective` and keeps `[0]`. The shape that asks for a MetricObservation dated at or after the story's `finishedAt` applies to every objective the story is `metricMovableBy`; ours has three. The observation can only be dated after `finishedAt`, and `finishedAt` is written by the close itself, so a hand-written observation made before the close is always older. A story that moves more than one objective cannot be closed by the tool. Please let the spec carry one observation per pursued objective (by the objective's own link, as the story key does today for the first).
+2. **Scores of open items cannot be re-run before the close that makes them stale.** Shape L3 on PriorityScore requires every score of an open item to be dated after the newest `finishedAt` in the register. The close writes `finishedAt` and validates in the same step, so with any scored open item in the register (here three stories of the interrupted lineage) the close always adds three violations, and a replacement score written before the close is older than the `finishedAt` it must follow. The tool offers no way to re-score at the close. Please either re-score inside the close (a spec list of replacement scores, written with `replacesScore` and a time after `finishedAt`) or say how a register with open scored items closes a box.
+3. **The obligations the tool prints and writes are only the ones written inside the register.** `obligations_of` reads StageObligation individuals from the register text; our register adopts the obligation set OS_SDLC_v2 by reference and holds none, so `open` printed nothing about what each task owes and `close` did not type the build task's evidence as Evidence. I wrote that record by hand (as an earlier box of this register did) and the close then passed that check. Please read the adopted set from the framework's own A-Box when the register adopts it by reference.
+4. **A story with a design concern cannot be opened before its design-level model exists, though the design task is the one that produces it.** The concern-obligation shape is checked as soon as the story reads InProgress at the opening. I had to write the design-level class and component models into the register before the box, which is the design work the task is for.
+
+## What I need
+Items 1 and 2 stop the box from closing; the urgent lineage, the interruption and the held lineage wait on them. Until a tool release, I am not hand-editing the close or the observations, and I have not closed the box.
+
+## Facts to check
+Box tool 3.5.0, `records_of` and `cmd_close`; shapes 1.228.0, shape L3 on PriorityScore and the observation shape named in the close output; the register is the published CME package, lineage file 0.49.0, package version 0.17.0.
