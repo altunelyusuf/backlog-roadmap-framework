@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.22 — 2026-11-17 (An archived lineage's live pointer is not a second status)
+
+The single-status rule (shapes 1.228.0, box 55, G241) treats LS_Archived on the live pointer of a lineage marked lineageArchived true as the pointer, not a second status, so validating a lineage together with its archive no longer reports a violation (the framework's own L_AgenticProof: 1 to 0); two statuses on a live lineage, or any other two on an archived one, still fail. Probe of 9 cases proven by planted faults.
+
+**Unplanned work:** none
+
 ## v5.5.21 — 2026-11-16 (The box tool finds a base plan by its link and carries unfinished stories; archived lineages are left out of the Done rule)
 
 Box 53 (G239): the box tool 3.4.0 finds the base plan of a box by its link, under any name and prefix (IPage handover); probe of 12 cases. Box 54 (G240): shapes 1.226.0 leave an item whose every lineage is archived out of the rule on Done items without a running criterion (IPage's register and archive: 14 violations to 0); probe of 23 cases; the box tool names a planned story it did not finish as carried forward on the closing review (probe of 8 cases). Box 55 (the single-status rule on an archived lineage) is planned and carried.
