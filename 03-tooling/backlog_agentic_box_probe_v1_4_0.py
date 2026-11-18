@@ -38,11 +38,13 @@ fw:L_AdaptiveProof backlog:openedWithProfile backlog:Profile_AgenticAdaptive ;
 fw:ST_AP_A a backlog:Story ; backlog:hasIdentifier "A" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 3.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:AC_AP_A a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_A backlog:hasAcceptanceCriterion fw:AC_AP_A .
 fw:ST_AP_P a backlog:Story ; backlog:hasIdentifier "P" ; backlog:hasState backlog:InProgress ; backlog:hasEffort 1.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:ST_AP_B a backlog:Story ; backlog:hasIdentifier "B" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 2.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:AC_AP_B a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_B backlog:hasAcceptanceCriterion fw:AC_AP_B .
 fw:It_AP_0 a backlog:Iteration ; backlog:hasState backlog:Done ; backlog:belongsToLineage fw:L_AdaptiveProof .
 """)
 ART = "03-tooling/artifact.txt"

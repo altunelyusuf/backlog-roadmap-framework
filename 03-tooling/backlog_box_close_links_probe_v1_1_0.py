@@ -36,6 +36,7 @@ fw:Gauge_Z a backlog:Metric .
 PLAIN = HDR + """fw:ST_AP_A a backlog:Story ; backlog:hasIdentifier "A" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 3.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:AC_AP_A a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_A backlog:hasAcceptanceCriterion fw:AC_AP_A .
 """
 ART = "03-tooling/artifact.txt"
 def scenario(reg_text, extra_spec=None, findings=True, label=""):

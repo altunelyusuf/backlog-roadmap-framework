@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step_probe v1.11.0 (box 50: an owed general evidence class is now written by the close, so the case that proved its refusal now proves it is covered). v1.10.0 (box 49: every close spec carries a finding, since the box tool v3.2.0 refuses a close that names none; the refusal itself is proved in backlog_box_close_links_probe). v1.9.0 (Lineage 29, package 14; 2SISA delivery handover, G233): a story opened with `KEY:design+build+verification` holds three tasks of those three types, each with its own readiness check, transitions and, at the close, its own evidence, and a task or a task's evidence that is missing is refused; a bare KEY still records the one build task; a refused step prints every violation it found, grouped by the check that raised it, not the first few, and puts the register back. v1.8.0 (IPage handover box-tool-for-an-adopting-register, C5): a planned box is opened in place whatever ORDER its own predicates
+"""backlog_box_step_probe v1.12.0 (box 58: the tool honours grooming, Definition of Done and concerns the register already holds; the fixture story now links its acceptance criterion, as a real register does). v1.11.0 (box 50: an owed general evidence class is now written by the close, so the case that proved its refusal now proves it is covered). v1.10.0 (box 49: every close spec carries a finding, since the box tool v3.2.0 refuses a close that names none; the refusal itself is proved in backlog_box_close_links_probe). v1.9.0 (Lineage 29, package 14; 2SISA delivery handover, G233): a story opened with `KEY:design+build+verification` holds three tasks of those three types, each with its own readiness check, transitions and, at the close, its own evidence, and a task or a task's evidence that is missing is refused; a bare KEY still records the one build task; a refused step prints every violation it found, grouped by the check that raised it, not the first few, and puts the register back. v1.8.0 (IPage handover box-tool-for-an-adopting-register, C5): a planned box is opened in place whatever ORDER its own predicates
 are written in, because a graph serializer is free to reorder them (it alphabetises them) and the tool must still open the box, not refuse it. v1.7.0
 treated box 5's layout (hasCapacity before hasState, named "odd") as one the tool "cannot open in place" and refused; that was this exact reordering,
 so v1.7.0's assertion is superseded here, not silently dropped: box 5 now opens correctly, and a genuinely unrecoverable layout (box 6, no hasCapacity
@@ -13,6 +13,7 @@ statement edited away, an artifact older than the box. Positive: open, checkpoin
 import os, re, shutil, subprocess, sys, tempfile, json, time
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOL = sorted((f for f in os.listdir(HERE) if re.match(r"backlog_box_step_v\d+_\d+_\d+\.py$", f)), key=lambda f: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", f)[0]])[-1]
+MUTANT = sys.argv[sys.argv.index("--tool") + 1] if "--tool" in sys.argv else None   # a planted mutant of the tool, to prove the cases can fail
 bad, COUNT = [], [0]
 def expect(name, ok):
     COUNT[0] += 1
@@ -20,7 +21,7 @@ def expect(name, ok):
     if not ok: bad.append(name)
 work = tempfile.mkdtemp()
 pk = os.path.join(work, "pkg"); os.makedirs(os.path.join(pk, "01-ontologies")); os.makedirs(os.path.join(pk, "03-tooling"))
-shutil.copy(os.path.join(HERE, TOOL), os.path.join(pk, "03-tooling", TOOL))
+shutil.copy(MUTANT or os.path.join(HERE, TOOL), os.path.join(pk, "03-tooling", TOOL))
 REG = os.path.join(pk, "01-ontologies", "backlog_abox_v1_1_0.ttl")
 open(REG, "w").write("""@prefix fw: <http://example.org/backlog-framework-register#> .
 @prefix backlog: <http://example.org/backlog#> .
@@ -31,7 +32,7 @@ open(REG, "w").write("""@prefix fw: <http://example.org/backlog-framework-regist
 fw:L_AdaptiveProof a backlog:Lineage ; backlog:hasLineageStatus backlog:LS_InProgress .
 fw:KO a backlog:KickOff ; backlog:kicksOffLineage fw:L_AdaptiveProof .
 fw:ST_AP_A a backlog:Story ; backlog:hasIdentifier "A" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 3.0 ;
-    backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
+    backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ; backlog:hasAcceptanceCriterion fw:AC_AP_A .
 fw:AC_AP_A a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
 fw:ST_AP_P a backlog:Story ; backlog:hasIdentifier "P" ; backlog:hasState backlog:InProgress ; backlog:hasEffort 1.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
@@ -127,7 +128,10 @@ fw:ST_AP_B a backlog:Story ; backlog:hasIdentifier "B" ; backlog:hasState backlo
 fw:ST_AP_B backlog:memberOfContainer fw:It_AP_2 .
 fw:ST_AP_C a backlog:Story ; backlog:hasIdentifier "C" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
+fw:AC_AP_C a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_C backlog:hasAcceptanceCriterion fw:AC_AP_C .
 fw:AC_AP_B a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_B backlog:hasAcceptanceCriterion fw:AC_AP_B .
 fw:It_AP_2 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-2" ; backlog:hasTitle "planned" ; backlog:hasSprintGoal "g" ; backlog:hasState backlog:Proposed ; backlog:hasCapacity 3.0 ; backlog:belongsToLineage fw:L_AdaptiveProof .
 fw:PB_AP_2 a backlog:PlanBaseline ; backlog:baselineFor fw:It_AP_2 ; backlog:isCurrentBaseline true ; backlog:hasBaselineStart "2026-01-01T00:00:00Z"^^xsd:dateTime ; backlog:hasBaselineEnd "2026-01-01T04:00:00Z"^^xsd:dateTime .
 """
@@ -149,6 +153,8 @@ fw:It_AP_5 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-5" ; backlog:hasT
 fw:ST_AP_D a backlog:Story ; backlog:hasIdentifier "D" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:ST_AP_D backlog:memberOfContainer fw:It_AP_5 .
+fw:ST_AP_D backlog:hasAcceptanceCriterion fw:AC_AP_D .
+fw:AC_AP_D a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
 fw:It_AP_6 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-6" ; backlog:hasTitle "unreadable" ; backlog:hasState backlog:Proposed ; backlog:belongsToLineage fw:L_AdaptiveProof .
 """)
 rc, out = run("open", "3", "t", "g", "C", "--capacity", "3")
@@ -163,10 +169,13 @@ expect("a planned box with no capacity recorded at all is still refused, not gue
 # v1.9.0: typed tasks and all violations
 publish()
 _r = open(REG).read() + """
+fw:AC_AP_D a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_D backlog:hasAcceptanceCriterion fw:AC_AP_D .
 fw:ST_AP_E a backlog:Story ; backlog:hasIdentifier "E" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 2.0 ;
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:ST_AP_E backlog:memberOfContainer fw:It_AP_7 .
 fw:AC_AP_E a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_E backlog:hasAcceptanceCriterion fw:AC_AP_E .
 fw:It_AP_7 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-7" ; backlog:hasTitle "typed" ; backlog:hasSprintGoal "g" ; backlog:hasState backlog:Proposed ; backlog:hasCapacity 3.0 ; backlog:belongsToLineage fw:L_AdaptiveProof .
 fw:PB_AP_7 a backlog:PlanBaseline ; backlog:baselineFor fw:It_AP_7 ; backlog:isCurrentBaseline true ; backlog:hasBaselineStart "2026-01-02T00:00:00Z"^^xsd:dateTime ; backlog:hasBaselineEnd "2026-01-02T04:00:00Z"^^xsd:dateTime .
 """
@@ -332,6 +341,7 @@ fw:ST_AP_F a backlog:Story ; backlog:hasIdentifier "F" ; backlog:hasState backlo
     backlog:memberOfContainer fw:Register ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:ST_AP_F backlog:memberOfContainer fw:It_AP_8 .
 fw:AC_AP_F a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_F backlog:hasAcceptanceCriterion fw:AC_AP_F .
 fw:It_AP_8 a backlog:Iteration ; backlog:hasIdentifier "AP-BOX-8" ; backlog:hasTitle "many" ; backlog:hasSprintGoal "g" ; backlog:hasState backlog:Proposed ; backlog:hasCapacity 3.0 ; backlog:belongsToLineage fw:L_AdaptiveProof .
 fw:PB_AP_8 a backlog:PlanBaseline ; backlog:baselineFor fw:It_AP_8 ; backlog:isCurrentBaseline true ; backlog:hasBaselineStart "2026-01-03T00:00:00Z"^^xsd:dateTime ; backlog:hasBaselineEnd "2026-01-03T04:00:00Z"^^xsd:dateTime .
 """
@@ -351,6 +361,89 @@ json.dump(many, open(os.path.join(work, "many2.json"), "w"))
 rc, out = run("close", "8", os.path.join(work, "many2.json"))
 expect("two violations on one focus that differ only after 110 characters are both kept, in full", rc != 0 and "tail one" in out and "tail two" in out and "2 violation(s)" in out)
 expect("a refused step puts the register back as it was", open(REG).read() == before8)
+# v1.12.0 (box 58): the register already holds the grooming, the Definition of Done and the concerns; the tool honours them and decides readiness from the register
+publish()
+_g = open(REG).read() + """
+fw:DoD_Own a backlog:DefinitionOfDone ; rdfs:label "Own"@en .
+fw:ST_AP_G a backlog:Story ; backlog:hasIdentifier "G" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_G ; backlog:appliesDefinitionOfDone fw:DoD_Own ; backlog:hasNoApplicableConcern "stated by the story" .
+fw:AC_AP_G a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:Ref_G_own a backlog:RefinementEvent ; backlog:refines fw:ST_AP_G ; backlog:groomsForIteration fw:It_AP_10 .
+fw:ST_AP_H a backlog:Story ; backlog:hasIdentifier "H" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ; backlog:hasAcceptanceCriterion fw:AC_AP_H .
+fw:AC_AP_H a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_I a backlog:Story ; backlog:hasIdentifier "I" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_H ; backlog:hasNoApplicableConcern "none" .
+fw:ST_AP_J a backlog:Story ; backlog:hasIdentifier "J" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_H ; backlog:dependsOn fw:ST_AP_Q .
+fw:ST_AP_Q a backlog:Story ; backlog:hasIdentifier "Q" ; backlog:hasState backlog:InProgress ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:ST_AP_K a backlog:Story ; backlog:hasIdentifier "K" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_H .
+fw:Imp_K a backlog:Impediment ; backlog:impedes fw:ST_AP_K .
+fw:ST_AP_L a backlog:Story ; backlog:hasIdentifier "L" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 5.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_H .
+fw:ST_AP_M a backlog:Story ; backlog:hasIdentifier "M" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
+fw:ST_AP_N a backlog:Story ; backlog:hasIdentifier "N" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B ;
+    backlog:hasAcceptanceCriterion fw:AC_AP_H ; backlog:dependsOn fw:ST_AP_R .
+fw:ST_AP_R a backlog:Story ; backlog:hasIdentifier "R" ; backlog:hasState backlog:Done ; backlog:belongsToLineage fw:L_AdaptiveProof .
+fw:Imp_N a backlog:Impediment ; backlog:impedes fw:ST_AP_N ; backlog:resolvedAt "2026-01-01T00:00:00Z"^^xsd:dateTime .
+"""
+open(REG, "w").write(_g)
+import rdflib
+_BB = rdflib.Namespace("http://example.org/backlog#"); _FW = rdflib.Namespace("http://example.org/backlog-framework-register#")
+def _g_of(txt):
+    g = rdflib.Graph(); g.parse(data=txt, format="turtle"); return g
+def _vals(txt, subj, pred): return sorted(str(o) for o in _g_of(txt).objects(_FW[subj], _BB[pred]))
+def _task(txt, k): return re.findall(r"fw:T_AP_%s_\w+ a backlog:ExecutionTask .*?\." % k, txt, re.S)
+rc, out = run("open", "10", "t", "g", "G:design+build+verification", "--capacity", "3")
+c10 = open(REG).read()
+expect("C1: a story already groomed for the box opens", rc == 0 and "now InProgress" in out)
+expect("C1: the grooming the register holds is not repeated: no refinement of the tool's own is written", "fw:Ref_AP_10_G " not in c10 and "fw:Ev10_ST_AP_G_T_Refine" in c10)
+expect("C1: the story that states no concern applies keeps that statement and gains no second one or an architecture claim", _vals(c10, "ST_AP_G", "hasNoApplicableConcern") == ["stated by the story"] and _vals(c10, "ST_AP_G", "hasApplicableConcern") == [])
+_tg = [str(t) for t in _g_of(c10).subjects(_BB.hasTaskType, None) if str(t).startswith(str(_FW) + "T_AP_G_")]
+expect("C1: the story's own Definition of Done is the one the story and its three tasks apply", len(_tg) == 3 and all(_vals(c10, t[len(str(_FW)):], "appliesDefinitionOfDone") == [str(_FW) + "DoD_Own"] for t in _tg) and _vals(c10, "ST_AP_G", "appliesDefinitionOfDone") == [str(_FW) + "DoD_Own"])
+expect("C1: the story's Definition of Done is not written a second time on the story (its own line plus one per task)", c10.count("appliesDefinitionOfDone fw:DoD_Own") == 4)
+rc, out = run("open", "11", "t", "g", "H", "--capacity", "3")
+c11 = open(REG).read()
+expect("C2: a story with no grooming still gets the tool's own refinement", rc == 0 and "fw:Ref_AP_11_H a backlog:RefinementEvent" in c11)
+expect("C2: a story with no concern statement still gets the tool's statement", len(_vals(c11, "ST_AP_H", "hasNoApplicableConcern")) == 1)
+_th = [str(t) for t in _g_of(c11).subjects(_BB.hasTaskType, None) if str(t).startswith(str(_FW) + "T_AP_H_")]
+expect("C2: a story that applies no Definition of Done gets the generic one, on the story and its task", len(_th) == 1 and _vals(c11, _th[0][len(str(_FW)):], "appliesDefinitionOfDone") == [str(_FW) + "DoD_AP"] and _vals(c11, "ST_AP_H", "appliesDefinitionOfDone") == [str(_FW) + "DoD_AP"] and len(_vals(c11, "DoD_AP", "hasDoDCriterion")) == 2)
+rc, out = run("open", "12", "t", "g", "I:analysis+architecture+build", "--capacity", "3")
+expect("C3: a story that states no concern applies and has an architecture task is refused plainly", rc != 0 and "states that no design concern applies" in out)
+rc, out = run("open", "13", "t", "g", "J", "--capacity", "3")
+expect("C4: a story whose dependency is still open is refused, naming it", rc != 0 and "ST_AP_Q" in out and "still open" in out)
+rc, out = run("open", "14", "t", "g", "K", "--capacity", "3")
+expect("C4: a story with an open impediment is refused, naming it", rc != 0 and "Imp_K" in out and "impediment" in out)
+rc, out = run("open", "15", "t", "g", "L", "--capacity", "3")
+expect("C4: a story whose effort is over the capacity is refused", rc != 0 and "exceeds the capacity" in out)
+rc, out = run("open", "16", "t", "g", "M", "--capacity", "3")
+expect("C4: a story with no acceptance criterion is refused", rc != 0 and "no acceptance criterion" in out)
+rc, out = run("open", "17", "t", "g", "N", "--capacity", "3")
+expect("C5: a story whose dependency is Done and whose impediment is resolved opens", rc == 0 and "now InProgress" in out)
+# C6: a register that names its own namespace (an adopting register, as the interactive-page package is) is read the same way: its grooming, Definition of Done and concern statement are honoured
+publish()
+_zz = """@prefix zz: <http://example.org/zz#> .
+@prefix backlog: <http://example.org/backlog#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+<http://example.org/backlog> owl:versionInfo "1.1.0" .
+zz:L_AdaptiveProof a backlog:Lineage ; backlog:hasLineageStatus backlog:LS_InProgress .
+zz:KO a backlog:KickOff ; backlog:kicksOffLineage zz:L_AdaptiveProof .
+zz:DoD_Own a backlog:DefinitionOfDone ; rdfs:label "Own"@en .
+zz:ST_AP_G a backlog:Story ; backlog:hasIdentifier "G" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 1.0 ; backlog:belongsToLineage zz:L_AdaptiveProof ; backlog:producedByStage zz:Out_B ;
+    backlog:hasAcceptanceCriterion zz:AC_AP_G ; backlog:appliesDefinitionOfDone zz:DoD_Own ; backlog:hasApplicableConcern backlog:Concern_Interface .
+zz:AC_AP_G a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+zz:Ref_G_own a backlog:RefinementEvent ; backlog:refines zz:ST_AP_G ; backlog:addressesConcern backlog:Concern_Interface ; backlog:groomsForIteration zz:It_AP_1 .
+"""
+ZREG = os.path.join(pk, "01-ontologies", "backlog_abox_zz_v1_1_0.ttl")
+open(ZREG, "w").write(_zz)
+publish()
+_r = subprocess.run([sys.executable, os.path.join(pk, "03-tooling", TOOL), ZREG, "--lineage", "zz:L_AdaptiveProof", "--prefix", "AP", "open", "1", "t", "g", "G:design+build+verification", "--capacity", "3"], capture_output=True, text=True)
+_z = open(ZREG).read()
+if _r.returncode: print(_r.stdout[-600:], _r.stderr[-600:])
+expect("C6: a register that names its own namespace opens a story groomed, with its own Definition of Done and concern", _r.returncode == 0 and "now InProgress" in _r.stdout)
+expect("C6: it gets no second refinement, no generic Definition of Done and no concern statement of the tool's", "zz:Ref_AP_1_G " not in _z and "zz:DoD_AP " not in _z and "hasNoApplicableConcern" not in _z and "Concern_Architecture" not in _z and _z.count("appliesDefinitionOfDone zz:DoD_Own") == 4)
 shutil.rmtree(work, ignore_errors=True)
 print("VERDICT: %s" % ("PASS -- %d expectations hold" % COUNT[0] if not bad else "FAIL -- " + "; ".join(bad)))
 sys.exit(1 if bad else 0)

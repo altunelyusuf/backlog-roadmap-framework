@@ -52,6 +52,7 @@ pcl:Story4_D1 a backlog:Story ; backlog:hasIdentifier "4" ; backlog:hasState bac
 pcl:Story5_D1 a backlog:Story ; backlog:hasIdentifier "5" ; backlog:hasState backlog:InProgress ; backlog:hasEffort 1.0 ;
     backlog:belongsToLineage pcl:D1 ; backlog:producedByStage pcl:Out_B .
 pcl:AC_D1_Story4_D1 a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+pcl:Story4_D1 backlog:hasAcceptanceCriterion pcl:AC_D1_Story4_D1 .
 """
 
 

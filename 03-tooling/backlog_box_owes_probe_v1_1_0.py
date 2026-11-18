@@ -32,6 +32,7 @@ fw:Gauge_Z a backlog:Metric .
 PLAIN = HDR + """fw:ST_AP_A a backlog:Story ; backlog:hasIdentifier "A" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 3.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:AC_AP_A a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_A backlog:hasAcceptanceCriterion fw:AC_AP_A .
 """
 ART = "03-tooling/artifact.txt"
 
@@ -39,6 +40,7 @@ HDR2 = HDR.replace("fw:L_AdaptiveProof a backlog:Lineage ; backlog:hasLineageSta
 STORY = """fw:ST_AP_A a backlog:Story ; backlog:hasIdentifier "A" ; backlog:hasState backlog:Proposed ; backlog:hasEffort 3.0 ;
     backlog:belongsToLineage fw:L_AdaptiveProof ; backlog:producedByStage fw:Out_B .
 fw:AC_AP_A a backlog:AcceptanceCriterion ; backlog:hasGherkinText "Given a, When b, Then c." .
+fw:ST_AP_A backlog:hasAcceptanceCriterion fw:AC_AP_A .
 """
 def OB(i, tt, cls, kind=None, level=None, depth=None, sev="Required"):
     return "fw:%s a backlog:StageObligation ; backlog:obligationOfTaskType backlog:%s ; backlog:owesClass backlog:%s ;%s%s%s backlog:obligationSeverity backlog:Oblig_%s ; backlog:inObligationSet fw:OS_T .\n" % (i, tt, cls, " backlog:owesKind backlog:%s ;" % kind if kind else "", " backlog:owesLevel backlog:%s ;" % level if level else "", " backlog:owesDepth backlog:%s ;" % depth if depth else "", sev)

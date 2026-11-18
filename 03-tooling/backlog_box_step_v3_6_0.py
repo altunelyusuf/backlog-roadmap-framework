@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_box_step v3.5.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+"""backlog_box_step v3.6.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
+
+v3.6.0 (box 58): the tool honours what the register already holds. A story already groomed for the box (a refinement that groomsForIteration it) gets no second refinement; its readiness is decided from the register (open dependency, open impediment, effort over capacity, no acceptance criterion all refuse); the Definition of Done the story applies is used, the generic one is written only for a story that applies none; a story that already states its concerns, or states none apply, keeps that statement, and one that states none applies but plans an architecture task is refused.
 
 v3.5.0 (box 56, same release): no change of behaviour; the file is renamed because box 54 changed it after its release (BP-D7). The carried-forward story it names on a closing review is now left out of the container state by the shapes 1.227.0 (rules R1a-R1c), so the closed box derives Done instead of In progress.
 v3.4.0 (Lineage 29, package 20, box 53, story BasePlanLink; IPage handover of 2026-11-16): the base plan of a box is found by its link, as the box record already is (`resolve_it_id`), and not by this tool's own name. `base_plan_of` finds a backlog:PlanBaseline that points to the box by `baselineFor` and carries `isCurrentBaseline true`, in whatever prefix and under whatever name the register gives it, reading every statement of the subject; `has_base_plan` adds this tool's own name `PB_<prefix>_<n>` as the fallback. `open` of a box planned in advance says its base plan stands, and writes none, when either finds one; `baseline` refuses, saying a base plan exists and moving it is a rebaseline, when either finds one. A base plan linked to another box, or not current, is not the box's. A box with no linked base plan still gets one under the tool's own name. Before: a base plan planned under another name was not seen, `open` printed that it had none and reached the refusal about pace, and a second current base plan would have been written once a pace existed.
@@ -76,6 +78,8 @@ Every record time is read from the clock when the record is written; a later rec
 Git is the witness of the published tree: the tool reads it with `git show origin/main:<path>`.
 """
 import sys, os, re, json, time, glob, datetime, subprocess
+import rdflib
+BB = rdflib.Namespace("http://example.org/backlog#")
 
 FW = "http://example.org/backlog-framework-register#"
 DEFAULT_EXEC = "<http://example.org/fixture-autofix#DefaultExecutor>"
@@ -507,7 +511,7 @@ def escalation_items(text):
     clean = lambda s: re.sub(r"\bRel_\w+", "a deployment unit", re.sub(r"\bIt_\w+", "an iteration", re.sub(r"\b(ST|T|Run|Ev|Obj)_\w+", "a record", s)))
     return [clean(x) for x in out]
 
-TOOL_VERSION = "3.5.0"
+TOOL_VERSION = "3.6.0"
 
 def has_own_kickoff(text, L):
     """True when the register holds a kick-off of this lineage itself; the kick-off of another lineage does not count (Lineage 24, held by a probe in Lineage 25)."""
@@ -634,6 +638,44 @@ def owed_lines(reg, kinds):
     return lines
 
 
+def register_facts(reg, ids, keys, sid):
+    """What the register already says about each story of a box (box 58, IPage handovers of 2026-11-17 and 2026-11-18): the grooming that names this box
+    (a refinement that refines the story and groomsForIteration the box), the Definition of Done the story applies, the concerns it declares, and what
+    decides each readiness criterion (acceptance criterion present, effort, open dependencies, open impediments)."""
+    g = rdflib.Graph()
+    try:
+        g.parse(data=reg.s, format="turtle")
+    except Exception as e:
+        raise SystemExit("REFUSED: the register cannot be read as Turtle (%s)" % str(e).splitlines()[0][:100])
+    N = rdflib.Namespace(FW); it = N[ids["it"]]   # the working text names the register's own namespace as fw: (an adopting register is aliased in), so facts are read in that one
+    done = (BB.Done, BB.Cancelled)
+    out = {}
+    for k in keys:
+        s_ = N[sid[k]]
+        d = {}
+        d["refinements"] = sorted(r for r in g.subjects(BB.refines, s_) if (r, BB.groomsForIteration, it) in g)
+        d["dods"] = sorted(g.objects(s_, BB.appliesDefinitionOfDone))
+        d["concerns"] = sorted(g.objects(s_, BB.hasApplicableConcern))
+        d["noconcern"] = bool(list(g.objects(s_, BB.hasNoApplicableConcern)))
+        d["ac"] = bool(list(g.objects(s_, BB.hasAcceptanceCriterion)))
+        d["open_deps"] = sorted(x for x in g.objects(s_, BB.dependsOn) if not any((x, BB.hasState, dn) in g for dn in done))
+        d["impediments"] = sorted(i_ for i_ in g.subjects(BB.impedes, s_) if not list(g.objects(i_, BB.resolvedAt)))
+        out[k] = d
+    return out
+
+
+def loc_of(iri):
+    """The local name of a node, for a message."""
+    t = str(iri)
+    return re.split(r"[#/]", t)[-1]
+
+
+def ref_of(reg, iri):
+    """A node as the working text names it: the aliased fw: form when it is in the register's own namespace (read as fw: in the working text), else the full IRI."""
+    t = str(iri)
+    return "fw:" + t[len(FW):] if t.startswith(FW) else "<%s>" % t
+
+
 def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2, kinds=None):
     kinds = kinds or {}
     P, L = reg.P, reg.L
@@ -661,7 +703,28 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2, k
     for k in keys:
         if reg.story_value(k, "hasState") != "backlog:Proposed":
             raise SystemExit("REFUSED: story %s is not Proposed" % k)
-    if not reg.has("DoD_%s" % P):
+    sid0 = {k: reg.story_ident(k) for k in keys}
+    facts = register_facts(reg, ids, keys, sid0)
+    cap_eff = float(capacity)
+    if planned is not None:
+        mc = re.search(r"backlog:hasCapacity\s+([\d.]+)\s*;", stmt)
+        cap_eff = float(mc.group(1))
+    total = 0.0
+    for k in keys:   # each readiness criterion is decided from the register, never written as met without a check (IPage handover, box 58)
+        f_ = facts[k]
+        if not f_["ac"]:
+            raise SystemExit("REFUSED: story %s has no acceptance criterion, so it is not ready for box %d" % (k, n))
+        if f_["open_deps"]:
+            raise SystemExit("REFUSED: story %s depends on work that is still open (%s), so it is not ready for box %d" % (k, ", ".join(sorted(loc_of(x) for x in f_["open_deps"])), n))
+        if f_["impediments"]:
+            raise SystemExit("REFUSED: story %s has an open impediment (%s), so it is not ready for box %d" % (k, ", ".join(sorted(loc_of(x) for x in f_["impediments"])), n))
+        if f_["noconcern"] and "Architecture" in (kinds or {}).get(k, []):
+            raise SystemExit("REFUSED: story %s states that no design concern applies, and an architecture task is planned for it; settle the story's grooming first" % k)
+        total += float(reg.effort_of_story(k))
+    if total > cap_eff:
+        raise SystemExit("REFUSED: the effort of the stories (%s points) exceeds the capacity of box %d (%s points)" % (total, n, cap_eff))
+    need_generic_dod = any(not facts[k]["dods"] for k in keys)
+    if need_generic_dod and not reg.has("DoD_%s" % P):
         reg.append("fw:DoD_%s a backlog:DefinitionOfDone ; rdfs:label \"Definition of Done for the stories of Lineage 21\"@en ;\n    backlog:hasDoDCriterion fw:DoD_%s_1 , fw:DoD_%s_2 .\n"
                    "fw:DoD_%s_1 a backlog:DoDCriterion ; rdfs:label \"Evidence attests the acceptance criterion\"@en ;\n    rdfs:comment \"A test or a measured run of a tool attests the acceptance criterion, and the artifact it names exists.\" ;\n    backlog:hasCheckQuery \"ASK { ?e a backlog:TestEvidence . FILTER NOT EXISTS { ?e backlog:attestsCriterion ?c } }\" ; backlog:hasExpectedResult \"false\" ; backlog:hasCriterionStatus backlog:Holds .\n"
                    "fw:DoD_%s_2 a backlog:DoDCriterion ; rdfs:label \"The register validates\"@en ;\n    rdfs:comment \"The register validates with no violation after the box is closed.\" ;\n    backlog:hasCheckQuery \"backlog_validate: 0 sh:Violation.\" ; backlog:hasExpectedResult \"0 violations\" ; backlog:hasCriterionStatus backlog:Holds .\n" % (P, P, P, P, P))
@@ -681,14 +744,25 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2, k
     # refinement and readiness, one second apart, before the box is planned
     sid = {k: reg.story_ident(k) for k in keys}   # C3: the local name each key actually refers to, resolved once
     recs = []
+    dod_ref = {}
     for k in keys:
         names = kinds.get(k, ["Build"])
+        dod_ref[k] = ref_of(reg, facts[k]["dods"][0]) if facts[k]["dods"] else "fw:DoD_%s" % P
+        if facts[k]["concerns"] or facts[k]["noconcern"]:
+            concern_text = ""   # the story already states its concerns: that statement stands
+        elif "Architecture" in names:
+            concern_text = " backlog:hasApplicableConcern backlog:Concern_Architecture ;"
+        else:
+            concern_text = " backlog:hasNoApplicableConcern \"%s\" ;" % NO_CONCERN
         t1 = tick()
         eff = reg.effort_of_story(k)
-        recs.append("fw:Ref_%s_%d_%s a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:%s ; backlog:refinedAt %s ;\n"
-                    "    backlog:hasRefinementOutcome \"Groomed for box %d: the acceptance criterion reads as a test, the effort is %s points, and the change is to shapes, tooling or records with probe checks.\" ;\n"
-                    "    backlog:refinedBy backlog:Builder%s ." % (P, n, k, sid[k], dt(t1), n, eff, (" ; backlog:addressesConcern backlog:Concern_Architecture" if "Architecture" in names else "")))
-        recs.append("fw:Ev%d_ST_%s_%s_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:%s ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote \"Groomed and made ready for box %d.\" ." % (n, P, k, sid[k], dt(t1), n))
+        if facts[k]["refinements"]:   # the story is already groomed for this box: that grooming stands and the planning cites it
+            recs.append("fw:Ev%d_ST_%s_%s_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:%s ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote \"Made ready for box %d from the grooming the register already holds.\" ." % (n, P, k, sid[k], dt(t1), n))
+        else:
+            recs.append("fw:Ref_%s_%d_%s a backlog:RefinementEvent ; backlog:hasWorkKind backlog:WorkKind_Preparation ; backlog:refines fw:%s ; backlog:refinedAt %s ;\n"
+                        "    backlog:hasRefinementOutcome \"Groomed for box %d: the acceptance criterion reads as a test, the effort is %s points, and the change is to shapes, tooling or records with probe checks.\" ;\n"
+                        "    backlog:refinedBy backlog:Builder%s ." % (P, n, k, sid[k], dt(t1), n, eff, (" ; backlog:addressesConcern backlog:Concern_Architecture" if "Architecture" in names else "")))
+            recs.append("fw:Ev%d_ST_%s_%s_T_Refine a backlog:TransitionEvent ; backlog:transitionedItem fw:%s ; backlog:viaTransition backlog:T_Refine ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ; backlog:hasTransitionNote \"Groomed and made ready for box %d.\" ." % (n, P, k, sid[k], dt(t1), n))
         t2 = tick()
         recs.append("fw:Chk_%s_%d_%s a backlog:ReadinessCheck ; rdfs:label \"Readiness of the story %s\"@en ;\n    backlog:checksReadinessOf fw:%s ; backlog:readinessCheckedAt %s ;\n    backlog:hasReadinessCriterion fw:K_%s_%d_%s_AC , fw:K_%s_%d_%s_Size , fw:K_%s_%d_%s_Dep , fw:K_%s_%d_%s_Input ." % (P, n, k, k, sid[k], dt(t2), P, n, k, P, n, k, P, n, k, P, n, k))
         for suf, lab in (("AC", "The acceptance criterion reads as a test the validator can run"), ("Size", "The effort is estimated and fits the box"), ("Dep", "Nothing it depends on is open"), ("Input", "No decision of the Owner is waited on")):
@@ -715,15 +789,15 @@ def cmd_open(reg, root, n, title, goal, keys, capacity, allow=(), integrity=2, k
             tdec = tick(); tck = tick(); trdy = tick(); tsk = tick(); tss = tick()
             tn = tname(P, k, nm)
             recs.append("fw:%s a backlog:ExecutionTask ; backlog:hasIdentifier \"T-%s-%s-%s\" ; backlog:hasState backlog:InProgress ;\n"
-                        "    backlog:hasTaskType %s ; backlog:responsible %s ; backlog:memberOfContainer fw:%s ; backlog:appliesDefinitionOfDone fw:DoD_%s ; backlog:belongsToLineage %s ;\n"
-                        "    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:startedAt %s ." % (tn, P, k.upper(), nm.upper(), ttype, DEFAULT_EXEC, ids["it"], P, L, dt(tsk)))
+                        "    backlog:hasTaskType %s ; backlog:responsible %s ; backlog:memberOfContainer fw:%s ; backlog:appliesDefinitionOfDone %s ; backlog:belongsToLineage %s ;\n"
+                        "    backlog:hasExecutionModality backlog:Mode_Automated ; backlog:startedAt %s ." % (tn, P, k.upper(), nm.upper(), ttype, DEFAULT_EXEC, ids["it"], dod_ref[k], L, dt(tsk)))
             kk = "K_%s_%d_T_%s%s" % (P, n, k, tsuf(nm))
             recs.append("fw:Chk_%s_%d_T_%s%s a backlog:ReadinessCheck ; rdfs:label \"Readiness of the %stask of story %s\"@en ;\n    backlog:checksReadinessOf fw:%s ; backlog:readinessCheckedAt %s ;\n    backlog:hasReadinessCriterion fw:%s_AC , fw:%s_Size , fw:%s_Dep , fw:%s_Input ." % (P, n, k, tsuf(nm), ("" if nm == "Build" else nm.lower() + " "), k, tn, dt(tck), kk, kk, kk, kk))
             for suf, lab in (("AC", tlab), ("Size", "The effort is estimated and fits the box"), ("Dep", "Nothing it depends on is open"), ("Input", "No decision of the Owner is waited on")):
                 recs.append("fw:%s_%s a backlog:ReadinessCriterion ; rdfs:label \"%s\"@en ; backlog:criterionMet true ." % (kk, suf, lab))
             for via, t in (("T_Decompose", tdec), ("T_RefinedToReady", trdy), ("T_Start", tsk)):
                 recs.append("fw:Ev%d_%s_%s a backlog:TransitionEvent ; backlog:transitionedItem fw:%s ; backlog:viaTransition backlog:%s ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ." % (n, tn, via, tn, via, dt(t)))
-        recs.append("fw:%s backlog:decomposesInto %s ; backlog:memberOfContainer fw:%s ; backlog:appliesDefinitionOfDone fw:DoD_%s ;%s backlog:startedAt %s ." % (sid[k], " , ".join("fw:" + tname(P, k, nm) for nm in names), ids["it"], P, (" backlog:hasApplicableConcern backlog:Concern_Architecture ;" if "Architecture" in names else " backlog:hasNoApplicableConcern \"%s\" ;" % NO_CONCERN), dt(tss)))
+        recs.append("fw:%s backlog:decomposesInto %s ; backlog:memberOfContainer fw:%s ;%s%s backlog:startedAt %s ." % (sid[k], " , ".join("fw:" + tname(P, k, nm) for nm in names), ids["it"], ("" if facts[k]["dods"] else " backlog:appliesDefinitionOfDone %s ;" % dod_ref[k]), concern_text, dt(tss)))
         recs.append("fw:Ev%d_ST_%s_%s_T_Start a backlog:TransitionEvent ; backlog:transitionedItem fw:%s ; backlog:viaTransition backlog:T_Start ; backlog:transitionedAt %s ; backlog:transitionedBy backlog:Builder ." % (n, P, k, sid[k], dt(tss)))
         reg.set_state(k, "Proposed", "InProgress")
     recs.append("fw:%s a backlog:ControlActivity ; rdfs:label \"Validate the register and run the probes before the box is reviewed\"@en ;\n    backlog:hasWorkKind backlog:WorkKind_Control ; backlog:plannedInBox fw:%s ." % (ids["act"], ids["it"]))
