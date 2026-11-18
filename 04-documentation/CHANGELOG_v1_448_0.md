@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.23 — 2026-11-18 (A tool runs the stored measurement query of an objective and records the observation)
+
+Box 57 (IPage seven-points, point 4): backlog_run_measures_v1_1_0.py executes the stored SPARQL query of an objective on a register and its archives, prints the one number and with --record appends a MetricObservation citing the query and the register and archive versions and digests; an objective with no query, a query that is not a SPARQL SELECT or does not return exactly one number, a service call, FROM or a non-reproducible function is refused without printing a value. Probe of 104 expectations proven by mutation; six independent reviews, the sixth accepted.
+
+**Unplanned work:** none
+
 ## v5.5.22 — 2026-11-17 (An archived lineage's live pointer is not a second status)
 
 The single-status rule (shapes 1.228.0, box 55, G241) treats LS_Archived on the live pointer of a lineage marked lineageArchived true as the pointer, not a second status, so validating a lineage together with its archive no longer reports a violation (the framework's own L_AgenticProof: 1 to 0); two statuses on a live lineage, or any other two on an archived one, still fail. Probe of 9 cases proven by planted faults.

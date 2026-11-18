@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_boxes_judged_probe v1.0.0 -- every closed box of Lineage 22 was recorded in order by the step tool and the register is clean (Lineage 22, box 3, D4).
+"""backlog_boxes_judged_probe v1.0.2 -- every closed box of Lineage 22 was recorded in order by the step tool and the register is clean (Lineage 22, box 3, D4).
+
+v1.0.2 (box 57 release 5.5.23): the validation of the register may take longer than fifteen minutes now that the register has grown (1027 s measured in the gate); the wait is raised from 900 to 3600 seconds. Before: the probe failed on a timeout of its own, not on a fault of the register.
 
   judge(graph, n) lists what is wrong with box n as the step tool records a box: it is Done with a start, an end and an observed duration; a planning ceremony and a planning event
   for each story precede the start; a checkpoint lies between the start and the end; a review closes the box and its stories after the last checkpoint; a retrospective follows the review
@@ -90,7 +92,7 @@ h = without(lambda x: x[0] == ev and x[1] == B.plannedAt)
 from rdflib import Literal, XSD
 h.add((ev, B.plannedAt, Literal("2020-01-01T00:00:00Z", datatype=XSD.dateTime)))
 expect("a planning event that precedes the start of the box is named", "a planning event precedes the start of the box" in judge(h, n))
-r = subprocess.run([sys.executable, VAL, AB], capture_output=True, text=True, timeout=900)
+r = subprocess.run([sys.executable, VAL, AB], capture_output=True, text=True, timeout=3600)
 expect("the validator finds no violation in the register under the rule sets it adopted", r.returncode == 0 and "0 violations at sh:Violation" in r.stdout)
 print("VERDICT   :", "PASS" if not bad else "FAIL"); [print("  ", b) for b in bad]
 sys.exit(1 if bad else 0)
