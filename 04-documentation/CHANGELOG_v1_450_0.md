@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.25 — 2026-11-19 (Sessions apply the lineage and its tools on their own registers without asking BRSF)
+
+The criterion resolver, the impediment tool and the release item check run on a package's own register, root and namespace; a lineage practice guide states who may decide what; the discipline points to it.
+
+**Unplanned work:** none
+
 ## v5.5.24 — 2026-11-18 (The box tool honours the grooming, the Definition of Done and the concerns a story already holds)
 
 Box 58 (IPage handovers of 2026-11-17 and 2026-11-18, G244): backlog_box_step_v3_6_0.py reads the register before it writes. A story already groomed for the box gets no second refinement; the Definition of Done a story applies is kept and the generic one is written only for a story that applies none; a story that declares concerns, or states none apply, keeps that statement; a story with an open dependency, an open impediment, effort over the box capacity or no acceptance criterion is refused with the reason instead of being opened with every readiness criterion marked met; a story that states no concern applies and plans an architecture task is refused. Works on a register under its own prefix. Probe of 99 expectations proven by 11 planted faults; opens box 1 of the interactive-page register 0.73.0 in a trial; one independent review, accepted. Instruction of the Owner of 2026-11-18 12:25 Istanbul (G244): no session needs a BRSF session to apply the lineage and its discipline.

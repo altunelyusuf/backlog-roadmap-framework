@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# v1.4.0 (Lineage 29, IK-S86): takes --register PATH and --root DIR, so a package that adopts the framework resolves the criteria of its own register against its own root. The framework T-box (beside this tool) is loaded for backlog: terms; without options the framework behaves as before.
 # v1.3.0 (Lineage 16, GOVMIT-S03): an artefact path that leads outside the package is reported as OUTSIDE ITS PACKAGE, named, counted, and never resolves -- a path joined to the package root used to follow '..' or an absolute path silently, so a criterion satisfied by another package's file read as satisfied here.
 # v1.2.0 (Lineage 17, OESC-S04): follows the package's new layout -- one vocabulary, one data and one shapes file per subject. The register is in the data file.
-"""backlog_criterion_resolve_v1_3_0.py — does the thing a criterion names exist?
+"""backlog_criterion_resolve_v1_4_0.py — does the thing a criterion names exist?
 
 Built after a story was closed with its work undone. EP_RuleExec_S1 specified an
 expected-polarity property on every fixture and a gate reading it instead of the
@@ -19,6 +20,10 @@ This resolves each criterion's satisfiedByArtifact independently:
   path/to/file.py#symbol  -> must exist AND contain the symbol
 
 Reports every criterion it cannot resolve. Exit 1 under --strict.
+
+  --register PATH   the register to read (default: the framework's latest A-box)
+  --root DIR        the package root artefact paths resolve against (default: the framework root)
+A package that adopts the framework passes both; the framework T-box beside this tool supplies the backlog: terms.
 """
 import sys, os, glob
 
@@ -93,26 +98,41 @@ def main():
     strict = "--strict" in sys.argv
     from rdflib import Graph, Namespace
     B = Namespace("http://example.org/backlog#")
+    def opt(name):
+        if name in sys.argv:
+            i = sys.argv.index(name)
+            if i + 1 >= len(sys.argv):
+                print("%s needs a value" % name); sys.exit(2)
+            return sys.argv[i + 1]
+        return None
     here = os.path.dirname(os.path.abspath(__file__))
-    pkg = os.path.dirname(here)
+    fwroot = os.path.dirname(here)
+    register = opt("--register")
+    root = opt("--root")
+    pkg = os.path.abspath(root) if root else fwroot
+    if register and not os.path.isfile(register):
+        print("register not found: %s" % register); sys.exit(2)
+    if root and not os.path.isdir(pkg):
+        print("root not found: %s" % pkg); sys.exit(2)
     g = Graph()
-    for pat in ("01-ontologies/backlog_tbox_v*.ttl",
-                "01-ontologies/backlog_abox_v*.ttl"):
-        g.parse(sorted(glob.glob(os.path.join(pkg, pat)))[-1], format="turtle")
+    g.parse(sorted(glob.glob(os.path.join(fwroot, "01-ontologies/backlog_tbox_v*.ttl")))[-1], format="turtle")
+    regfile = register if register else sorted(glob.glob(os.path.join(fwroot, "01-ontologies/backlog_abox_v*.ttl")))[-1]
+    g.parse(regfile, format="turtle")
+    mine = Graph().parse(regfile, format="turtle") if register else None  # the criteria read are those of the register given, never the framework's fixtures
     # #3 of the mitigation plan: the strengthened "is this property actually
     # used" check produced a false positive on hasExpectedPolarity, whose own
     # definition says it lives on FIXTURES, not the register. A use-check
     # that does not load the population a property is documented to inhabit
     # reproduces exactly the false confidence this check exists to remove,
     # one layer along. Fixtures are loaded into the same graph for the test.
-    for fx in sorted(glob.glob(os.path.join(pkg, "03-tooling", "fixtures", "*.ttl"))):
+    for fx in sorted(glob.glob(os.path.join(pkg, "03-tooling", "fixtures", "*.ttl")) + (glob.glob(os.path.join(fwroot, "03-tooling", "fixtures", "*.ttl")) if pkg != fwroot else [])):
         try:
             g.parse(fx, format="turtle")
         except Exception:
             pass
     subjects = {str(s) for s in set(g.subjects())}
     named = unresolved = outside = 0
-    for ac, _, target in g.triples((None, B.satisfiedByArtifact, None)):
+    for ac, _, target in (mine if mine is not None else g).triples((None, B.satisfiedByArtifact, None)):
         named += 1
         if outside_package(str(target), pkg):
             outside += 1; unresolved += 1

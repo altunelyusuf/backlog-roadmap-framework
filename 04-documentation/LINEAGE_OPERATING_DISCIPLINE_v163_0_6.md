@@ -1,14 +1,14 @@
-# Lineage Operating Discipline — v163.0.5
+# Lineage Operating Discipline — v163.0.6
 
 **What this is.** How a lineage is started and run, in one page. SHACL enforces; this file only tells the agent the order of work and the principles behind it. It holds no ruling text.
 
-**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. Rule sets and profiles are in the register too. How each ruling came about is in `LINEAGE_RULING_NARRATIVES_v163_2_0.md`: history, read only when working on that ruling.
+**Where everything else is.** Every ruling is a `GovernanceRuling` in the register (statement, enforcing shapes, source): query it, do not look for it here. A session's own practice: `LINEAGE_PRACTICE_GUIDE_v1_0_0.md`. Rule sets and profiles are in the register too. How each ruling came about: `LINEAGE_RULING_NARRATIVES_v163_2_0.md`, read when working on that ruling.
 
 **Order of precedence.** The OE ceremony and OE Operating Discipline run first; a lineage grounded on unverified bytes is a lineage about nothing.
 
 ## Ceremony — before the first work item
 
-1. **Declare the profile and level** as an owner decision with rationale, target and review date. Work done by agents opens under the agentic adaptive profile (AAL); otherwise under the non-agentic one (NAAL); AAL is the default profile and opens a lineage that names none. A clean result at a low level is a narrower claim, not a better one.
+1. **Declare the profile and level** as an owner decision with rationale, target and review date. Work done by agents opens under the agentic adaptive profile (AAL); otherwise under the non-agentic one (NAAL); AAL is the default profile and opens a lineage that names none. A clean result at a low level is a narrower claim.
 2. **Build the chain as a pipeline, one commit per stage:** Mission → ScopeStatement (text, exclusions, deliverables) → Goal → Objective → Backlog. Each stage closes in its own commit and records a `StageOutput`; the next stage consumes it. Git is the only witness of order, between commits, not within one. With a work branch (G203), each stage and box is pushed there when it closes and the order is read there.
 3. **Date the objectives from a forecast, and read every date as a forecast (G186, G197).** Run `backlog_date_plan predict` on the lineage: it shows the expected completion from the work left and the pace so far; discuss it with the Owner before the dates are final and record that on the forecast (G198); keep the base dates; every box opened gets a base plan of its own (`backlog_box_step open` records its predicted end, G187), and run `backlog_date_report` for each date against its base plan (G188). **A date is a forecast at the pace delivered. It is never a target, a deadline or a promise, and it enforces nothing:** nothing waits for a date and a date that passes makes nothing invalid (a passed date with no observation is an advisory).
 3a. **Name the kind of every obstacle (G189).** An impediment names one of seven kinds (rule refusing, evidence missing, tool at fault, wrong order, access limited, decision waited on, outside service failing); a lineage that adopts `RS_ImpedimentsKnown` is refused an impediment with none.
@@ -35,4 +35,4 @@ If a step cannot be completed from rules and facts, stop and state plainly what 
 - **A tool that refuses is not thereby correct.** Check tools with fixtures whose answer is known; run at the level you enforce.
 - **Publish each increment** after its gate passes; a lineage with a work branch commits each increment there once the checks of its kind pass, and releases the batch when its measures meet their conditions (G203). The gate has a cost budget; a release of records alone passes the light gate; one that changes code, data or pages runs the full one (G178, G205). Checks that read no register are skipped while nothing they read has changed.
 - **Simplify how a lineage is run, never the obligations it owes.**
-- **Keep this file short.** `backlog_lineage_discipline_check` holds it to a size ceiling.
+- **Keep this file short** (ceiling: `backlog_lineage_discipline_check`).

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""backlog_impediment_probe v1.2.0 -- proof of backlog_impediment (G191, G199): the tool run on a scratch register that holds the real kinds and ways, then the real validator on what it wrote."""
+"""backlog_impediment_probe v1.3.0 -- proof of backlog_impediment 2.1.0 (G191, G199, G245): the tool run on a scratch register that holds the real kinds and ways, on an adopting register that holds none, and on a copy of the real register, then the real validator on what it wrote."""
 import glob, os, re, subprocess, sys, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__)); PKG = os.path.dirname(HERE)
 sv = lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", p)[0]]
 if sys.argv[1:] == ["--deps"]:
-    print(os.path.join(HERE, "backlog_impediment_v2_0_0.py")); print(os.path.abspath(__file__)); sys.exit(0)
-TOOL = os.path.join(HERE, "backlog_impediment_v2_0_0.py")
+    print(os.path.join(HERE, "backlog_impediment_v2_1_0.py")); print(os.path.abspath(__file__)); sys.exit(0)
+TOOL = os.path.join(HERE, "backlog_impediment_v2_1_0.py")
 VAL = sorted(glob.glob(HERE + "/backlog_validate_v*.py"), key=sv)[-1]
 REGF = sorted(glob.glob(PKG + "/01-ontologies/backlog_abox_v*.ttl"), key=sv)[-1]
 fails = 0
@@ -99,13 +99,38 @@ with tempfile.TemporaryDirectory() as d:
     expect("a write cut short by a file-size limit is refused and the register is byte-for-byte as it was and still parses", rf.returncode != 0 and open(reg, "rb").read() == before and run(reg, "list")[0] == 0)
     # a statement that quotes the full address of a later impediment does not block that number
     nxt = max(int(x.split("_")[-1]) for x in re.findall(r"^(Imp_T_\d+) ", run(reg, "list")[1], re.M)) + 1
-    c, o = run(reg, "raise", *NL, "--statement", "quotes <http://example.org/backlog-framework-register#Imp_T_%d> in its text" % nxt, "--now", "2026-11-02T10:55:00Z")
+    c, o = run(reg, "raise", *NL, "--statement", "quotes <http://example.org/imp-probe#Imp_T_%d> in its text" % nxt, "--now", "2026-11-02T10:55:00Z")
     c2, o2 = run(reg, "raise", *NL, "--statement", "the next one", "--now", "2026-11-02T10:56:00Z")
     expect("a statement quoting the address of a later number does not block it", c == 0 and c2 == 0 and ("raised Imp_T_%d" % (nxt + 1)) in o2)
     import shutil
     real = os.path.join(d, "real.ttl"); shutil.copy(REGF, real)
     c, o = run(real, "raise", "--lineage", "L_ImpedimentsKnown", "--prefix", "ZZ", "--box", "It_IK_2", "--blocks", "ST_IK_RaiseAdviseClear", "--kind", "ToolFault", "--owner", "Builder", "--statement", "Probe entry on a copy of the real register.", "--now", "2026-11-02T16:00:00Z")
     expect("on a copy of the real register an item of the lineage can be blocked, the way a real story is", c == 0 and "raised Imp_ZZ_1" in o)
+    expect("on the real register the impediment is minted in the framework's own namespace, as before", "<http://example.org/backlog-framework-register#Imp_ZZ_1>" in open(real).read())
+    # G245: a register that adopts the framework holds no kinds, ways or framework roles: they come from the framework's published register
+    adopt = os.path.join(d, "adopt.ttl")
+    open(adopt, "w").write("""@prefix pcl: <http://example.org/adopter#> . @prefix backlog: <http://example.org/backlog#> .
+pcl:Lineage04 a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown ; backlog:humanApprovalLevel 3 .
+backlog:Builder a backlog:Role .
+pcl:Story4_D1 a backlog:Story ; backlog:belongsToLineage pcl:Lineage04 .
+pcl:It4_1 a backlog:Iteration ; backlog:belongsToLineage pcl:Lineage04 .
+""")
+    AD = ["--lineage", "Lineage04", "--prefix", "4", "--box", "It4_1", "--kind", "ToolFault", "--statement", "The box tool refuses a register it does not know; nothing can open.", "--owner", "Builder"]
+    c, o = run(adopt, "advise", "--kind", "ToolFault"); expect("an adopting register without kinds: advise lists the ways from the framework's published register", c == 0 and "Reproduce the fault" in o)
+    c, o = run(adopt, "raise", *AD, "--now", "2026-11-18T10:00:00Z")
+    expect("an adopting register: an obstacle that keeps the first box from opening is raised on the planned box, with a digit prefix", c == 0 and "raised Imp_4_1" in o and "Reproduce the fault" in o)
+    expect("the impediment is minted in the register's own namespace, not the framework's", "<http://example.org/adopter#Imp_4_1>" in open(adopt).read() and "backlog-framework-register" not in open(adopt).read())
+    c, o = run(adopt, "list"); expect("list shows the adopting register's obstacle open with its kind and its box", c == 0 and "Imp_4_1" in o and "open" in o and "It4_1" in o)
+    c, o = run(adopt, "clear", "Imp_4_1", "--method", "BoundedRetry", "--now", "2026-11-18T11:00:00Z"); expect("an adopting register: clear refuses a way the kind does not list", c == 1 and "does not list" in o)
+    c, o = run(adopt, "clear", "Imp_4_1", "--method", "ReproduceAndRepairTool", "--now", "2026-11-18T11:00:00Z"); expect("an adopting register: clear appends the time and the way from the framework's list", c == 0 and "cleared Imp_4_1" in o)
+    c, o = run(adopt, "raise", *[x if x != "ToolFault" else "NoSuchKind" for x in AD], "--now", "2026-11-18T11:30:00Z"); expect("an adopting register: a kind that is not one of the seven is still refused and the seven are named", c == 1 and "not one of" in o and "Imp_ToolFault" in o)
+    c, o = run(adopt, "raise", *[x if x != "Builder" else "Story4_D1" for x in AD], "--now", "2026-11-18T11:30:00Z"); expect("an adopting register: an owner that is not a role is still refused", c == 1 and "not a role" in o)
+    adopt2 = os.path.join(d, "adopt2.ttl")
+    open(adopt2, "w").write("""@prefix pcl: <http://example.org/adopter#> . @prefix backlog: <http://example.org/backlog#> .
+pcl:Lineage04 a backlog:Lineage ; backlog:adoptsRuleSet backlog:RS_ImpedimentsKnown ; backlog:humanApprovalLevel 3 .
+pcl:It4_1 a backlog:Iteration ; backlog:belongsToLineage pcl:Lineage04 .
+""")
+    c, o = run(adopt2, "raise", *AD, "--now", "2026-11-18T10:00:00Z"); expect("an adopting register that defines no role: the owner is a role of the framework's published register", c == 0 and "owner Builder" in o and "<http://example.org/backlog#Builder>" in open(adopt2).read())
     c, o = run(reg, "list"); expect("list shows the cleared one with its way and the other still open", "cleared by Mth_ReproduceAndRepairTool" in o and "open" in o)
     # G199: an obstacle names the box whose work it blocks
     snapb = open(reg).read()
@@ -116,7 +141,8 @@ with tempfile.TemporaryDirectory() as d:
     c, o = run(reg, "raise", *[x if x != "It" else "ItDone" for x in RA], "--now", "2026-11-02T11:02:00Z"); expect("the release of a closed box can still be blocked", c == 0 and "raised Imp_T_" in o)
     c, o = run(reg, "raise", *[x for x in RA if x not in ("--blocks", "Work")], "--now", "2026-11-02T11:03:00Z"); expect("an obstacle may name only the box", c == 0 and "blocks It" in o)
     snapc = open(reg).read()
-    for nm, why in (("ItNoStart", "no start"), ("ItStrStart", "a start that is plain text"), ("ItTwoStarts", "two starts")):
-        c, o = run(reg, "raise", *[x if x != "It" else nm for x in RA], "--now", "2026-11-02T11:05:00Z"); expect("raise refuses a box with " + why + " cleanly", c == 1 and "exactly one start" in o and "Traceback" not in o and open(reg).read() == snapc)
+    for nm, why in (("ItStrStart", "a start that is plain text"), ("ItTwoStarts", "two starts")):
+        c, o = run(reg, "raise", *[x if x != "It" else nm for x in RA], "--now", "2026-11-02T11:05:00Z"); expect("raise refuses a box with " + why + " cleanly", c == 1 and "at most one start" in o and "Traceback" not in o and open(reg).read() == snapc)
+    c, o = run(reg, "raise", *[x if x != "It" else "ItNoStart" for x in RA], "--now", "2026-11-02T11:05:00Z"); expect("a planned box that has not begun can be named: nothing in the shapes asks that it had begun", c == 0 and "raised Imp_T_" in o and "blocks Work" in o)
     c, o = run(reg, "advise", "--kind", "RuleRefusal"); expect("advice for a kind shows the limit of a way that has one", c == 0 and "Limit: Applies to work not yet released" in o)
 print("VERDICT   :", "PASS" if not fails else "FAIL"); sys.exit(1 if fails else 0)

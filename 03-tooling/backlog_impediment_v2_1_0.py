@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""backlog_impediment v2.0.0 (--box is required: a break of the raise command) -- raise, advise on and clear an obstacle (Lineage 29, G191; G199).
+"""backlog_impediment v2.1.0 -- raise, advise on and clear an obstacle (Lineage 29, G191; G199; IK-S87, G245).
+v2.1.0 serves a register that adopts the framework: the kinds, the ways and the roles are read from the register given and, where it holds no ImpedimentKind, from the framework's published register beside this tool; the impediment is minted in the namespace of the register's own lineage; a box that has not begun may be named (nothing in the shapes asks that it had begun); a record prefix may be letters or digits. On the framework's own register behaviour is unchanged.
 
   backlog_impediment.py REGISTER.ttl raise  --lineage L --prefix P --box BOX [--blocks ITEM] --kind KIND --statement TEXT --owner ROLE [--now ISO]
   backlog_impediment.py REGISTER.ttl advise (--kind KIND | --impediment ID)
@@ -15,6 +16,7 @@ import datetime, fcntl, os, re, sys
 from rdflib import Graph, URIRef, RDF, RDFS, Literal
 from rdflib.namespace import SKOS
 B = "http://example.org/backlog#"; FW = "http://example.org/backlog-framework-register#"
+import glob
 U = lambda n: URIRef(B + n)
 local = lambda x: str(x).rsplit("#", 1)[-1]
 iso = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -78,9 +80,16 @@ def parse_args(a, names):
 def next_id(g, prefix):  # taken from the register as read; write() refuses a number another raise took meanwhile
     n = [int(m.group(1)) for s in g.subjects(RDF.type, U("Impediment")) for m in [re.fullmatch(r"Imp_%s_(\d+)" % re.escape(prefix), local(s))] if m]
     return "Imp_%s_%d" % (prefix, max(n, default=0) + 1)
+def published_register():
+    """The framework's own published register, beside this tool: where an adopting register finds the kinds and the ways."""
+    hits = sorted(glob.glob(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "01-ontologies", "backlog_abox_v*.ttl")))
+    if not hits: die("the register holds no kinds of obstacle and the framework's published register was not found beside this tool")
+    return Graph().parse(hits[-1], format="turtle")
 def main(a):
     if len(a) < 2 or a[1] not in ("raise", "advise", "clear", "list"): print(__doc__); return 2
     reg, cmd = a[0], a[1]; g = Graph(); g.parse(reg, format="turtle")
+    kg = g  # kinds, ways and roles: the register's own, or the framework's published ones for an adopting register
+    if cmd != "list" and not any(True for _ in g.subjects(RDF.type, U("ImpedimentKind"))): kg = g + published_register()
     if cmd == "list":
         now = when(None)
         for s in sorted(g.subjects(RDF.type, U("Impediment")), key=str):
@@ -95,14 +104,14 @@ def main(a):
             if len(im) != 1: die("no impediment %r" % o["--impediment"])
             k = g.value(im[0], U("hasImpedimentKind"))
             if k is None: die("%s has no kind; give it one first" % o["--impediment"])
-        elif "--kind" in o: k = find(g, "ImpedimentKind", o["--kind"], "kind")
+        elif "--kind" in o: k = find(kg, "ImpedimentKind", o["--kind"], "kind")
         else: die("advise needs --kind or --impediment")
-        show(g, k); return 0
+        show(kg, k); return 0
     if cmd == "raise":
         o = parse_args(a[2:], ("--lineage", "--prefix", "--box", "--blocks", "--kind", "--statement", "--owner", "--now"))
         for r in ("--lineage", "--prefix", "--box", "--kind", "--statement", "--owner"):
             if r not in o: die("raise needs %s" % r)
-        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", o["--prefix"]): die("the prefix is letters and digits (IK), got %r" % o["--prefix"])
+        if not re.fullmatch(r"[A-Za-z0-9]+", o["--prefix"]): die("the prefix is letters and digits (IK or 4), got %r" % o["--prefix"])
         if not o["--statement"].strip(): die("the statement says what is blocked, by what, and what would clear it; it is empty")
         lin = [s for s in g.subjects(RDF.type, U("Lineage")) if local(s) == o["--lineage"]]
         if len(lin) != 1: die("no lineage %r" % o["--lineage"])
@@ -114,22 +123,24 @@ def main(a):
         item = [] if "--blocks" not in o else [s for s in set(g.subjects(None, None)) if local(s) == o["--blocks"] and isinstance(s, URIRef) and (s, RDF.type, None) in g and not any(local(t) in NOT_WORK for t in g.objects(s, RDF.type))]
         if "--blocks" in o and len(item) < 1: die("nothing named %r in the register for the impediment to block (not a role, kind, way, impediment, lineage, rule set or ruling)" % o["--blocks"])
         if len(item) > 1: die("%r names more than one thing in the register: %s" % (o["--blocks"], ", ".join(str(x) for x in item)))
-        kind = find(g, "ImpedimentKind", o["--kind"], "kind")
-        own = [s for s in set(g.subjects(None, None)) if local(s) == o["--owner"] and isinstance(s, URIRef) and any(local(t) in ("Role",) or (t, RDFS.subClassOf, U("Role")) in g for t in g.objects(s, RDF.type))]
+        kind = find(kg, "ImpedimentKind", o["--kind"], "kind")
+        own = [s for s in set(kg.subjects(None, None)) if local(s) == o["--owner"] and isinstance(s, URIRef) and any(local(t) in ("Role",) or (t, RDFS.subClassOf, U("Role")) in kg for t in kg.objects(s, RDF.type))]
         if not own: die("%r is not a role in the register: an impediment is owned by a role" % o["--owner"])
         t = when(o.get("--now"))
         starts = list(g.objects(box, U("iterationStart")))
-        if len(starts) != 1 or not isinstance(starts[0], Literal) or str(starts[0].datatype) != "http://www.w3.org/2001/XMLSchema#dateTime":
-            die("%s must have exactly one start recorded as a date-time with a zone, so it can be said to have begun when the obstacle was met" % local(box))
-        try: b0 = starts[0].toPython().astimezone(datetime.timezone.utc) if starts[0].toPython().tzinfo else None
-        except Exception: b0 = None
-        if b0 is None: die("the start of %s has no time zone or is not a time; it needs one such as 2026-11-02T09:00:00Z" % local(box))
-        if t < b0: die("%s was raised (%s) before the box began (%s): an obstacle is met in a box that has begun" % (o["--prefix"], iso(t), starts[0]))
+        if starts:  # a box that has begun: the obstacle is met after it began; a planned box that has not begun may be named
+            if len(starts) != 1 or not isinstance(starts[0], Literal) or str(starts[0].datatype) != "http://www.w3.org/2001/XMLSchema#dateTime":
+                die("%s must have at most one start recorded as a date-time with a zone, so it can be said to have begun when the obstacle was met" % local(box))
+            try: b0 = starts[0].toPython().astimezone(datetime.timezone.utc) if starts[0].toPython().tzinfo else None
+            except Exception: b0 = None
+            if b0 is None: die("the start of %s has no time zone or is not a time; it needs one such as 2026-11-02T09:00:00Z" % local(box))
+            if t < b0: die("the obstacle was raised (%s) before the box began (%s): an obstacle is met in a box that has begun" % (iso(t), starts[0]))
+        ns = str(lin[0]).rsplit("#", 1)[0] + "#"  # the namespace of the register's own lineage
         iid = next_id(g, o["--prefix"]); st = o["--statement"].replace("\\", "\\\\").replace('"', '\\"').replace("\r", "\\r").replace("\n", "\\n").replace("\t", "\\t")
         itemq = "<%s>, <%s>" % (box, item[0]) if item else "<%s>" % box; item = item[0] if item else box
-        txt = '\n# Impediment raised %s\n<%s%s> a <%sImpediment> ; <%sbelongsToLineage> <%s> ;\n    <%simpedes> %s ; <%shasImpedimentKind> <%s> ;\n    <%shasImpedimentOwner> <%s> ;\n    <%shasImpedimentStatement> "%s" ;\n    <%sraisedAt> "%s"^^<http://www.w3.org/2001/XMLSchema#dateTime> .\n' % (iso(t), FW, iid, B, B, lin[0], B, itemq, B, kind, B, own[0], B, st, B, iso(t))
-        write(reg, txt, "<%s%s>" % (FW, iid))
-        print("raised %s at %s: blocks %s, %s, owner %s" % (iid, iso(t), local(item), local(kind), local(own[0]))); show(g, kind); return 0
+        txt = '\n# Impediment raised %s\n<%s%s> a <%sImpediment> ; <%sbelongsToLineage> <%s> ;\n    <%simpedes> %s ; <%shasImpedimentKind> <%s> ;\n    <%shasImpedimentOwner> <%s> ;\n    <%shasImpedimentStatement> "%s" ;\n    <%sraisedAt> "%s"^^<http://www.w3.org/2001/XMLSchema#dateTime> .\n' % (iso(t), ns, iid, B, B, lin[0], B, itemq, B, kind, B, own[0], B, st, B, iso(t))
+        write(reg, txt, "<%s%s>" % (ns, iid))
+        print("raised %s at %s: blocks %s, %s, owner %s" % (iid, iso(t), local(item), local(kind), local(own[0]))); show(kg, kind); return 0
     if cmd == "clear":
         if len(a) < 3: print(__doc__); return 2
         o = parse_args(a[3:], ("--method", "--now"))
@@ -140,11 +151,11 @@ def main(a):
         if g.value(im, U("resolvedAt")) is not None: die("%s is already resolved" % a[2])
         k = g.value(im, U("hasImpedimentKind"))
         if k is None: die("%s has no kind, so no way is known to clear it; give it a kind first" % a[2])
-        m = find(g, "ClearingMethod", o["--method"], "way")
-        if (k, U("clearableBy"), m) not in g: die("%s does not list %s; its kind lists: %s. Add the way to the kind through change management first." % (local(k), local(m), ", ".join(n for n, _, _ in ways(g, k))))
+        m = find(kg, "ClearingMethod", o["--method"], "way")
+        if (k, U("clearableBy"), m) not in kg: die("%s does not list %s; its kind lists: %s. Add the way to the kind through change management first." % (local(k), local(m), ", ".join(n for n, _, _ in ways(kg, k))))
         t = when(o.get("--now")); r = g.value(im, U("raisedAt"))
         if r is None: die("%s has no raise time recorded, so no clearing time can be checked against it" % a[2])
         if t < r.toPython().astimezone(datetime.timezone.utc): die("it cannot be resolved (%s) before it was raised (%s)" % (iso(t), r))
         write(reg, '\n# Impediment resolved %s\n<%s> <%sresolvedAt> "%s"^^<http://www.w3.org/2001/XMLSchema#dateTime> ; <%sclearedBy> <%s> .\n' % (iso(t), im, B, iso(t), B, m), once=str(im))
-        print("cleared %s at %s by %s" % (a[2], iso(t), g.value(m, RDFS.label))); return 0
+        print("cleared %s at %s by %s" % (a[2], iso(t), kg.value(m, RDFS.label))); return 0
 if __name__ == "__main__": sys.exit(main(sys.argv[1:]))

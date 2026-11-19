@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# v1.9.0 (Lineage 29, IK-S88, G245): serves a package that adopts the framework. Options give the register (a glob relative to the package, --register), the governed directories (--governed, comma separated), the changelog (--changelog, a glob, whole file when it carries no section for the version) and the version file; item subjects of any prefix are read; an Owner ruling is cited by any identifier the register records (hasRulingIdentifier), not only G and digits. Without options the framework is checked as before; a declaration that cites nothing new, such as "None", still fails.
 # v1.8.0 (G196): a release that only closes a stage of a lineage's chain is planned work, not unplanned: when the only governed file changed is the register and the
 # register introduces a StageOutput the baseline lacked, the release passes as a chain stage. Before, such a release had to declare "Unplanned work: None.", which is the
 # bare declaration G194 refuses.
@@ -9,7 +10,7 @@
 # Owner ruling (G followed by digits, rulingSource naming the Owner) or an urgent interruption. "None", an empty reason, a citation of a record the register
 # lacked at the baseline or does not have, all FAIL. Before, the words "Unplanned work: None." passed.
 # v1.5.0 (G99 RCA): the release-time comparison examined a span that could never contain the release being gated -- fixed to the working tree, and to include files never git-added.
-"""backlog_release_item_check v1.8.0 -- GOV-S01, GOV-S02.
+"""backlog_release_item_check v1.9.0 -- GOV-S01, GOV-S02.
 
 The real, agreed gap: a package can publish a release whose governed files genuinely changed, while
 not one real backlog item moved -- checked and confirmed on automate-python-book-3e (fourteen real
@@ -49,8 +50,9 @@ own current VERSION.txt must contain a line starting with "**Unplanned work:**" 
 deliberate marker, not any prose that happens to mention the phrase. A version bump with no matching
 changelog entry, or a changelog entry with no such marker, is read as no declaration at all.
 
-Usage: backlog_release_item_check_v1_5_0.py <package_root> <baseline_tag>
+Usage: backlog_release_item_check_v1_9_0.py <package_root> <baseline_tag>
        [--repo-root <path>] [--package-prefix <rel_path>]
+       [--register <glob>] [--governed <dir,dir>] [--changelog <glob>] [--version-file <rel>]   (a package that adopts the framework)
 
 Exit 0 and PASS if nothing governed changed, a real item moved, or the changelog carries a real
 unplanned-work marker for the current version that cites an Owner ruling or urgent interruption new in this release (v1.6.0). Exit 1 and FAIL, naming the span checked, otherwise.
@@ -62,6 +64,9 @@ import glob
 import os
 
 GOVERNED_DIRS = ("01-ontologies/", "02-shacl-safeguards/", "03-tooling/")
+REGISTER_GLOB = "01-ontologies/backlog_abox_v*.ttl"
+CHANGELOG_GLOB = "04-documentation/CHANGELOG_v*.md"
+VERSION_FILE = "VERSION.txt"
 UNPLANNED_MARKER = re.compile(r'^\*\*Unplanned work:\*\*\s*(.+)$', re.MULTILINE)
 
 
@@ -93,15 +98,16 @@ def changed_governed_files(repo_root, package_prefix, baseline_tag):
     return sorted(set(changed))
 
 
+def vkey(path):
+    return [int(x) for x in re.findall(r"\d+", os.path.basename(path))]
+
+
 def register_path(repo_root, package_prefix):
-    rc, out, err = sh(["bash", "-c",
-                        f"ls {repo_root}/{package_prefix}01-ontologies/backlog_abox_v*.ttl "
-                        f"| sort -V | tail -1"], repo_root)
-    p = out.strip()
-    if not p:
-        print("GATE ABORT: no backlog_abox_v*.ttl resolved")
+    hits = sorted(glob.glob(os.path.join(repo_root, package_prefix, REGISTER_GLOB)), key=vkey)
+    if not hits:
+        print(f"GATE ABORT: no register resolved by {REGISTER_GLOB}")
         sys.exit(3)
-    return p
+    return hits[-1]
 
 
 def register_path_at_tag(repo_root, package_prefix, tag):
@@ -109,14 +115,15 @@ def register_path_at_tag(repo_root, package_prefix, tag):
     old tag is not necessarily the same as the current one. Resolved independently via git
     ls-tree, not assumed to match the current working tree's own glob result."""
     rc, out, err = sh(["git", "ls-tree", "-r", "--name-only", tag,
-                        f"{package_prefix}01-ontologies/"], repo_root)
+                        f"{package_prefix}{os.path.dirname(REGISTER_GLOB)}/"], repo_root)
     if rc != 0:
         print(f"GATE ABORT: git ls-tree at {tag} failed: {err.strip()}")
         sys.exit(3)
     # v1.4.0: from v1.339.0 the register is part of the data file, and the baseline tag now always carries that layout.
-    candidates = sorted(l for l in out.splitlines() if re.search(r'backlog_abox_v[\d_]+\.ttl$', l))
+    import fnmatch
+    candidates = sorted((l for l in out.splitlines() if fnmatch.fnmatchcase(l, package_prefix + REGISTER_GLOB)), key=vkey)
     if not candidates:
-        print(f"GATE ABORT: no register file (backlog_abox_v*.ttl) found at {tag}")
+        print(f"GATE ABORT: no register file ({REGISTER_GLOB}) found at {tag}")
         sys.exit(3)
     return candidates[-1]
 
@@ -129,7 +136,7 @@ def item_states(ttl_text):
     honest tool for exactly this one comparison."""
     states = {}
     for m in re.finditer(
-        r'(fw:\S+)\s+a\s+backlog:(?:Story|ExecutionTask)\s*;.*?backlog:hasState\s+backlog:(\w+)',
+        r'(\w+:\S+)\s+a\s+backlog:(?:Story|ExecutionTask)\s*;.*?backlog:hasState\s+backlog:(\w+)',
         ttl_text, re.DOTALL):
         subj, state = m.group(1), m.group(2)
         if subj not in states:
@@ -140,23 +147,27 @@ def item_states(ttl_text):
 def declared_unplanned_reason(package_root, package_prefix, repo_root):
     """Reads the package's own current VERSION.txt and the changelog, and returns the real
     unplanned-work statement for that exact version if one is written -- never a runtime flag."""
-    vpath = os.path.join(package_root, "VERSION.txt")
+    vpath = os.path.join(package_root, VERSION_FILE)
     if not os.path.exists(vpath):
         return None
     with open(vpath) as f:
         version = f.read().strip()
-    changelogs = glob.glob(os.path.join(package_root, "04-documentation", "CHANGELOG_v*.md"))
+    changelogs = glob.glob(os.path.join(package_root, CHANGELOG_GLOB))
     if not changelogs:
         return None
-    changelog_path = sorted(changelogs)[-1]
+    changelog_path = sorted(changelogs, key=vkey)[-1]
     with open(changelog_path) as f:
         text = f.read()
     # Find the section for this exact version: "## vVERSION —" through the next "## v" or EOF.
     pattern = re.compile(
-        rf'^## v{re.escape(version)}\b.*?(?=^## v|\Z)', re.MULTILINE | re.DOTALL)
+        rf'^## v?{re.escape(version)}\b.*?(?=^## v?\d|\Z)', re.MULTILINE | re.DOTALL)
     m = pattern.search(text)
     if not m:
-        return None
+        # a changelog file kept per version (CHANGELOG_v1_19_3.md) may carry no section for it: the whole file is that version's entry
+        if re.search(r"(?<!\d)" + re.escape(version.replace(".", "_")) + r"(?!\d)", os.path.basename(changelog_path)):
+            m = re.match(r"(?s).*", text)
+        else:
+            return None
     marker = UNPLANNED_MARKER.search(m.group(0))
     return marker.group(1).strip() if marker else None
 
@@ -174,13 +185,14 @@ def _block(text, ident_pattern):
 def cited_new_records(reason, old_text, new_text):
     """Records the declaration names that this release introduces: an Owner ruling by its identifier, or an urgent interruption by its name."""
     out = []
-    for g in sorted(set(re.findall(r"\bG\d+\b", reason))):
+    recorded = set(re.findall(r'hasRulingIdentifier\s+"([^"]+)"', new_text))
+    for g in sorted(i for i in recorded if re.search(r"(?<![\w-])" + re.escape(i) + r"(?![\w-])", reason)):
         pat = rf'hasRulingIdentifier\s+"{g}"'
         nb, ob = _block(new_text, pat), _block(old_text, pat)
         if nb and ob is None and re.search(r"rulingSource[^\n]*Owner", nb):
             out.append(g)
-    for u in sorted(set(re.findall(r"\b(?:fw:)?(Urg_\w+)\b", reason))):
-        npat = rf"fw:{u}\s+a\s+backlog:UrgentInterruption"
+    for u in sorted(set(re.findall(r"\b(?:\w+:)?(Urg_\w+)\b", reason))):
+        npat = rf"\w+:{u}\s+a\s+backlog:UrgentInterruption"
         if re.search(npat, new_text) and not re.search(npat, old_text):
             out.append(u)
     return out
@@ -203,7 +215,7 @@ def authority_time(cited, new_text):
     out = {}
     for c in cited:
         if c.startswith("Urg_"):
-            blk = _block(new_text, rf"fw:{c}\s+a\s+backlog:UrgentInterruption")
+            blk = _block(new_text, rf"\w+:{c}\s+a\s+backlog:UrgentInterruption")
             m = re.search(r'urgencyDeclaredAt\s+"([^"]+)"', blk or "")
             if m:
                 out[c] = datetime.datetime.fromisoformat(m.group(1).replace("Z", "+00:00"))
@@ -216,11 +228,12 @@ def authority_time(cited, new_text):
 
 
 def new_stage_outputs(old_text, new_text):
-    pat = r"(fw:\S+)\s+a\s+backlog:StageOutput"
+    pat = r"(\w+:\S+)\s+a\s+backlog:StageOutput"
     return sorted(set(re.findall(pat, new_text)) - set(re.findall(pat, old_text)))
 
 
 def main():
+    global REGISTER_GLOB, GOVERNED_DIRS, CHANGELOG_GLOB, VERSION_FILE
     args = sys.argv[1:]
     if len(args) < 2:
         print(__doc__)
@@ -234,6 +247,14 @@ def main():
             repo_root = args[i + 1]; i += 2
         elif args[i] == "--package-prefix":
             package_prefix = args[i + 1]; i += 2
+        elif args[i] in ("--register", "--governed", "--changelog", "--version-file"):
+            if i + 1 >= len(args):
+                print(f"{args[i]} needs a value"); sys.exit(2)
+            if args[i] == "--register": REGISTER_GLOB = args[i + 1]
+            elif args[i] == "--governed": GOVERNED_DIRS = tuple(d if d.endswith("/") else d + "/" for d in args[i + 1].split(",") if d)
+            elif args[i] == "--changelog": CHANGELOG_GLOB = args[i + 1]
+            else: VERSION_FILE = args[i + 1]
+            i += 2
         else:
             i += 1
 
@@ -273,7 +294,8 @@ def main():
         sys.exit(0)
 
     print("items moved : 0")
-    only_register = all(re.fullmatch(r"01-ontologies/backlog_abox_v\d+_\d+_\d+\.ttl", c) for c in changed)
+    import fnmatch
+    only_register = all(fnmatch.fnmatchcase(c, REGISTER_GLOB) for c in changed)
     stages = new_stage_outputs(old_text, new_text)
     if only_register and stages:
         print(f"chain stage : {', '.join(stages)} (only the register changed)")
@@ -294,7 +316,7 @@ def main():
                 sys.exit(1)
             print("VERDICT     : PASS -- the unplanned work cites an Owner ruling or an urgent interruption this release records")
             sys.exit(0)
-        print("cited       : none -- no Owner ruling (G and digits) or urgent interruption in the declaration is new in the register of this release")
+        print("cited       : none -- no Owner ruling (an identifier the register records) or urgent interruption in the declaration is new in the register of this release")
         print("VERDICT     : FAIL -- unplanned work must cite the Owner ruling or urgent interruption that authorises it; a bare declaration is development outside the backlog (G194)")
         sys.exit(1)
 
