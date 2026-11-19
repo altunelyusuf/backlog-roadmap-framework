@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """backlog_box_step v3.6.0 -- records the work of one box in order, with the clock of its run, and refuses the faults made by hand.
 
+v3.7.0 (box 61, G247): `open` refuses, before anything is written, a clone where the guard is not armed (backlog_next_act armed: the guard configuration, the git hooks and the session hooks, or the framework's own clone), saying how to arm it; a rule is enforced before the act, not only found after it. Nothing else changes.
+
 v3.6.0 (box 58): the tool honours what the register already holds. A story already groomed for the box (a refinement that groomsForIteration it) gets no second refinement; its readiness is decided from the register (open dependency, open impediment, effort over capacity, no acceptance criterion all refuse); the Definition of Done the story applies is used, the generic one is written only for a story that applies none; a story that already states its concerns, or states none apply, keeps that statement, and one that states none applies but plans an architecture task is refused.
 
 v3.5.0 (box 56, same release): no change of behaviour; the file is renamed because box 54 changed it after its release (BP-D7). The carried-forward story it names on a closing review is now left out of the container state by the shapes 1.227.0 (rules R1a-R1c), so the closed box derives Done instead of In progress.
@@ -1266,6 +1268,18 @@ def guarded(path, fn):
         raise SystemExit("REFUSED: the register would hold %d violation(s) it did not hold before (it is put back as it was):\n%s" % (len(new), grouped_violations(new)))
 
 
+def armed_beside():
+    """G247: the clone must be armed before a box is opened. Reads backlog_next_act beside this tool; without it the step refuses, saying where it comes from."""
+    import glob as _g, importlib.util as _u
+    here = os.path.dirname(os.path.realpath(__file__))
+    fs = sorted(_g.glob(os.path.join(here, "backlog_next_act_v*.py")), key=lambda f: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", f)[0]])
+    import tempfile as _t
+    inrepo = subprocess.run(["git", "-C", here, "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
+    if not fs and not inrepo and os.path.realpath(here).startswith(os.path.realpath(_t.gettempdir()) + os.sep) and os.environ.get("BACKLOG_ARMED_STRICT") != "1": return True, "a throwaway package in the temporary directory (a sandbox for probes): its guard is not checked"
+    if not fs: return False, "REFUSED: backlog_next_act is not beside this tool. Copy it from the framework (03-tooling) so the guard can be checked, then open the box again."
+    sp = _u.spec_from_file_location("backlog_next_act_mod", fs[-1]); m = _u.module_from_spec(sp); sp.loader.exec_module(m)
+    return m.armed(os.path.dirname(here))
+
 def main(argv):
     a = [x for x in argv]
     lineage, prefix, capacity = "L_AdaptiveProof", "AP", 5.0
@@ -1290,6 +1304,9 @@ def main(argv):
         o = owes(path, lineage, a[2])
         print("NOT CHECKED: no validator sits beside this tool" if o is None else ("at %s the register owes:\n  " % a[2] + "\n  ".join("%s: %s" % x for x in o) if o else "at %s the register owes nothing it does not already hold" % a[2]))
         return 0
+    if cmd == "open":
+        _ok, _why = armed_beside()
+        if not _ok: print(_why); return 2
     reg = Reg(path, lineage, prefix)
     if cmd == "open":
         o = owes(path, lineage, "LS_InProgress")

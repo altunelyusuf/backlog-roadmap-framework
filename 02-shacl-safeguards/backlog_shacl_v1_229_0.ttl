@@ -9,9 +9,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Framework — SHACL Safeguards"@en ;
-    owl:versionIRI <http://example.org/backlog-shapes/1.228.0> ;
-    owl:versionInfo "1.228.0" ;
-    owl:priorVersion <http://example.org/backlog-shapes/1.227.0> , <http://example.org/backlog-shapes/1.226.0> , <http://example.org/backlog-shapes/1.225.0> , <http://example.org/backlog-shapes/1.224.0> , <http://example.org/backlog-shapes/1.223.0> , <http://example.org/backlog-shapes/1.222.0> , <http://example.org/backlog-shapes/1.221.0> , <http://example.org/backlog-shapes/1.220.0> , <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
+    owl:versionIRI <http://example.org/backlog-shapes/1.229.0> ;
+    owl:versionInfo "1.229.0" ;
+    owl:priorVersion <http://example.org/backlog-shapes/1.228.0> , <http://example.org/backlog-shapes/1.227.0> , <http://example.org/backlog-shapes/1.226.0> , <http://example.org/backlog-shapes/1.225.0> , <http://example.org/backlog-shapes/1.224.0> , <http://example.org/backlog-shapes/1.223.0> , <http://example.org/backlog-shapes/1.222.0> , <http://example.org/backlog-shapes/1.221.0> , <http://example.org/backlog-shapes/1.220.0> , <http://example.org/backlog-shapes/1.219.0> , <http://example.org/backlog-shapes/1.218.0> , <http://example.org/backlog-shapes/1.217.0> , <http://example.org/backlog-shapes/1.216.0> , <http://example.org/backlog-shapes/1.215.0> , <http://example.org/backlog-shapes/1.214.0> , <http://example.org/backlog-shapes/1.213.0> , <http://example.org/backlog-shapes/1.212.0> , <http://example.org/backlog-shapes/1.211.0> , <http://example.org/backlog-shapes/1.210.0> , <http://example.org/backlog-shapes/1.209.0> , <http://example.org/backlog-shapes/1.208.0> , <http://example.org/backlog-shapes/1.207.0> , <http://example.org/backlog-shapes/1.206.0> , <http://example.org/backlog-shapes/1.205.0> , <http://example.org/backlog-shapes/1.204.0> , <http://example.org/backlog-shapes/1.203.0> , <http://example.org/backlog-shapes/1.202.0> , <http://example.org/backlog-shapes/1.201.0> , <http://example.org/backlog-shapes/1.197.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.184.0> , <http://example.org/backlog-shapes/1.176.0> , <http://example.org/backlog-shapes/1.175.0> , <http://example.org/backlog-shapes/1.174.0> , <http://example.org/backlog-shapes/1.173.0> , <http://example.org/backlog-shapes/1.172.0> , <http://example.org/backlog-shapes/1.171.0> , <http://example.org/backlog-shapes/1.170.0> , <http://example.org/backlog-shapes/1.169.0> , <http://example.org/backlog-shapes/1.168.0> , <http://example.org/backlog-shapes/1.167.0> , <http://example.org/backlog-shapes/1.166.0> , <http://example.org/backlog-shapes/1.165.0> , <http://example.org/backlog-shapes/1.164.0> , <http://example.org/backlog-shapes/1.159.0> , <http://example.org/backlog-shapes/1.158.0> , <http://example.org/backlog-shapes/1.157.0> , <http://example.org/backlog-shapes/1.156.0> , <http://example.org/backlog-shapes/1.155.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.154.0> , <http://example.org/backlog-shapes/1.153.0> , <http://example.org/backlog-shapes/1.152.0> , <http://example.org/backlog-shapes/1.151.0> , <http://example.org/backlog-shapes/1.150.0> , <http://example.org/backlog-shapes/1.149.0> , <http://example.org/backlog-shapes/1.148.0> , <http://example.org/backlog-shapes/1.147.0> , <http://example.org/backlog-shapes/1.146.0> ;
     owl:priorVersion <http://example.org/backlog-shapes/1.145.0> ;
@@ -5796,11 +5796,11 @@ backlog:MissionClauseCitationShape a sh:NodeShape ;
     sh:severity sh:Warning ;
     rdfs:label "Advisory: a mission-clause citation is not a literal substring of any current mission"@en ;
     sh:sparql [ a sh:SPARQLConstraint ;
-        sh:message "Advisory: this deliverable's derivesFromMissionClause quote does not appear verbatim in any Mission's current hasMissionStatement. A citation was written to be checkable, not merely traceable — if the mission has been amended since, the underlying claim may still be true while the citation has gone stale. Found in this register's own data: 3 of 5 citations quoted an early rendering of the mission superseded by its crystallized wording, none re-checked when it changed." ;
+        sh:message "Advisory: this deliverable's derivesFromMissionClause quote does not appear verbatim in any Mission's statement or in the amended statement of any Mission Amendment (the mission in force is the latest amendment's statement, and every amendment keeps the earlier wording, so a quote of any of them stands). A citation was written to be checkable, not merely traceable — if the mission has been amended since, the underlying claim may still be true while the citation has gone stale. Found in this register's own data: 3 of 5 citations quoted an early rendering of the mission superseded by its crystallized wording, none re-checked when it changed." ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:select """SELECT $this WHERE {
             $this backlog:derivesFromMissionClause ?q .
-            FILTER NOT EXISTS { ?m backlog:hasMissionStatement ?s . FILTER CONTAINS(?s, ?q) }
+            FILTER NOT EXISTS { { ?m backlog:hasMissionStatement ?s } UNION { ?am backlog:amendedMissionStatement ?s } FILTER CONTAINS(?s, ?q) }
         }""" ] .
 
 #################################################################
@@ -7528,7 +7528,7 @@ backlog:ContainerDependencyRule a sh:NodeShape ;
     sh:targetClass backlog:WorkItemContainer ;
     rdfs:label "R5: container dependency derivation"@en ;
     sh:rule [ a sh:SPARQLRule ;
-        rdfs:label "R5: a member depends on a member of another container"@en ;
+        rdfs:label "R5: a member depends on a member of another container of the same kind (two packages or two iterations; never the whole backlog)"@en ;
         sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
         sh:construct """
             CONSTRUCT { $this backlog:derivedContainerDependency ?other }
@@ -7536,6 +7536,8 @@ backlog:ContainerDependencyRule a sh:NodeShape ;
                 ?m backlog:memberOfContainer $this ; backlog:dependsOn ?d .
                 ?d backlog:memberOfContainer ?other .
                 FILTER (?other != $this)
+                $this a ?kind . ?other a ?kind .
+                FILTER (?kind IN (backlog:Package, backlog:Iteration))
                 ?d backlog:hasState ?ds .
                 FILTER (?ds != backlog:Done)
             }""" ] .
@@ -10456,4 +10458,44 @@ backlog:RemedyCarriedOutShape a sh:NodeShape ;
         sh:select """SELECT $this WHERE {
             $this backlog:remedyCarriedOutIn ?it .
             FILTER NOT EXISTS { $this backlog:remedyShownBy ?e }
+        }""" ] .
+
+#################################################################
+#  v1.229.0 (G247) -- A REFUSAL OR A REVIEW FINDING IS CORRECTED IN ROUNDS UNTIL EVERY RULE HOLDS
+#################################################################
+
+backlog:RepairRoundShape a sh:NodeShape ;
+    sh:targetClass backlog:RepairRound ;
+    sh:severity sh:Violation ;
+    rdfs:label "A repair round names what it repairs, its number, its repairs, its result and its time, and a satisfied round ends the series (G247)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RR_Bare" ;
+    sh:property [ sh:path backlog:roundFor ; sh:minCount 1 ; sh:maxCount 1 ; sh:message "RR_Bare: a repair round names the one box, item or step it repairs." ] ;
+    sh:property [ sh:path backlog:hasRoundNumber ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:message "RR_Bare: a repair round carries its number in the series, from one." ] ;
+    sh:property [ sh:path backlog:hasRoundRepairs ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:message "RR_Bare: a repair round says what was repaired and which rule each repair answers." ] ;
+    sh:property [ sh:path backlog:roundSatisfied ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ; sh:message "RR_Bare: a repair round says whether every rule held at its recheck." ] ;
+    sh:property [ sh:path backlog:roundAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; sh:message "RR_Bare: a repair round says when it ended." ] ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RR_Bare: another round of the same subject follows a satisfied round, or two rounds of one subject carry the same number. Rounds are appended in order and a satisfied round ends the series; a later problem is a new refusal and opens a new series on a new subject." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            $this backlog:roundFor ?x ; backlog:hasRoundNumber ?n .
+            ?other backlog:roundFor ?x ; backlog:hasRoundNumber ?n2 .
+            FILTER (?other != $this)
+            FILTER ((?n2 = ?n) || (?n2 > ?n && EXISTS { $this backlog:roundSatisfied true }))
+        }""" ] .
+
+backlog:RepairRoundsEndShape a sh:NodeShape ;
+    sh:targetClass backlog:Iteration ;
+    sh:severity sh:Violation ;
+    rdfs:label "A box is not Done while the last repair round of its refusal or review is not satisfied (G247)"@en ;
+    backlog:provenByFixture "03-tooling/fixtures/fixture_negative" ;
+    backlog:fixtureCaseName "RR_OpenEnd" ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+        sh:message "RR_OpenEnd: this box is Done and the last repair round recorded for it is not satisfied. A refusal or a review finding is corrected and rechecked until every rule holds; append a further round that shows every rule satisfied, or keep the box open." ;
+        sh:prefixes [ sh:declare [ sh:prefix "backlog" ; sh:namespace "http://example.org/backlog#"^^xsd:anyURI ] ] ;
+        sh:select """SELECT $this WHERE {
+            { $this backlog:hasState backlog:Done } UNION { $this backlog:derivedState backlog:Done }
+            ?r backlog:roundFor $this ; backlog:hasRoundNumber ?n ; backlog:roundSatisfied false .
+            FILTER NOT EXISTS { ?r2 backlog:roundFor $this ; backlog:hasRoundNumber ?n2 . FILTER (?n2 > ?n) }
         }""" ] .

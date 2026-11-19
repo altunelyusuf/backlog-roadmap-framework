@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_date_plan v1.4.0 -- predicts the measure dates of a lineage from its scope, its work and the velocity observed in earlier boxes (G186).
+"""backlog_date_plan v1.5.0 -- predicts the measure dates of a lineage from its scope, its work and the velocity observed in earlier boxes (G186).
+
+v1.5.0 (box 60, G246; IPage handover of 2026-11-16, point 3): `--sequential` reads the roadmap rank of a mover from the mover itself; when it has none, from the package it belongs to (memberOfContainer a Package that carries hasRoadmapRank); when it has none either, from the items it is decomposed into (partOf, decomposesInto), the lowest rank found. A mover with a rank of its own keeps it, and a mover with none of these still refuses, saying which mover and that its package was read too. Before: only a rank on the mover was read, so a register that ranks packages on the roadmap (as the framework's own planning does) was refused.
 
 v1.4.0 (OE, another registrant and IPage handovers, 2026-11-16): the tool works on a register of any package. (1) The namespace of the forecasts is the one the register declares as `fw:`, else the namespace of the lineage's own IRI, and the forecast is linked to that register's root; it no longer stops on a register with no `fw:` prefix. (2) A mover that carries no effort but is decomposed (an epic) counts the open effort of its descendants (partOf, decomposesInto), each once. (3) A forecast of zero points while an open story pursues the objective is refused, never printed. (4) `--pace-from REGISTER` borrows the pace of another register, and the forecast says so. (5) `--sequential` adds the points of the objectives in the order of the roadmap rank of their open movers, so that sequential work is not forecast as if every objective started now. (6) `--effort` names the key the tool expects. (7) An open item with no effort and no stories under it makes the forecast refuse, never count as zero; under `--sequential` a story shared by objectives is counted once, and the forecast says its points are cumulative.
 v1.3.0 (course-management handover, box-step-tool-stops-on-typed-effort-and-on-mixed-time-zones, 2026-11-12): a time without a zone (`"2026-09-24T14:35:00"^^xsd:dateTime`, valid Turtle) and a time with one cannot be compared in Python, so the sort of the iterations' starts stopped with a TypeError. `dt` now reads a time without a zone as UTC, says so here, and returns an aware time in every case; nothing in the register is rewritten.
@@ -101,11 +103,21 @@ def predict(g, lineage, now, buffer, effort=None, pace_graph=None, sequential=Fa
         if effort and local(obj).split("_", 1)[-1] in effort and not movers: pts = effort[local(obj).split("_", 1)[-1]]; used.add(local(obj).split("_", 1)[-1])
         rows0.append((obj, cps, pts, movers))
     if sequential:
+        def item_rank(m, seen):
+            if m in seen: return None
+            seen.add(m)
+            own = g.value(m, U("hasRoadmapRank"))
+            if own is not None: return float(own)
+            pk = [float(g.value(c, U("hasRoadmapRank"))) for c in g.objects(m, U("memberOfContainer")) if (c, RDF.type, U("Package")) in g and g.value(c, U("hasRoadmapRank")) is not None]
+            if pk: return min(pk)
+            kids = set(g.subjects(U("partOf"), m)) | set(g.objects(m, U("decomposesInto")))
+            ks = [r for r in (item_rank(k, seen) for k in sorted(kids, key=str)) if r is not None]
+            return min(ks) if ks else None
         def rank(o):
-            rs = [float(g.value(m, U("hasRoadmapRank"))) for m in g.objects(o, U("metricMovableBy")) if g.value(m, U("hasRoadmapRank")) is not None]
+            rs = [r for r in (item_rank(m, set()) for m in g.objects(o, U("metricMovableBy"))) if r is not None]
             return min(rs) if rs else float("inf")
         order = sorted(rows0, key=lambda r: (rank(r[0]), str(r[0])))
-        if any(rank(r[0]) == float("inf") and r[2] > 0 for r in order): raise SystemExit("ERROR: --sequential needs a roadmap rank (hasRoadmapRank) on a mover of every objective that still has work; none was found for some")
+        if any(rank(r[0]) == float("inf") and r[2] > 0 for r in order): raise SystemExit("ERROR: --sequential needs a roadmap rank (hasRoadmapRank) on a mover of every objective that still has work, or on the package the mover belongs to, or on the items it is decomposed into; none was found for some")
         acc = 0.0; cum = {}; seen = set()
         for r in order:
             acc += sum(open_effort(g, m, seen) for m in r[3]) if r[3] else r[2]; cum[r[0]] = acc

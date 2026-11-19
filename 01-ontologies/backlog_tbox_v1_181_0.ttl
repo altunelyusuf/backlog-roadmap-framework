@@ -19,8 +19,9 @@
 
 <http://example.org/backlog> a owl:Ontology ;
     rdfs:label "Backlog & Roadmap Semantic Framework (TBox)"@en ;
-    owl:versionIRI <http://example.org/backlog/1.180.0> ;
-    owl:versionInfo "1.180.0" ;
+    owl:versionIRI <http://example.org/backlog/1.181.0> ;
+    owl:versionInfo "1.181.0" ;
+    owl:priorVersion <http://example.org/backlog/1.180.0> ;
     owl:priorVersion <http://example.org/backlog/1.179.0> , <http://example.org/backlog/1.178.0> , <http://example.org/backlog/1.177.0> , <http://example.org/backlog/1.176.0> , <http://example.org/backlog/1.175.0> , <http://example.org/backlog/1.174.0> , <http://example.org/backlog/1.173.0> , <http://example.org/backlog/1.172.0> , <http://example.org/backlog/1.171.0> , <http://example.org/backlog/1.170.0> , <http://example.org/backlog/1.169.0> , <http://example.org/backlog/1.168.0> , <http://example.org/backlog/1.167.0> , <http://example.org/backlog/1.166.0> , <http://example.org/backlog/1.165.0> , <http://example.org/backlog/1.164.0> , <http://example.org/backlog/1.163.0> , <http://example.org/backlog/1.162.0> , <http://example.org/backlog/1.161.0> , <http://example.org/backlog/1.153.0> , <http://example.org/backlog/1.152.0> , <http://example.org/backlog/1.151.0> , <http://example.org/backlog/1.150.0> , <http://example.org/backlog/1.149.0> , <http://example.org/backlog/1.148.0> , <http://example.org/backlog/1.143.0> , <http://example.org/backlog/1.142.0> , <http://example.org/backlog/1.141.0> , <http://example.org/backlog/1.140.0> , <http://example.org/backlog/1.139.0> , <http://example.org/backlog/1.138.0> , <http://example.org/backlog/1.137.0> , <http://example.org/backlog/1.136.0> , <http://example.org/backlog/1.135.0> , <http://example.org/backlog/1.134.0> , <http://example.org/backlog/1.133.0> , <http://example.org/backlog/1.132.0> , <http://example.org/backlog/1.131.0> , <http://example.org/backlog/1.130.0> , <http://example.org/backlog/1.129.0> , <http://example.org/backlog/1.125.0> , <http://example.org/backlog/1.124.0> , <http://example.org/backlog/1.123.0> , <http://example.org/backlog/1.122.0> ;
     owl:priorVersion <http://example.org/backlog/1.121.0> , <http://example.org/backlog/1.120.0> , <http://example.org/backlog/1.119.0> , <http://example.org/backlog/1.118.0> , <http://example.org/backlog/1.117.0> ;
     owl:priorVersion <http://example.org/backlog/1.116.0> ;
@@ -5408,6 +5409,7 @@ backlog:hasEffort backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasEffortEstimate backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasEstimateConfidence backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasGateOrder backlog:numberOrigin backlog:Num_Asserted .
+backlog:hasRoundNumber backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasImpact backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasJobSize backlog:numberOrigin backlog:Num_Asserted .
 backlog:hasLaunchPriority backlog:numberOrigin backlog:Num_Asserted .
@@ -9140,3 +9142,80 @@ backlog:repairedByItem a owl:ObjectProperty ;
 backlog:raisedByReviewOf kb:hasRelationshipCategory kb:RelationshipCategory_Association .
 backlog:repairedByItem kb:hasRelationshipCategory kb:RelationshipCategory_Association .
 backlog:remedyShownBy kb:hasRelationshipCategory kb:RelationshipCategory_Assessment .
+
+#################################################################
+#  v1.181.0 (G247) -- A RULE IS ENFORCED BEFORE THE ACT, CARRIES ITS OWN REPAIR, AND IS CORRECTED IN ROUNDS. Sessions met rules only by being
+#  refused after the act, had no stated way out and asked BRSF, and a refusal or a review ended as a single pass or fail. A RuleRepair is the
+#  record of what to do when one rule refuses (the condition, the correct method, who decides, when to ask the Owner); a RepairRound is one
+#  pass of correcting and rechecking something a rule refused, appended and never edited; the step passes when the last round is satisfied.
+#################################################################
+backlog:RuleRepair a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "Rule repair"@en ;
+    skos:definition "What to do when one shape refuses: the condition under which it refuses, the correct method that satisfies the rule, the role that may decide it, and the case in which the Owner is asked. It lets a session settle a refusal by the rule, without asking BRSF, and is the text the refusal prints."@en .
+backlog:repairsShape a owl:ObjectProperty ;
+    rdfs:domain backlog:RuleRepair ; rdfs:range owl:Thing ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "repairs shape"@en ;
+    skos:definition "The shape whose refusal this repair settles."@en .
+backlog:repairDecidedBy a owl:ObjectProperty ;
+    rdfs:domain backlog:RuleRepair ; rdfs:range backlog:Role ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "repair decided by"@en ;
+    skos:definition "The role that may decide the repair without asking anyone else."@en .
+backlog:hasRepairCondition a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RuleRepair ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has repair condition"@en ;
+    skos:definition "When the rule refuses, in a sentence a session can match against its own situation."@en .
+backlog:hasRepairMethod a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RuleRepair ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has repair method"@en ;
+    skos:definition "The correct method that satisfies the rule: the steps to take, never a waiver, a skip or a deferral of the obligation."@en .
+backlog:repairAsksOwnerWhen a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RuleRepair ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "repair asks Owner when"@en ;
+    skos:definition "The case in which no rule or fact settles the repair and the Owner is asked, one point at a time."@en .
+backlog:RepairRound a owl:Class ;
+    rdfs:subClassOf core:Artifact ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "Repair round"@en ;
+    skos:definition "One pass of correcting and rechecking what a rule refused or a review found: the repairs made and whether every rule now holds. Rounds are appended in order and never edited; the item passes when its last round is satisfied."@en .
+backlog:roundFor a owl:ObjectProperty ;
+    rdfs:domain backlog:RepairRound ; rdfs:range owl:Thing ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    backlog:isFrameworkOriginal true ;
+    rdfs:label "round for"@en ;
+    skos:definition "The box, item or step whose refusal or finding this round repairs."@en .
+backlog:hasRoundNumber a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RepairRound ; rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has round number"@en ;
+    skos:definition "The place of the round in the series of rounds for the same subject, from one."@en .
+backlog:hasRoundRepairs a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RepairRound ; rdfs:range xsd:string ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "has round repairs"@en ;
+    skos:definition "What was repaired in the round, naming the rule each repair answers."@en .
+backlog:roundSatisfied a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RepairRound ; rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "round satisfied"@en ;
+    skos:definition "True only when every rule held at the recheck that ended the round."@en .
+backlog:roundAt a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain backlog:RepairRound ; rdfs:range xsd:dateTime ;
+    rdfs:isDefinedBy <http://example.org/backlog> ;
+    rdfs:label "round at"@en ;
+    skos:definition "When the round ended."@en .
+backlog:RuleRepair kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:RepairRound kb:hasClassKind kb:ClassKind_InformationArtifact .
+backlog:repairsShape kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:repairDecidedBy kb:hasRelationshipCategory kb:RelationshipCategory_Association .
+backlog:roundFor kb:hasRelationshipCategory kb:RelationshipCategory_Association .

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_box_step_probe v1.12.0 (box 58: the tool honours grooming, Definition of Done and concerns the register already holds; the fixture story now links its acceptance criterion, as a real register does). v1.11.0 (box 50: an owed general evidence class is now written by the close, so the case that proved its refusal now proves it is covered). v1.10.0 (box 49: every close spec carries a finding, since the box tool v3.2.0 refuses a close that names none; the refusal itself is proved in backlog_box_close_links_probe). v1.9.0 (Lineage 29, package 14; 2SISA delivery handover, G233): a story opened with `KEY:design+build+verification` holds three tasks of those three types, each with its own readiness check, transitions and, at the close, its own evidence, and a task or a task's evidence that is missing is refused; a bare KEY still records the one build task; a refused step prints every violation it found, grouped by the check that raised it, not the first few, and puts the register back. v1.8.0 (IPage handover box-tool-for-an-adopting-register, C5): a planned box is opened in place whatever ORDER its own predicates
+"""backlog_box_step_probe v1.13.0 (box 58: the tool honours grooming, Definition of Done and concerns the register already holds; the fixture story now links its acceptance criterion, as a real register does). v1.11.0 (box 50: an owed general evidence class is now written by the close, so the case that proved its refusal now proves it is covered). v1.10.0 (box 49: every close spec carries a finding, since the box tool v3.2.0 refuses a close that names none; the refusal itself is proved in backlog_box_close_links_probe). v1.9.0 (Lineage 29, package 14; 2SISA delivery handover, G233): a story opened with `KEY:design+build+verification` holds three tasks of those three types, each with its own readiness check, transitions and, at the close, its own evidence, and a task or a task's evidence that is missing is refused; a bare KEY still records the one build task; a refused step prints every violation it found, grouped by the check that raised it, not the first few, and puts the register back. v1.8.0 (IPage handover box-tool-for-an-adopting-register, C5): a planned box is opened in place whatever ORDER its own predicates
 are written in, because a graph serializer is free to reorder them (it alphabetises them) and the tool must still open the box, not refuse it. v1.7.0
 treated box 5's layout (hasCapacity before hasState, named "odd") as one the tool "cannot open in place" and refused; that was this exact reordering,
 so v1.7.0's assertion is superseded here, not silently dropped: box 5 now opens correctly, and a genuinely unrecoverable layout (box 6, no hasCapacity
@@ -41,7 +41,14 @@ ART = "03-tooling/artifact.txt"
 def git(*a): return subprocess.run(["git", "-C", pk] + list(a), capture_output=True, text=True)
 def publish():
     git("add", "-A"); git("-c", "user.email=p@p", "-c", "user.name=p", "commit", "-qm", "p"); git("update-ref", "refs/remotes/origin/main", "HEAD")
-subprocess.run(["git", "-C", work, "init", "-q"]); open(os.path.join(pk, "03-tooling", "other.py"), "w").write("x = 1\n"); publish()
+subprocess.run(["git", "-C", work, "init", "-q"])
+# G247: the packages these cases open boxes in are real git clones, so they are armed like a working clone (guard configuration, git hooks, session hooks) and carry the next-act tool
+import glob as _gl
+_na = sorted(_gl.glob(os.path.join(HERE, "backlog_next_act_v*.py")), key=lambda f: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", f)[0]])[-1]
+shutil.copy(_na, os.path.join(pk, "03-tooling", os.path.basename(_na)))
+open(os.path.join(work, ".backlog-guard.json"), "w").write("{}"); os.makedirs(os.path.join(work, ".githooks")); open(os.path.join(work, ".githooks", "commit-msg"), "w").write("#!/bin/sh\n")
+subprocess.run(["git", "-C", work, "config", "core.hooksPath", ".githooks"]); os.makedirs(os.path.join(work, ".claude")); open(os.path.join(work, ".claude", "settings.json"), "w").write('{"x": "backlog_guard_claude_hook"}')
+open(os.path.join(pk, "03-tooling", "other.py"), "w").write("x = 1\n"); publish()
 def run(*a):
     r = subprocess.run([sys.executable, os.path.join(pk, "03-tooling", TOOL), REG] + list(a), capture_output=True, text=True)
     return r.returncode, r.stdout + r.stderr

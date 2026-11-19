@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""backlog_adopting_register_probe v1.1.0 (box tool 3.2.0 refuses a close that names no finding, so every close spec carries one) -- re-runnable proof that backlog_box_step generalizes to a register that is
+"""backlog_adopting_register_probe v1.3.0 (box tool 3.2.0 refuses a close that names no finding, so every close spec carries one) -- re-runnable proof that backlog_box_step generalizes to a register that is
 NOT the framework's own (IPage handover box-tool-for-an-adopting-register, v1.1.0, C1-C8). Builds a throwaway package
 whose register lives in its own namespace (prefix pcl:, <http://example.org/ipage-register#>) and own story-naming
 convention, and drills the same ten acceptance criteria that backlog_box_step_probe and backlog_agent_monitor_probe
@@ -56,6 +56,14 @@ pcl:Story4_D1 backlog:hasAcceptanceCriterion pcl:AC_D1_Story4_D1 .
 """
 
 
+def arm(pk):
+    # G247: the scratch package is a real git clone, so it is armed like a working clone and carries the next-act tool
+    na = sorted(glob.glob(os.path.join(HERE, "backlog_next_act_v*.py")), key=lambda p: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", p)[0]])[-1]
+    shutil.copy(na, os.path.join(pk, "03-tooling", os.path.basename(na)))
+    open(os.path.join(pk, ".backlog-guard.json"), "w").write("{}"); os.makedirs(os.path.join(pk, ".githooks")); open(os.path.join(pk, ".githooks", "commit-msg"), "w").write("#!/bin/sh\n")
+    git(pk, "config", "core.hooksPath", ".githooks"); os.makedirs(os.path.join(pk, ".claude")); open(os.path.join(pk, ".claude", "settings.json"), "w").write('{"x": "backlog_guard_claude_hook"}')
+
+
 def fixture(reserialize=False):
     work = tempfile.mkdtemp()
     pk = os.path.join(work, "pkg")
@@ -71,6 +79,7 @@ def fixture(reserialize=False):
     # the committed ("published") tree must match the reserialized bytes, exactly as a real reserializing editor would commit
     # them -- reserializing AFTER commit would look, to the tool, like work that began outside the box (a different, real bug)
     git(pk, "init", "-q")
+    arm(pk)
     open(os.path.join(pk, "03-tooling", "other.py"), "w").write("x = 1\n")
     git(pk, "add", "-A")
     git(pk, "-c", "user.email=p@p", "-c", "user.name=p", "commit", "-qm", "p")
@@ -183,6 +192,7 @@ def c5_pass(reserialize):
         import rdflib as rl
         rl.Graph().parse(reg, format="turtle").serialize(destination=reg, format="turtle")
     git(pk, "init", "-q")
+    arm(pk)
     open(os.path.join(pk, "03-tooling", "other.py"), "w").write("x = 1\n")
     git(pk, "add", "-A")
     git(pk, "-c", "user.email=p@p", "-c", "user.name=p", "commit", "-qm", "p")

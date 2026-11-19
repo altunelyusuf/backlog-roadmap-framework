@@ -1,6 +1,6 @@
 # Lineage Practice Guide — v1.0.0
 
-**What this is.** What a session of any package needs to run its own lineage without asking a BRSF session. It holds no ruling text: rulings are `GovernanceRuling` records in the register (G245 records the Owner's instruction of 2026-11-18, 12:25 Istanbul, that no session should need BRSF to apply the lineage and its discipline). The order of work is in `LINEAGE_OPERATING_DISCIPLINE_v163_0_6.md`; read this guide beside it.
+**What this is.** What a session of any package needs to run its own lineage without asking a BRSF session. It holds no ruling text: rulings are `GovernanceRuling` records in the register (G245 records the Owner's instruction of 2026-11-18, 12:25 Istanbul, that no session should need BRSF to apply the lineage and its discipline). The order of work is in `LINEAGE_OPERATING_DISCIPLINE_v163_0_7.md`; read this guide beside it.
 
 ## Who may decide what
 | Matter | Decided by | Where it is |

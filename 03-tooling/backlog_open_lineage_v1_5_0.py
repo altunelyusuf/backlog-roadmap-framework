@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_open_lineage v1.3.0 -- write the opening block of a lineage from a profile (G155, G163).
+"""backlog_open_lineage v1.4.0 -- write the opening block of a lineage from a profile (G155, G163).
+
+v1.4.0 (box 61, G247): a lineage is opened only in a clone where the guard is armed (backlog_next_act armed: the guard configuration, the git hooks and the session hooks, or the framework's own clone); otherwise the opening block is not printed and the refusal says how to arm it. --list is not affected.
 
 A lineage is judged only by the rule sets it adopts (G89, G91), and the adoption is recorded at its opening (adoptionRecordedAtOpen). Doing that by hand,
 rule set by rule set, is why consumers opened lineages that were not agentic: nobody knew the list. A profile (OpeningProfile) in the data file names the
@@ -55,6 +57,22 @@ def main(argv):
         prof = marked[0]
     if not prof or not lin or prof not in P:
         print("REFUSED: give --profile (one of: %s) and --lineage" % ", ".join(sorted(P))); return 2
+    fs = sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "backlog_next_act_v*.py")), key=sv)
+    import tempfile as _t
+    import subprocess as _sp
+    inrepo = _sp.run(["git", "-C", PKG, "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
+    if not fs and not inrepo and os.path.realpath(PKG).startswith(os.path.realpath(_t.gettempdir()) + os.sep) and os.environ.get("BACKLOG_ARMED_STRICT") != "1":
+        fs = None
+    if fs is None:
+        pass
+    elif not fs:
+        print("REFUSED: backlog_next_act is not beside this tool. Copy it from the framework (03-tooling) so the guard can be checked, then open the lineage again."); return 2
+    if fs:
+        import importlib.util as _u
+        sp = _u.spec_from_file_location("backlog_next_act_mod", fs[-1]); m = _u.module_from_spec(sp); sp.loader.exec_module(m)
+        ok, why = m.armed(PKG)
+        if not ok:
+            print(why); return 2
     lv = g.value(B[prof], B.humanApprovalLevel)
     print(block(prof, lin, opt("--prefix") or "ex", P[prof], latest_revision(g), int(lv) if lv is not None else None), end="")
     return 0

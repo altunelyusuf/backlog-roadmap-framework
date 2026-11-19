@@ -51,7 +51,14 @@ ART = "03-tooling/artifact.txt"
 def git(*a): return subprocess.run(["git", "-C", pk] + list(a), capture_output=True, text=True)
 def publish():
     git("add", "-A"); git("-c", "user.email=p@p", "-c", "user.name=p", "commit", "-qm", "p"); git("update-ref", "refs/remotes/origin/main", "HEAD")
-subprocess.run(["git", "-C", work, "init", "-q"]); open(os.path.join(pk, "03-tooling", "other.py"), "w").write("x = 1\n"); publish()
+subprocess.run(["git", "-C", work, "init", "-q"])
+# G247: the packages these cases open boxes in are real git clones, so they are armed like a working clone (guard configuration, git hooks, session hooks) and carry the next-act tool
+import glob as _gl
+_na = sorted(_gl.glob(os.path.join(HERE, "backlog_next_act_v*.py")), key=lambda f: [int(x) for x in re.findall(r"_v(\d+)_(\d+)_(\d+)", f)[0]])[-1]
+shutil.copy(_na, os.path.join(pk, "03-tooling", os.path.basename(_na)))
+open(os.path.join(work, ".backlog-guard.json"), "w").write("{}"); os.makedirs(os.path.join(work, ".githooks")); open(os.path.join(work, ".githooks", "commit-msg"), "w").write("#!/bin/sh\n")
+subprocess.run(["git", "-C", work, "config", "core.hooksPath", ".githooks"]); os.makedirs(os.path.join(work, ".claude")); open(os.path.join(work, ".claude", "settings.json"), "w").write('{"x": "backlog_guard_claude_hook"}')
+open(os.path.join(pk, "03-tooling", "other.py"), "w").write("x = 1\n"); publish()
 def run(*a):
     r = subprocess.run([sys.executable, os.path.join(pk, "03-tooling", TOOL), REG] + list(a), capture_output=True, text=True)
     if os.environ.get("PROBE_DEBUG") and r.returncode: print("   [debug] " + (r.stdout + r.stderr).strip()[-300:].replace("\n", " / "))

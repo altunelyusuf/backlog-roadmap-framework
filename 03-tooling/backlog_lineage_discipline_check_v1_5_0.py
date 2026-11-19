@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""backlog_lineage_discipline_check v1.3.0 — the discipline's claims are checked.
+"""backlog_lineage_discipline_check v1.5.0 — the discipline's claims are checked.
+
+v1.5.0 (box 61, G247; the Owner, 2026-11-19: the ceiling is a manual guard against uncontrolled growth and may be raised for a real need): the ceiling is 8300 bytes (was 8000). The need: the discipline now carries one mandatory step before every step, the next-act check, whose rules and repairs are records, not prose.
 
 A discipline document that names shapes as enforcing its boundaries is making
 externally-verifiable claims. Those claims drift: a shape gets renamed, a
@@ -66,7 +68,7 @@ def shape_blocks(text):
     return out
 
 
-MAX_DISCIPLINE_BYTES = 8000
+MAX_DISCIPLINE_BYTES = 8300
 
 
 def main():

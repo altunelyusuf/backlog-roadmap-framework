@@ -1,4 +1,4 @@
-# Backlog & Roadmap Semantic Framework — Standard v1.164.0
+# Backlog & Roadmap Semantic Framework — Standard v1.165.0
 
 **Subject:** `backlog` 1.7.0 · **Namespace:** `http://example.org/backlog#` · **Prefix:** `backlog:`
 **Status:** REGISTERED as `orh:Subject_backlog`; independently distributable and usable without the pack
@@ -92,6 +92,8 @@ confused with `LifecycleState` — the delivery state of a work item. The two ar
 | `evidenceVerified`, `verifiedAt`, `hasVerificationMethod` | The bridge's world-check, its time and its method |
 | `DefinitionOfDone`, `DoDCriterion` | Each clause carries `hasCheckQuery`, `hasExpectedResult`, `hasCriterionStatus` |
 | `AcceptanceCriterion` | Per-item Given/When/Then held on the item |
+| `RuleRepair` | The repair of one rule: the shape it repairs (`repairsShape`), the condition (`hasRepairCondition`), the method (`hasRepairMethod`), who decides (`repairDecidedBy`) and when the Owner is asked (`repairAsksOwnerWhen`); the next-act check prints it with each refusal |
+| `RepairRound` | One round of repairing a refusal or a review finding: `roundFor` its subject, `hasRoundNumber`, `hasRoundRepairs`, `roundSatisfied`, `roundAt`; a satisfied round ends the series and a Done box needs its last round satisfied |
 
 The shipped baseline Definition of Done has six executable criteria: evidence exists, evidence is
 verified, acceptance criteria are present, no Done item depends on unfinished work, no open item is

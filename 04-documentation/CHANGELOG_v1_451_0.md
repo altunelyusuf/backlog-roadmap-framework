@@ -11285,6 +11285,12 @@ Backlog stage of Lineage 21 (`L_AdaptiveProof`): nine Story-direct stories, one 
 
 **Unplanned work:** the Backlog stage is the planned stage; the line records that this release is also the measurement of a records-only gate.
 
+## v5.5.26 — 2026-11-19 (Rules are enforced before the act with their own repairs; the citation advisory, rule R5 and the date planner handle amended missions, containers and package ranks)
+
+Box 60 (G246): the citation advisory reads a mission amendment, rule R5 compares containers of one kind, the date planner reads a package's roadmap rank (shapes 1.229.0, planner 1.5.0). Box 61 (G247): backlog_next_act checks the rules that carry a repair before a step and prints each repair, a box or lineage opens only in an armed clone, repair rounds are recorded until satisfied (T-box 1.181.0, shapes 1.229.0, box tool 3.8.0, open lineage 1.5.0, discipline 163.0.7, seven repair records). Three independent reviews of box 61, the third accepted.
+
+**Unplanned work:** none
+
 ## v5.5.25 — 2026-11-19 (Sessions apply the lineage and its tools on their own registers without asking BRSF)
 
 The criterion resolver, the impediment tool and the release item check run on a package's own register, root and namespace; a lineage practice guide states who may decide what; the discipline points to it.

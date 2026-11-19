@@ -4668,3 +4668,8 @@ ex:FR_Item a backlog:BacklogConcept ; rdfs:label "stand-in for the finished item
 ex:RD_NoRunning a backlog:Story ; backlog:hasState backlog:Done ; backlog:appliesDefinitionOfDone ex:RD_Def .
 ex:RD_Def a backlog:DefinitionOfDone ; backlog:hasDoDCriterion ex:RD_Crit .
 ex:RD_Crit a backlog:DoDCriterion ; rdfs:label "A criterion that does not run yet"@en ; backlog:hasCheckQuery "to be written" ; backlog:hasExpectedResult "to be written" ; backlog:hasCriterionStatus backlog:NotYetEnforceable .
+
+# RR_Bare -- a repair round with nothing but a number (RepairRoundShape, G247); RR_OpenEnd -- a Done box whose last repair round is not satisfied (RepairRoundsEndShape, G247).
+ex:RR_Bare a backlog:RepairRound ; backlog:hasRoundNumber 1 .
+ex:RR_OpenEnd a backlog:Iteration ; backlog:hasState backlog:Done .
+ex:RR_OpenEnd_R1 a backlog:RepairRound ; backlog:roundFor ex:RR_OpenEnd ; backlog:hasRoundNumber 1 ; backlog:hasRoundRepairs "one repair" ; backlog:roundSatisfied false ; backlog:roundAt "2026-11-19T10:00:00Z"^^xsd:dateTime .
