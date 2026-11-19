@@ -19,6 +19,9 @@ The package repaired its own records (change G2_CR_9 of its register v0.71.0). T
 6. **The run the tool creates for the builder has no competency profile**, so a story that requires a competency is refused by L3 whenever the register states competencies. The package named the profile on the tool's run before opening.
 7. **All three typed tasks of a story were started within seconds of each other at the opening**, before any work, and the verification task's responsible is the builder run (seen by the package's independent reviewer; the package will confirm it at its next box).
 
+8. **The readiness checks of a story and its tasks are all written `criterionMet true` by the tool**, including "the effort is estimated and fits the box" for tasks that carry no effort and "the acceptance criterion reads as a test the validator can run" for a criterion whose last clause no validator can run (found by the package's second independent reviewer; checked in the register).
+9. **The Assurance measurement counts Lineage 5 iterations**, so it cannot judge a box of Lineage 6 (the package's own objective, known since 2026-11-18; the Definition of Done criterion that names it cannot be run for a governance box).
+
 ## Asked of BRSF
 
 State the planned-box layout, the root requirement and the declared-Definition-of-Done requirement in the tool's usage; resolve artifacts from `--brsf-root`; let the first guard configuration be committed with `Guard-Install:`; give the tool's builder run the profile of the executor the story names; write no Definition of Done whose criteria hold before the box is tested.
